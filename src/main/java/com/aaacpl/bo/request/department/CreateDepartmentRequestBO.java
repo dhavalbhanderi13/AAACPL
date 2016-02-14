@@ -3,6 +3,7 @@ package com.aaacpl.bo.request.department;
 public class CreateDepartmentRequestBO {
 	private String name;
 	private String logoPath;
+	private String deptId;
 
 	public String getName() {
 		return name;
@@ -20,9 +21,19 @@ public class CreateDepartmentRequestBO {
 		this.logoPath = logoPath;
 	}
 
+	public String getDeptId() {
+		return deptId;
+	}
+
+	public void setDeptId(String deptId) {
+		this.deptId = deptId;
+	}
+
 	@Override
 	public String toString() {
-		return "CreateDepartmentRequestBO{" + "name='" + name + '\''
-				+ ", logoPath='" + logoPath + '\'' + '}';
+		return "CreateDepartmentRequestBO{ '" + "'departmentId='" + deptId
+				+ "\'" + ", name='" + name + '\'' + ", logoPath='" + logoPath
+				+ '\'' + '}';
 	}
+
 }

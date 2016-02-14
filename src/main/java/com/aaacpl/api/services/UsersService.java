@@ -1,4 +1,4 @@
-package com.aaacpl.rest.user;
+package com.aaacpl.api.services;
 
 import java.io.IOException;
 import java.sql.SQLException;

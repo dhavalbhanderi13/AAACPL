@@ -4,6 +4,7 @@ public class CreateDepartmentDTO {
 
 	private String name;
 	private String logoPath;
+	private String deptId;
 
 	public String getName() {
 		return name;
@@ -21,9 +22,19 @@ public class CreateDepartmentDTO {
 		this.logoPath = logoPath;
 	}
 
+	public String getDeptId() {
+		return deptId;
+	}
+
+	public void setDeptId(String deptId) {
+		this.deptId = deptId;
+	}
+
 	@Override
 	public String toString() {
-		return "CreateDepartmentDTO{" + "name='" + name + '\'' + ", logoPath='"
-				+ logoPath + '\'' + '}';
+		return "CreateDepartmentDTO{" + "departmentId='" + deptId + "\'"
+				+ ", name='" + name + '\'' + ", logoPath='" + logoPath + '\''
+				+ '}';
 	}
+
 }

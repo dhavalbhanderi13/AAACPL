@@ -40,10 +40,10 @@ public class ConnectionPool {
 		// url =
 		// "jdbc:mysql://56b98d757628e1cde30000e4-theuniquemedia.rhcloud.com:44456/aaacplapi";
 		// driver = "com.mysql.jdbc.Driver";
-		/*
-		 * for(int cnt=0; cnt<15; cnt++) {
-		 * availableConnections.addElement(getConnection()); }
-		 */
+
+		for (int cnt = 0; cnt < 15; cnt++) {
+			availableConnections.addElement(getConnection());
+		}
 
 	}
 

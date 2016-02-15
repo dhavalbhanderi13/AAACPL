@@ -12,23 +12,27 @@ import java.util.List;
 
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.auction.AuctionDTO;
+import com.aaacpl.dto.auction.AuctionResponseDTO;
 import com.aaacpl.dto.auction.CreateAuctionDTO;
 
 public class AuctionDAO {
 
-	public Boolean insertAuction(CreateAuctionDTO createAuctionDTO)
+	public AuctionResponseDTO insertAuction(CreateAuctionDTO createAuctionDTO)
 			throws SQLException, IOException {
 		boolean isCreated = false;
 		PreparedStatement preparedStatement = null;
 		Connection connection = null;
+		AuctionResponseDTO auctionResponseDTO = new AuctionResponseDTO();
 		try {
 			int parameterIndex = 1;
 			connection = new ConnectionPool().getPoolConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection
-					.prepareStatement("INSERT INTO auction(dept_id,auction_name,auction_des,initial_bid,startdate,enddate,catalog,status,updatedby) VALUES (?,?,?,?,?,?,?,?,?);");
+					.prepareStatement("INSERT INTO auction(dept_id, auction_type_id, auction_name,auction_des,initial_bid,startdate,enddate,catalog,status,updatedby) VALUES (?,?,?,?,?,?,?,?,?,?);");
 			preparedStatement.setInt(parameterIndex++,
 					createAuctionDTO.getDeptId());
+			preparedStatement.setInt(parameterIndex++,
+					createAuctionDTO.getAuctionTypeId());
 			preparedStatement.setString(parameterIndex++,
 					createAuctionDTO.getName());
 			preparedStatement.setString(parameterIndex++,
@@ -54,6 +58,19 @@ public class AuctionDAO {
 			} else {
 				connection.rollback();
 			}
+
+			try{
+				ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					auctionResponseDTO.setId(generatedKeys.getInt(1));
+				}
+				else {
+					throw new SQLException("Creating user failed, no ID obtained.");
+				}
+			}catch (SQLException e){
+				connection.rollback();
+				e.printStackTrace();
+			}
 		} catch (SQLException sqlException) {
 			connection.rollback();
 			sqlException.printStackTrace();
@@ -65,7 +82,7 @@ public class AuctionDAO {
 				e.printStackTrace();
 			}
 		}
-		return isCreated;
+		return auctionResponseDTO;
 	}
 
 	public List<AuctionDTO> getAllAuctions() throws SQLException, IOException {
@@ -79,7 +96,9 @@ public class AuctionDAO {
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
 				AuctionDTO auctionDTO = new AuctionDTO(
+						resultSet.getInt("id"),
 						resultSet.getString("auction_name"),
+						resultSet.getInt("auction_type_id"),
 						resultSet.getString("auction_des"),
 						resultSet.getInt("dept_id"),
 						resultSet.getInt("initial_bid"),

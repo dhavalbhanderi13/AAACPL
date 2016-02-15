@@ -1,8 +1,17 @@
 package com.aacpl.rest.response.auction;
 
 public class CreateAuctionResponse {
+	private int auctionId;
 	private String successMessage;
 	private String failureMessage;
+
+	public int getAuctionId() {
+		return auctionId;
+	}
+
+	public void setAuctionId(int auctionId) {
+		this.auctionId = auctionId;
+	}
 
 	public String getSuccessMessage() {
 		return successMessage;
@@ -22,8 +31,10 @@ public class CreateAuctionResponse {
 
 	@Override
 	public String toString() {
-		return "CreateAuctionResponse{" + "successMessage='"
-				+ successMessage + '\'' + ", failureMessage='" + failureMessage
-				+ '\'' + '}';
+		return "CreateAuctionResponse{" +
+				"auctionId=" + auctionId +
+				", successMessage='" + successMessage + '\'' +
+				", failureMessage='" + failureMessage + '\'' +
+				'}';
 	}
 }

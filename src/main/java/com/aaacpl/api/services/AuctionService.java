@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.aaacpl.bo.request.auction.CreateAuctionRequestBO;
+import com.aaacpl.bo.response.AuctionResponseBO;
 import com.aaacpl.requestHandlers.AuctionRequestHandler;
 import com.aaacpl.rest.request.auction.CreateAuctionRequest;
 import com.aaacpl.rest.util.ResponseGenerator;
@@ -25,6 +26,7 @@ public class AuctionService {
 	public Response create(CreateAuctionRequest createAuctionRequest) {
 		CreateAuctionRequestBO createAuctionRequestBO = new CreateAuctionRequestBO(
 				createAuctionRequest.getName(),
+				createAuctionRequest.getAuctionTypeId(),
 				createAuctionRequest.getDescription(),
 				createAuctionRequest.getDeptId(),
 				createAuctionRequest.getInitialBid(),
@@ -34,7 +36,9 @@ public class AuctionService {
 				createAuctionRequest.getCreatedBy());
 		CreateAuctionResponse createDepartmentResponse = new CreateAuctionResponse();
 		AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
-		if (auctionRequestHandler.createAuction(createAuctionRequestBO)) {
+		AuctionResponseBO auctionResponseBO = auctionRequestHandler.createAuction(createAuctionRequestBO);
+		if (auctionResponseBO.getId() != 0) {
+			createDepartmentResponse.setAuctionId(auctionResponseBO.getId());
 			createDepartmentResponse.setFailureMessage("");
 			createDepartmentResponse.setSuccessMessage("SUCCESS");
 		} else {

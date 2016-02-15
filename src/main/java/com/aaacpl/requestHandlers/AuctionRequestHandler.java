@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aaacpl.bo.request.auction.CreateAuctionRequestBO;
+import com.aaacpl.bo.response.AuctionResponseBO;
 import com.aaacpl.dao.AuctionDAO;
 import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.auction.CreateAuctionDTO;
@@ -14,11 +15,13 @@ import com.aacpl.rest.response.auction.AuctionResponse;
 
 public class AuctionRequestHandler {
 
-	public boolean createAuction(CreateAuctionRequestBO createAuctionRequestBO) {
+	public AuctionResponseBO createAuction(CreateAuctionRequestBO createAuctionRequestBO) {
 		Boolean isProcessed = Boolean.FALSE;
 		AuctionDAO auctionDao = new AuctionDAO();
+        AuctionResponseBO auctionResponseBO = new AuctionResponseBO();
 		CreateAuctionDTO auctionDTO = new CreateAuctionDTO(
 				createAuctionRequestBO.getName(),
+				createAuctionRequestBO.getAuctionTypeId(),
 				createAuctionRequestBO.getDescription(),
 				createAuctionRequestBO.getDeptId(),
 				createAuctionRequestBO.getInitialBid(),
@@ -28,14 +31,15 @@ public class AuctionRequestHandler {
 				createAuctionRequestBO.getCreatedBy());
 
 		try {
-			isProcessed = auctionDao.insertAuction(auctionDTO);
+
+			auctionResponseBO.setId(auctionDao.insertAuction(auctionDTO).getId());
 		} catch (SQLException sq) {
-			isProcessed = false;
+            sq.printStackTrace();
 		} catch (IOException sqlException) {
-			isProcessed = false;
+            sqlException.printStackTrace();
 		}
 
-		return isProcessed;
+		return auctionResponseBO;
 	}
 
 	public List<AuctionResponse> getAllAuctions() {
@@ -59,7 +63,8 @@ public class AuctionRequestHandler {
 		while (iterator.hasNext()) {
 			AuctionDTO auctionDTO = iterator.next();
 			AuctionResponse auctionResponse = new AuctionResponse(
-					auctionDTO.getName(), auctionDTO.getDescription(),
+                    auctionDTO.getId(),	auctionDTO.getName(),
+                    auctionDTO.getAuctionTypeId(), auctionDTO.getDescription(),
 					auctionDTO.getDeptId(), auctionDTO.getInitialBid(),
 					auctionDTO.getStartDate(), auctionDTO.getEndDate(),
 					auctionDTO.getCatalog(), auctionDTO.getCreatedBy());

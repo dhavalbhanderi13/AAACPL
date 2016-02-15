@@ -3,6 +3,7 @@ package com.aaacpl.rest.request.auction;
 public class CreateAuctionRequest {
 
 	private String name;
+	private int auctionTypeId;
 	private String description;
 	private Integer deptId;
 	private Integer initialBid;
@@ -17,6 +18,15 @@ public class CreateAuctionRequest {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+
+	public int getAuctionTypeId() {
+		return auctionTypeId;
+	}
+
+	public void setAuctionTypeId(int auctionTypeId) {
+		this.auctionTypeId = auctionTypeId;
 	}
 
 	public String getDescription() {
@@ -78,7 +88,7 @@ public class CreateAuctionRequest {
 	@Override
 	public String toString() {
 		return "CreateAuctionRequestBO {'name': '" + name
-				+ "',  'description': '" + description + "',  'deptId': '"
+				+ "',  'auctionTypeId': '" + auctionTypeId + "',  'description': '" + description + "',  'deptId': '"
 				+ deptId + "',  'initialBid': '" + initialBid
 				+ "',  'startDate': '" + startDate + "',  'endDate': '" + name
 				+ "enddate',  'catalog': '" + catalog + "',  'createdBy': '"

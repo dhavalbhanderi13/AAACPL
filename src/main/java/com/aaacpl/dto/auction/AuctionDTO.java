@@ -2,7 +2,9 @@ package com.aaacpl.dto.auction;
 
 public class AuctionDTO {
 
+    private int id;
 	private String name;
+	private int auctionTypeId;
 	private String description;
 	private Integer deptId;
 	private Integer initialBid;
@@ -11,10 +13,12 @@ public class AuctionDTO {
 	private String catalog;
 	private String createdBy;
 
-	public AuctionDTO(String name, String description, Integer deptId,
+	public AuctionDTO(int id, String name, int auctionTypeId, String description, Integer deptId,
 			Integer initialBid, String startDate, String endDate,
 			String catalog, String createdBy) {
+        this.id= id;
 		this.name = name;
+		this.auctionTypeId = auctionTypeId;
 		this.description = description;
 		this.deptId = deptId;
 		this.initialBid = initialBid;
@@ -25,11 +29,19 @@ public class AuctionDTO {
 
 	}
 
-	public String getName() {
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
 		return name;
 	}
 
-	public String getDescription() {
+    public int getAuctionTypeId() {
+        return auctionTypeId;
+    }
+
+    public String getDescription() {
 		return description;
 	}
 
@@ -56,15 +68,20 @@ public class AuctionDTO {
 	public String getCreatedBy() {
 		return createdBy;
 	}
-	
-	@Override
-	public String toString() {
-		return "CreateAuctionRequestBO {'name': '" + name
-				+ "',  'description': '" + description + "',  'deptId': '"
-				+ deptId + "',  'initialBid': '" + initialBid
-				+ "',  'startDate': '" + startDate + "',  'endDate': '" + name
-				+ "enddate',  'catalog': '" + catalog + "',  'createdBy': '"
-				+ createdBy + "'";
-	}
 
+    @Override
+    public String toString() {
+        return "AuctionDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", auctionTypeId=" + auctionTypeId +
+                ", description='" + description + '\'' +
+                ", deptId=" + deptId +
+                ", initialBid=" + initialBid +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", catalog='" + catalog + '\'' +
+                ", createdBy='" + createdBy + '\'' +
+                '}';
+    }
 }

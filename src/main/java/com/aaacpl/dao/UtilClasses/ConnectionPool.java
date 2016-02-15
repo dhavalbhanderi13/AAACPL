@@ -31,8 +31,8 @@ public class ConnectionPool {
 		// properties.load(classLoader.getResourceAsStream("classes/com/aaacpl/dao/UtilClasses/db.properties"));
 
 		userName = "root";
-		password = "";
-		url = "jdbc:mysql://localhost:3306/dummy";
+		password = "root";
+		url = "jdbc:mysql://localhost:3306/aaacpl";
 		driver = "com.mysql.jdbc.Driver";
 
 		// userName = "adminJuMUFDf";

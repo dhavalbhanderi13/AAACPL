@@ -3,6 +3,7 @@ package com.aaacpl.dto.auction;
 public class CreateAuctionDTO {
 
 	private String name;
+	private int auctionTypeId;
 	private String description;
 	private Integer deptId;
 	private Integer initialBid;
@@ -11,10 +12,11 @@ public class CreateAuctionDTO {
 	private String catalog;
 	private String createdBy;
 
-	public CreateAuctionDTO(String name, String description, Integer deptId,
+	public CreateAuctionDTO(String name, int auctionTypeId, String description, Integer deptId,
 			Integer initialBid, String startDate, String endDate,
 			String catalog, String createdBy) {
 		this.name = name;
+		this.auctionTypeId = auctionTypeId;
 		this.description = description;
 		this.deptId = deptId;
 		this.initialBid = initialBid;
@@ -27,6 +29,10 @@ public class CreateAuctionDTO {
 	public String getName() {
 		return name;
 	}
+
+    public int getAuctionTypeId(){
+        return auctionTypeId;
+    }
 
 	public String getDescription() {
 		return description;

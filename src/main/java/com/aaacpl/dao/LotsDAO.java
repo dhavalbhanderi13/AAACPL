@@ -1,11 +1,15 @@
 package com.aaacpl.dao;
 
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
+import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.CreateLotResponseDTO;
+import com.aaacpl.dto.lots.LotDTO;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LotsDAO {
     public CreateLotResponseDTO createLot(CreateLotRequestDTO createLotRequestDTO) throws SQLException, IOException{
@@ -70,4 +74,41 @@ public class LotsDAO {
         }
         return createLotResponseDTO;
     }
+
+    public List<LotDTO> getAllLots() throws SQLException, IOException {
+        List<LotDTO> lotDTOs = new ArrayList<LotDTO>();
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query = new StringBuilder("SELECT * FROM lot");
+            ResultSet resultSet = statement.executeQuery(query.toString());
+            while (resultSet.next()) {
+                LotDTO auctionDTO = new LotDTO(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("auction_id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("auction_des"),
+                        resultSet.getString("start_bid"),
+                        resultSet.getInt("difference_factor"),
+                        resultSet.getString("startdate"),
+                        resultSet.getString("enddate"),
+                        resultSet.getString("createdBy"),
+                        resultSet.getString("updatedBy"));
+                lotDTOs.add(auctionDTO);
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return lotDTOs;
+    }
+
 }

@@ -5,11 +5,11 @@ import java.util.List;
 public class AuctionsListResponse {
 	List<AuctionResponse> auctionResponseList;
 
-	public List<AuctionResponse> getDepartmentResponseList() {
+	public List<AuctionResponse> getAuctionResponseList() {
 		return auctionResponseList;
 	}
 
-	public void setDepartmentResponseList(
+	public void setAuctionResponseList(
 			List<AuctionResponse> auctionResponseList) {
 		this.auctionResponseList = auctionResponseList;
 	}

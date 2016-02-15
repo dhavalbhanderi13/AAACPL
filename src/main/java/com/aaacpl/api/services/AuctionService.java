@@ -38,9 +38,8 @@ public class AuctionService {
 		AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
 		AuctionResponseBO auctionResponseBO = auctionRequestHandler.createAuction(createAuctionRequestBO);
 		if (auctionResponseBO.getId() != 0) {
-			createDepartmentResponse.setAuctionId(auctionResponseBO.getId());
 			createDepartmentResponse.setFailureMessage("");
-			createDepartmentResponse.setSuccessMessage("SUCCESS");
+			createDepartmentResponse.setSuccessMessage(String.valueOf(auctionResponseBO.getId()));
 		} else {
 			createDepartmentResponse.setFailureMessage("FAILURE");
 			createDepartmentResponse.setSuccessMessage("");
@@ -57,7 +56,7 @@ public class AuctionService {
 		AuctionsListResponse auctionResponseList = new AuctionsListResponse();
 		
 		auctionResponseList
-				.setDepartmentResponseList(auctionRequestHandler
+				.setAuctionResponseList(auctionRequestHandler
 						.getAllAuctions());
 		return ResponseGenerator.generateResponse(auctionResponseList);
 	}

@@ -25,11 +25,11 @@ public class LotsResponse {
 	private int differenceFactor;
 	private String startDate;
 	private String endDate;
-	private String createdBy;
-	private String updatedBy;
+	private int createdBy;
+	private int updatedBy;
 
 	public LotsResponse(final int id, final int auctionId, final String name, final String description, final String startBid,
-			final int differenceFactor, final String startDate, final String endDate, final String createdBy, final String updatedBy) {
+			final int differenceFactor, final String startDate, final String endDate, final int createdBy, final int updatedBy) {
 		this.id = id;
 		this.auctionId = auctionId;
 		this.name = name;
@@ -74,11 +74,11 @@ public class LotsResponse {
 		return endDate;
 	}
 
-	public String getCreatedBy() {
+	public int getCreatedBy() {
 		return createdBy;
 	}
 
-	public String getUpdatedBy() {
+	public int getUpdatedBy() {
 		return updatedBy;
 	}
 

@@ -1,21 +1,18 @@
 package com.aaacpl.dao;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
+import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.CreateLotResponseDTO;
 import com.aaacpl.dto.lots.LotDTO;
+import com.aaacpl.dto.user.UsersDTO;
 import com.aaacpl.exceptions.lotServiceException.LotNotFoundException;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
+
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LotsDAO {
     public CreateLotResponseDTO createLot(CreateLotRequestDTO createLotRequestDTO) throws SQLException, IOException{
@@ -27,7 +24,7 @@ public class LotsDAO {
             connection = new ConnectionPool().getPoolConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection
-                    .prepareStatement("INSERT INTO lot(auction_id, name, description, start_bid, difference_factor, startdate,enddate,createdBy,updatedby) VALUES (?,?,?,?,?,?,?,?,?);");
+                    .prepareStatement("INSERT INTO lot(auction_id, name, description, start_bid, difference_factor, startdate,enddate,created_by,updated_by) VALUES (?,?,?,?,?,?,?,?,?);");
             preparedStatement.setInt(parameterIndex++,
                     createLotRequestDTO.getAuctionId());
             preparedStatement.setString(parameterIndex++,
@@ -44,9 +41,9 @@ public class LotsDAO {
                     Date.valueOf(createLotRequestDTO.getStartDate()));
             preparedStatement.setDate(parameterIndex++,
                     Date.valueOf(createLotRequestDTO.getEndDate()));
-            preparedStatement.setString(parameterIndex++,
+            preparedStatement.setInt(parameterIndex++,
                     createLotRequestDTO.getCreatedBy());
-            preparedStatement.setString(parameterIndex++,
+            preparedStatement.setInt(parameterIndex++,
                     createLotRequestDTO.getCreatedBy());
             int i = preparedStatement.executeUpdate();
             if (i > 0) {
@@ -100,8 +97,8 @@ public class LotsDAO {
                         resultSet.getInt("difference_factor"),
                         resultSet.getString("startdate"),
                         resultSet.getString("enddate"),
-                        resultSet.getString("createdBy"),
-                        resultSet.getString("updatedBy"));
+                        resultSet.getInt("created_by"),
+                        resultSet.getInt("updated_by"));
                 lotDTOs.add(lotDTO);
             }
         } catch (SQLException sqlException) {
@@ -140,8 +137,8 @@ public class LotsDAO {
                         resultSet.getInt("difference_factor"),
                         resultSet.getString("startdate"),
                         resultSet.getString("enddate"),
-                        resultSet.getString("createdBy"),
-                        resultSet.getString("updatedBy"));
+                        resultSet.getInt("created_by"),
+                        resultSet.getInt("updated_by"));
             }
 
             if(index == 0){

@@ -9,10 +9,10 @@ public class LotDTO {
     private int differenceFactor;
     private String startDate;
     private String endDate;
-    private String createdBy;
-    private String updatedBy;
+    private int createdBy;
+    private int updatedBy;
 
-    public LotDTO(int id, int auctionId, String name, String description, String startBid, int differenceFactor, String startDate, String endDate, String createdBy, String updatedBy) {
+    public LotDTO(int id, int auctionId, String name, String description, String startBid, int differenceFactor, String startDate, String endDate, int createdBy, int updatedBy) {
         this.id = id;
         this.auctionId = auctionId;
         this.name = name;
@@ -57,11 +57,11 @@ public class LotDTO {
         return endDate;
     }
 
-    public String getCreatedBy() {
+    public int getCreatedBy() {
         return createdBy;
     }
 
-    public String getUpdatedBy() {
+    public int getUpdatedBy() {
         return updatedBy;
     }
 

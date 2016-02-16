@@ -8,9 +8,9 @@ public class CreateLotRequestBO {
     private int differenceFactor;
     private String startDate;
     private String endDate;
-    private String createdBy;
+    private int createdBy;
 
-    public CreateLotRequestBO(int auctionId, String name, String description, String startBid, int differenceFactor, String startDate, String endDate, String createdBy) {
+    public CreateLotRequestBO(int auctionId, String name, String description, String startBid, int differenceFactor, String startDate, String endDate, int createdBy) {
         this.auctionId = auctionId;
         this.name = name;
         this.description = description;
@@ -49,7 +49,7 @@ public class CreateLotRequestBO {
         return endDate;
     }
 
-    public String getCreatedBy() {
+    public int getCreatedBy() {
         return createdBy;
     }
 

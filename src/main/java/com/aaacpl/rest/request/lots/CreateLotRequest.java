@@ -8,7 +8,7 @@ public class CreateLotRequest {
     private int differenceFactor;
     private String startDate;
     private String endDate;
-    private String createdBy;
+    private int createdBy;
     public int getAuctionId() {
         return auctionId;
     }
@@ -65,11 +65,11 @@ public class CreateLotRequest {
         this.endDate = endDate;
     }
 
-    public String getCreatedBy() {
+    public int getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
     }
 

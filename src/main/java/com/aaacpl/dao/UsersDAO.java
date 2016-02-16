@@ -21,6 +21,7 @@ public class UsersDAO implements IUsersDAO {
 		try {
 			int parameterIndex = 1;
 			connection = new ConnectionPool().getConnection();
+			connection.setAutoCommit(false);
 			preparedStatement = connection
 					.prepareStatement("INSERT INTO users(type_id, name, company_name, email, password,  material, address, city, state, country,pin, phone, mobile, pan_number, vat_number, reg_date, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 			preparedStatement.setInt(parameterIndex++, usersDTO.getTypeId());
@@ -52,10 +53,13 @@ public class UsersDAO implements IUsersDAO {
 			preparedStatement.setDate(parameterIndex++,
 					new java.sql.Date(today.getTime()));
 			preparedStatement.setString(parameterIndex++, "A");
-			int i = preparedStatement.executeUpdate();
-			if (i > 0) {
-				isCreated = Boolean.TRUE;
-			}
+            int i = preparedStatement.executeUpdate();
+            if (i > 0) {
+                connection.commit();
+                isCreated = Boolean.TRUE;
+            } else {
+                connection.rollback();
+            }
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		} finally {
@@ -67,6 +71,40 @@ public class UsersDAO implements IUsersDAO {
 			}
 		}
 		return isCreated;
+	}
+
+    public Boolean updateSessionId(int userId, Long sessionId) throws SQLException,
+			IOException {
+		boolean isUpdated = false;
+		PreparedStatement preparedStatement = null;
+		Connection connection = null;
+		try {
+			int parameterIndex = 1;
+			connection = new ConnectionPool().getConnection();
+			connection.setAutoCommit(false);
+            StringBuffer query = new StringBuffer("UPDATE users SET sessionId = ").append(sessionId)
+                    .append(" WHERE id = ").append(userId);
+			preparedStatement = connection
+					.prepareStatement(query.toString());
+
+            int i = preparedStatement.executeUpdate();
+            if (i > 0) {
+                connection.commit();
+                isUpdated = Boolean.TRUE;
+            } else {
+                connection.rollback();
+            }
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				preparedStatement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return isUpdated;
 	}
 
 	@Override

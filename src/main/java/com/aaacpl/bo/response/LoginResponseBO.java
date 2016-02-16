@@ -1,11 +1,17 @@
 package com.aaacpl.bo.response;
 
-/**
- * Created by Hp on 11-02-2016.
- */
 public class LoginResponseBO {
 	private Boolean isValidUser;
 	private int id;
+	private long sessionId;
+
+	public long getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(long sessionId) {
+		this.sessionId = sessionId;
+	}
 
 	public int getId() {
 		return id;
@@ -23,9 +29,12 @@ public class LoginResponseBO {
 		isValidUser = validUser;
 	}
 
-	@Override
-	public String toString() {
-		return "LoginResponseBO{" + "isValidUser=" + isValidUser + ", id=" + id
-				+ '}';
-	}
+    @Override
+    public String toString() {
+        return "LoginResponseBO{" +
+                "isValidUser=" + isValidUser +
+                ", id=" + id +
+                ", sessionId=" + sessionId +
+                '}';
+    }
 }

@@ -3,6 +3,7 @@ package com.aaacpl.requestHandlers;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.aaacpl.bo.request.user.LoginRequestBO;
@@ -44,8 +45,14 @@ public class UserRequestHandler {
 				.getNamePasswordForLoginValidationForName(loginRequestBO
 						.getName());
 		LoginResponseBO loginResponseBO = new LoginResponseBO();
-		loginResponseBO.setValidUser(usersValidation.validateUserNamePassword(
-				loginRequestBO, loginResponseDTO));
+		Boolean isValidUser = usersValidation.validateUserNamePassword(
+				loginRequestBO, loginResponseDTO);
+		if(isValidUser){
+            Long sessionId = new Date().getTime();
+            usersDAO.updateSessionId(loginResponseDTO.getId(), sessionId);
+			loginResponseBO.setSessionId(sessionId);
+		}
+		loginResponseBO.setValidUser(isValidUser);
 		loginResponseBO.setId(loginResponseDTO.getId());
 		return loginResponseBO;
 	}
@@ -123,4 +130,17 @@ public class UserRequestHandler {
 				.getTypeId()));
 		return userResponse;
 	}
+
+    public Boolean logout(int userId){
+        Boolean isLoggedOut = Boolean.FALSE;
+        try {
+            UsersDAO usersDAO = new UsersDAO();
+            isLoggedOut = usersDAO.updateSessionId(userId, null);
+        }catch (SQLException s){
+            s.printStackTrace();
+        }catch (IOException s){
+            s.printStackTrace();
+        }
+        return isLoggedOut;
+    }
 }

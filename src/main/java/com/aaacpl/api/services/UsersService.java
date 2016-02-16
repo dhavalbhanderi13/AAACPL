@@ -19,11 +19,13 @@ import com.aaacpl.bo.response.LoginResponseBO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.requestHandlers.UserRequestHandler;
 import com.aaacpl.rest.request.user.LoginRequest;
+import com.aaacpl.rest.request.user.LogoutRequest;
 import com.aaacpl.rest.request.user.RegistrationRequest;
 import com.aaacpl.rest.response.user.LoginResponse;
 import com.aaacpl.rest.response.user.RegistrationResponse;
 import com.aaacpl.rest.response.user.UserTypesResponse;
 import com.aaacpl.rest.util.ResponseGenerator;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 @Path("/user")
 public class UsersService {
@@ -43,8 +45,7 @@ public class UsersService {
 			if (loginResponseBO.getValidUser()) {
 				loginResponse.setFailureMessage("");
 				loginResponse.setUserId(loginResponseBO.getId());
-				loginResponse.setSuccessMessage(String.valueOf(new Date()
-						.getTime()));
+				loginResponse.setSuccessMessage(String.valueOf(loginResponseBO.getSessionId()));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -124,5 +125,24 @@ public class UsersService {
 			return ResponseGenerator.generateResponse(loginResponse);
 		}
 		return ResponseGenerator.generateResponse(response);
+	}
+
+	@POST
+	@Path("/logout")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response logout(LogoutRequest logoutRequest){
+		UserRequestHandler userRequestHandler = new UserRequestHandler();
+		Boolean isLoggedOut = userRequestHandler.logout(logoutRequest.getUserId());
+        LoginResponse loginResponse = new LoginResponse();
+        if(isLoggedOut){
+            loginResponse.setSuccessMessage("SUCCESS");
+            loginResponse.setFailureMessage("");
+            return ResponseGenerator.generateResponse(loginResponse);
+        }else{
+            loginResponse.setSuccessMessage("");
+            loginResponse.setFailureMessage("FAILURE");
+            return ResponseGenerator.generateResponse(loginResponse);
+        }
 	}
 }

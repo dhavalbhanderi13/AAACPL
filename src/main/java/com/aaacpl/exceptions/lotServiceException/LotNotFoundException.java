@@ -1,7 +1,9 @@
 package com.aaacpl.exceptions.lotServiceException;
 
 public class LotNotFoundException extends RuntimeException {
-    public LotNotFoundException(String message){
-        super(message);
-    }
+	private static final long serialVersionUID = 1L;
+
+	public LotNotFoundException(String message) {
+		super(message);
+	}
 }

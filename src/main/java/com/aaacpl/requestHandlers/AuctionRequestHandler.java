@@ -15,10 +15,10 @@ import com.aacpl.rest.response.auction.AuctionResponse;
 
 public class AuctionRequestHandler {
 
-	public AuctionResponseBO createAuction(CreateAuctionRequestBO createAuctionRequestBO) {
-		Boolean isProcessed = Boolean.FALSE;
+	public AuctionResponseBO createAuction(
+			CreateAuctionRequestBO createAuctionRequestBO) {
 		AuctionDAO auctionDao = new AuctionDAO();
-        AuctionResponseBO auctionResponseBO = new AuctionResponseBO();
+		AuctionResponseBO auctionResponseBO = new AuctionResponseBO();
 		CreateAuctionDTO auctionDTO = new CreateAuctionDTO(
 				createAuctionRequestBO.getName(),
 				createAuctionRequestBO.getAuctionTypeId(),
@@ -32,11 +32,12 @@ public class AuctionRequestHandler {
 
 		try {
 
-			auctionResponseBO.setId(auctionDao.insertAuction(auctionDTO).getId());
+			auctionResponseBO.setId(auctionDao.insertAuction(auctionDTO)
+					.getId());
 		} catch (SQLException sq) {
-            sq.printStackTrace();
+			sq.printStackTrace();
 		} catch (IOException sqlException) {
-            sqlException.printStackTrace();
+			sqlException.printStackTrace();
 		}
 
 		return auctionResponseBO;
@@ -46,7 +47,8 @@ public class AuctionRequestHandler {
 		List<AuctionResponse> departmentResponseList = new ArrayList<AuctionResponse>();
 		try {
 			AuctionDAO auctionDAO = new AuctionDAO();
-			List<AuctionDTO> auctionsDTOs = auctionDAO.getAllAuctions(departmentId);
+			List<AuctionDTO> auctionsDTOs = auctionDAO
+					.getAllAuctions(departmentId);
 			departmentResponseList = buildListOfDepartmentResponseFromDTOs(auctionsDTOs);
 		} catch (SQLException s) {
 			s.printStackTrace();
@@ -63,14 +65,38 @@ public class AuctionRequestHandler {
 		while (iterator.hasNext()) {
 			AuctionDTO auctionDTO = iterator.next();
 			AuctionResponse auctionResponse = new AuctionResponse(
-                    auctionDTO.getId(),	auctionDTO.getName(),
-                    auctionDTO.getAuctionTypeId(), auctionDTO.getDescription(),
+					auctionDTO.getId(), auctionDTO.getName(),
+					auctionDTO.getAuctionTypeId(), auctionDTO.getDescription(),
 					auctionDTO.getDeptId(), auctionDTO.getInitialBid(),
 					auctionDTO.getStartDate(), auctionDTO.getEndDate(),
 					auctionDTO.getCatalog(), auctionDTO.getCreatedBy());
 			auctionResponseList.add(auctionResponse);
 		}
 		return auctionResponseList;
+	}
+
+	public AuctionResponse getAuctionById(int id) {
+		AuctionResponse auctionResponse = null;
+		try {
+			AuctionDAO auctionDAO = new AuctionDAO();
+			AuctionDTO auctionDTO = auctionDAO.getLotById(id);
+			auctionResponse = buildLotResponseFromDTOs(auctionDTO);
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (IOException s) {
+			s.printStackTrace();
+		}
+		return auctionResponse;
+	}
+
+	private AuctionResponse buildLotResponseFromDTOs(AuctionDTO auctionDTO) {
+		AuctionResponse auctionResponse = new AuctionResponse(
+				auctionDTO.getId(), auctionDTO.getName(),
+				auctionDTO.getAuctionTypeId(), auctionDTO.getDescription(),
+				auctionDTO.getDeptId(), auctionDTO.getInitialBid(),
+				auctionDTO.getStartDate(), auctionDTO.getEndDate(),
+				auctionDTO.getCatalog(), auctionDTO.getCreatedBy());
+		return auctionResponse;
 	}
 
 }

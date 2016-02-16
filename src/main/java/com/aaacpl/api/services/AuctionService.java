@@ -1,10 +1,6 @@
 package com.aaacpl.api.services;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -50,14 +46,14 @@ public class AuctionService {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/list")
-	public Response getAllAuctions() {
+	@Path("/list/{departmentId}")
+	public Response getAllAuctions(@PathParam("departmentId") int departmentId) {
 		AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
 		AuctionsListResponse auctionResponseList = new AuctionsListResponse();
 		
 		auctionResponseList
 				.setAuctionResponseList(auctionRequestHandler
-						.getAllAuctions());
+						.getAllAuctions(departmentId));
 		return ResponseGenerator.generateResponse(auctionResponseList);
 	}
 

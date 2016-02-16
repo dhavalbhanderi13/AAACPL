@@ -42,11 +42,11 @@ public class AuctionRequestHandler {
 		return auctionResponseBO;
 	}
 
-	public List<AuctionResponse> getAllAuctions() {
+	public List<AuctionResponse> getAllAuctions(int departmentId) {
 		List<AuctionResponse> departmentResponseList = new ArrayList<AuctionResponse>();
 		try {
 			AuctionDAO auctionDAO = new AuctionDAO();
-			List<AuctionDTO> auctionsDTOs = auctionDAO.getAllAuctions();
+			List<AuctionDTO> auctionsDTOs = auctionDAO.getAllAuctions(departmentId);
 			departmentResponseList = buildListOfDepartmentResponseFromDTOs(auctionsDTOs);
 		} catch (SQLException s) {
 			s.printStackTrace();

@@ -2,8 +2,9 @@ package com.aaacpl.requestHandlers;
 
 import com.aaacpl.bo.request.department.CreateDepartmentRequestBO;
 import com.aaacpl.bo.request.department.UpdateDepartmentRequestBO;
+import com.aaacpl.bo.response.CreateDepartmentResponseBO;
 import com.aaacpl.dao.DepartmentDAO;
-import com.aaacpl.dto.department.CreateDepartmentDTO;
+import com.aaacpl.dto.department.CreateDepartmentRequestDTO;
 import com.aaacpl.dto.department.DepartmentDTO;
 import com.aaacpl.dto.department.UpdateDepartmentDTO;
 import com.aaacpl.rest.response.department.DepartmentResponse;
@@ -15,23 +16,24 @@ import java.util.Iterator;
 import java.util.List;
 
 public class DepartmentRequestHandler {
-	public Boolean createDepartment(
+	public CreateDepartmentResponseBO createDepartment(
 			CreateDepartmentRequestBO createDepartmentRequestBO) {
 		Boolean isProcessed = Boolean.FALSE;
 		DepartmentDAO departmentDAO = new DepartmentDAO();
-		CreateDepartmentDTO createDepartmentDTO = new CreateDepartmentDTO();
-		createDepartmentDTO.setName(createDepartmentRequestBO.getName());
-		createDepartmentDTO
+		CreateDepartmentRequestDTO createDepartmentRequestDTO = new CreateDepartmentRequestDTO();
+		createDepartmentRequestDTO.setName(createDepartmentRequestBO.getName());
+		createDepartmentRequestDTO
 				.setLogoPath(createDepartmentRequestBO.getLogoPath());
+		CreateDepartmentResponseBO createDepartmentResponseBO = new CreateDepartmentResponseBO();
 		try {
-			isProcessed = departmentDAO.insertDepartment(createDepartmentDTO);
+			createDepartmentResponseBO.setId(departmentDAO.insertDepartment(createDepartmentRequestDTO).getId());
 		} catch (SQLException sq) {
 			isProcessed = false;
 		} catch (IOException sqlException) {
 			isProcessed = false;
 		}
 
-		return isProcessed;
+		return createDepartmentResponseBO;
 	}
 
 	public List<DepartmentResponse> getAllDepartments() {

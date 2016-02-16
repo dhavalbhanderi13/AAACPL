@@ -85,14 +85,14 @@ public class AuctionDAO {
 		return auctionResponseDTO;
 	}
 
-	public List<AuctionDTO> getAllAuctions() throws SQLException, IOException {
+	public List<AuctionDTO> getAllAuctions(int departmentId) throws SQLException, IOException {
 		List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
 		Connection connection = null;
 		Statement statement = null;
 		try {
 			connection = new ConnectionPool().getConnection();
 			statement = connection.createStatement();
-			StringBuilder query = new StringBuilder("SELECT * FROM auction");
+			StringBuilder query = new StringBuilder("SELECT * FROM auction where dept_id = ").append(departmentId);
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
 				AuctionDTO auctionDTO = new AuctionDTO(

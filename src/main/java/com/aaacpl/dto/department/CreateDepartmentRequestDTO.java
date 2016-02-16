@@ -1,6 +1,6 @@
 package com.aaacpl.dto.department;
 
-public class CreateDepartmentDTO {
+public class CreateDepartmentRequestDTO {
 
 	private String name;
 	private String logoPath;
@@ -32,7 +32,7 @@ public class CreateDepartmentDTO {
 
 	@Override
 	public String toString() {
-		return "CreateDepartmentDTO{" + "departmentId='" + deptId + "\'"
+		return "CreateDepartmentRequestDTO{" + "departmentId='" + deptId + "\'"
 				+ ", name='" + name + '\'' + ", logoPath='" + logoPath + '\''
 				+ '}';
 	}

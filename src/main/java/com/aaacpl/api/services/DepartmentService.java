@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 
 import com.aaacpl.bo.request.department.CreateDepartmentRequestBO;
 import com.aaacpl.bo.request.department.UpdateDepartmentRequestBO;
+import com.aaacpl.bo.response.CreateDepartmentResponseBO;
 import com.aaacpl.requestHandlers.DepartmentRequestHandler;
 import com.aaacpl.rest.request.department.CreateDepartmentRequest;
 import com.aaacpl.rest.request.department.UpdateDepartmentRequest;
@@ -33,10 +34,11 @@ public class DepartmentService {
 				.getLogoPath());
 		DepartmentRequestHandler departmentRequestHandler = new DepartmentRequestHandler();
 		CreateDepartmentResponse createDepartmentResponse = new CreateDepartmentResponse();
-		if (departmentRequestHandler
-				.createDepartment(createDepartmentRequestBO)) {
+		CreateDepartmentResponseBO createDepartmentResponseBO = departmentRequestHandler
+				.createDepartment(createDepartmentRequestBO);
+		if (createDepartmentResponseBO.getId() != 0) {
 			createDepartmentResponse.setFailureMessage("");
-			createDepartmentResponse.setSuccessMessage("SUCCESS");
+			createDepartmentResponse.setSuccessMessage(String.valueOf(createDepartmentResponseBO.getId()));
 		} else {
 			createDepartmentResponse.setFailureMessage("FAILURE");
 			createDepartmentResponse.setSuccessMessage("");

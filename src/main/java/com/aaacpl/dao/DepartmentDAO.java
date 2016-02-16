@@ -10,30 +10,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
-import com.aaacpl.dto.department.CreateDepartmentDTO;
+import com.aaacpl.dto.auction.CreateAuctionDTO;
+import com.aaacpl.dto.department.CreateDepartmentRequestDTO;
+import com.aaacpl.dto.department.CreateDepartmentResponseDTO;
 import com.aaacpl.dto.department.DepartmentDTO;
 import com.aaacpl.dto.department.UpdateDepartmentDTO;
 
 public class DepartmentDAO {
-	public Boolean insertDepartment(CreateDepartmentDTO createDepartmentDTO)
+	public CreateDepartmentResponseDTO insertDepartment(CreateDepartmentRequestDTO createDepartmentRequestDTO)
 			throws SQLException, IOException {
 		boolean isCreated = false;
 		PreparedStatement preparedStatement = null;
 		Connection connection = null;
+        CreateDepartmentResponseDTO createDepartmentResponseDTO = new CreateDepartmentResponseDTO();
 		try {
 			int parameterIndex = 1;
 			connection = new ConnectionPool().getPoolConnection();
+			connection.setAutoCommit(false);
 			preparedStatement = connection
 					.prepareStatement("INSERT INTO department(name, logo_path, status) VALUES (?,?,?);");
 			preparedStatement.setString(parameterIndex++,
-					createDepartmentDTO.getName());
+					createDepartmentRequestDTO.getName());
 			preparedStatement.setString(parameterIndex++,
-					createDepartmentDTO.getLogoPath());
+					createDepartmentRequestDTO.getLogoPath());
 			preparedStatement.setString(parameterIndex++, "A");
-			int i = preparedStatement.executeUpdate();
-			if (i > 0) {
-				isCreated = Boolean.TRUE;
-			}
+            int i = preparedStatement.executeUpdate();
+            if (i > 0) {
+                connection.commit();
+                isCreated = Boolean.TRUE;
+            } else {
+                connection.rollback();
+            }
+
+            try{
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    createDepartmentResponseDTO.setId(generatedKeys.getInt(1));
+                }
+                else {
+                    throw new SQLException("Creating department failed, no ID obtained.");
+                }
+            }catch (SQLException e){
+                connection.rollback();
+                e.printStackTrace();
+            }
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		} finally {
@@ -44,7 +64,7 @@ public class DepartmentDAO {
 				e.printStackTrace();
 			}
 		}
-		return isCreated;
+		return createDepartmentResponseDTO;
 	}
 
 	public List<DepartmentDTO> getAllDepartments() throws SQLException,

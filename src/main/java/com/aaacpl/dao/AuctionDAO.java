@@ -26,7 +26,7 @@ public class AuctionDAO {
 		AuctionResponseDTO auctionResponseDTO = new AuctionResponseDTO();
 		try {
 			int parameterIndex = 1;
-			connection = new ConnectionPool().getPoolConnection();
+			connection = new ConnectionPool().getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection
 					.prepareStatement("INSERT INTO auction(dept_id, auction_type_id, auction_name,auction_des,initial_bid,startdate,enddate,catalog,status,updatedby) VALUES (?,?,?,?,?,?,?,?,?,?);");

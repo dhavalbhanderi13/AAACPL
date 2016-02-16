@@ -25,7 +25,7 @@ public class DepartmentDAO {
         CreateDepartmentResponseDTO createDepartmentResponseDTO = new CreateDepartmentResponseDTO();
 		try {
 			int parameterIndex = 1;
-			connection = new ConnectionPool().getPoolConnection();
+			connection = new ConnectionPool().getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection
 					.prepareStatement("INSERT INTO department(name, logo_path, status) VALUES (?,?,?);");

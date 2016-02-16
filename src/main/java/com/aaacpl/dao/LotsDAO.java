@@ -21,7 +21,7 @@ public class LotsDAO {
         CreateLotResponseDTO createLotResponseDTO = new CreateLotResponseDTO(0);
         try {
             int parameterIndex = 1;
-            connection = new ConnectionPool().getPoolConnection();
+            connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection
                     .prepareStatement("INSERT INTO lot(auction_id, name, description, start_bid, difference_factor, startdate,enddate,created_by,updated_by) VALUES (?,?,?,?,?,?,?,?,?);");

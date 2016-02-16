@@ -5,6 +5,9 @@ import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.CreateLotResponseDTO;
 import com.aaacpl.dto.lots.LotDTO;
+import com.aaacpl.dto.user.UsersDTO;
+import com.aaacpl.exceptions.lotServiceException.LotNotFoundException;
+import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 
 import java.io.IOException;
 import java.sql.*;
@@ -75,28 +78,28 @@ public class LotsDAO {
         return createLotResponseDTO;
     }
 
-    public List<LotDTO> getAllLots() throws SQLException, IOException {
+    public List<LotDTO> getAllLots(int auctionId) throws SQLException, IOException {
         List<LotDTO> lotDTOs = new ArrayList<LotDTO>();
         Connection connection = null;
         Statement statement = null;
         try {
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();
-            StringBuilder query = new StringBuilder("SELECT * FROM lot");
+            StringBuilder query = new StringBuilder("SELECT * FROM lot where auction_id = ").append(auctionId);
             ResultSet resultSet = statement.executeQuery(query.toString());
             while (resultSet.next()) {
-                LotDTO auctionDTO = new LotDTO(
+                LotDTO lotDTO = new LotDTO(
                         resultSet.getInt("id"),
                         resultSet.getInt("auction_id"),
                         resultSet.getString("name"),
-                        resultSet.getString("auction_des"),
+                        resultSet.getString("description"),
                         resultSet.getString("start_bid"),
                         resultSet.getInt("difference_factor"),
                         resultSet.getString("startdate"),
                         resultSet.getString("enddate"),
                         resultSet.getString("createdBy"),
                         resultSet.getString("updatedBy"));
-                lotDTOs.add(auctionDTO);
+                lotDTOs.add(lotDTO);
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -111,4 +114,47 @@ public class LotsDAO {
         return lotDTOs;
     }
 
+
+    public LotDTO getLotById(int id) throws SQLException, IOException,
+            UserNotFoundException {
+        Connection connection = null;
+        Statement statement = null;
+        LotDTO lotDTO = null;
+        try {
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query = new StringBuilder("SELECT * FROM lot where id = ").append(id);
+            ResultSet resultSet = statement.executeQuery(query.toString());
+            int index = 0;
+            while (resultSet.next()) {
+                index++;
+                lotDTO = new LotDTO(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("auction_id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("description"),
+                        resultSet.getString("start_bid"),
+                        resultSet.getInt("difference_factor"),
+                        resultSet.getString("startdate"),
+                        resultSet.getString("enddate"),
+                        resultSet.getString("createdBy"),
+                        resultSet.getString("updatedBy"));
+            }
+
+            if(index == 0){
+                throw new LotNotFoundException("Lot not found");
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return lotDTO;
+    }
 }
+

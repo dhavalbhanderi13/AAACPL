@@ -19,21 +19,21 @@ import java.util.Iterator;
 import java.util.List;
 
 public class LotsRequestHandler {
-    public CreateLotResponseBO createLot(CreateLotRequestBO createLotRequestBO){
+    public CreateLotResponseBO createLot(CreateLotRequestBO createLotRequestBO) {
         CreateLotResponseBO createLotResponseBO = null;
         LotsDAO lotsDAO = new LotsDAO();
-        try{
+        try {
             createLotResponseBO = new CreateLotResponseBO(lotsDAO.createLot(buildCreateLotRequestDTOFromBO(createLotRequestBO)).getId());
-        }catch (SQLException s){
+        } catch (SQLException s) {
             s.printStackTrace();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return createLotResponseBO;
     }
 
-    private CreateLotRequestDTO buildCreateLotRequestDTOFromBO(CreateLotRequestBO createLotRequestBO){
+    private CreateLotRequestDTO buildCreateLotRequestDTOFromBO(CreateLotRequestBO createLotRequestBO) {
         CreateLotRequestDTO createLotRequestDTO = new CreateLotRequestDTO(
                 createLotRequestBO.getAuctionId(),
                 createLotRequestBO.getName(),
@@ -47,11 +47,11 @@ public class LotsRequestHandler {
         return createLotRequestDTO;
     }
 
-    public List<LotsResponse> getAllLots() {
+    public List<LotsResponse> getAllLots(int auctionId) {
         List<LotsResponse> departmentResponseList = new ArrayList<LotsResponse>();
         try {
             LotsDAO lotsDAO = new LotsDAO();
-            List<LotDTO> lotDTOs = lotsDAO.getAllLots();
+            List<LotDTO> lotDTOs = lotsDAO.getAllLots(auctionId);
             departmentResponseList = buildListOfLotsFromDTOs(lotDTOs);
         } catch (SQLException s) {
             s.printStackTrace();
@@ -61,6 +61,20 @@ public class LotsRequestHandler {
         return departmentResponseList;
     }
 
+    public LotsResponse getLotById(int id) {
+        LotsResponse lotsResponse = null;
+        try {
+            LotsDAO lotsDAO = new LotsDAO();
+            LotDTO lotDTO = lotsDAO.getLotById(id);
+            lotsResponse = buildLotResponseFromDTOs(lotDTO);
+        } catch (SQLException s) {
+            s.printStackTrace();
+        } catch (IOException s) {
+            s.printStackTrace();
+        }
+        return lotsResponse;
+    }
+
     private List<LotsResponse> buildListOfLotsFromDTOs(
             List<LotDTO> lotDTOs) {
         List<LotsResponse> lotsResponseList = new ArrayList<LotsResponse>();
@@ -68,7 +82,7 @@ public class LotsRequestHandler {
         while (iterator.hasNext()) {
             LotDTO lotDTO = iterator.next();
             LotsResponse auctionResponse = new LotsResponse(
-                  lotDTO.getId(),
+                    lotDTO.getId(),
                     lotDTO.getAuctionId(),
                     lotDTO.getName(),
                     lotDTO.getDescription(),
@@ -81,5 +95,20 @@ public class LotsRequestHandler {
             lotsResponseList.add(auctionResponse);
         }
         return lotsResponseList;
+    }
+
+    private LotsResponse buildLotResponseFromDTOs(LotDTO lotDTO) {
+        LotsResponse lotsResponse = new LotsResponse(
+                    lotDTO.getId(),
+                    lotDTO.getAuctionId(),
+                    lotDTO.getName(),
+                    lotDTO.getDescription(),
+                    lotDTO.getStartBid(),
+                    lotDTO.getDifferenceFactor(),
+                    lotDTO.getStartDate(),
+                    lotDTO.getEndDate(),
+                    lotDTO.getCreatedBy(),
+                    lotDTO.getUpdatedBy());
+        return lotsResponse;
     }
 }

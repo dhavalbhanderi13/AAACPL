@@ -2,13 +2,16 @@ package com.aaacpl.api.services;
 
 import com.aaacpl.bo.request.lots.CreateLotRequestBO;
 import com.aaacpl.bo.response.CreateLotResponseBO;
-import com.aaacpl.requestHandlers.AuctionRequestHandler;
+import com.aaacpl.exceptions.lotServiceException.LotNotFoundException;
 import com.aaacpl.requestHandlers.LotsRequestHandler;
 import com.aaacpl.rest.request.lots.CreateLotRequest;
+import com.aaacpl.rest.request.lots.GetAllLotsRequest;
 import com.aaacpl.rest.response.lots.CreateLotResponse;
+import com.aaacpl.rest.response.lots.LotNotFoundResponse;
 import com.aaacpl.rest.response.lots.LotsListResponse;
+import com.aaacpl.rest.response.lots.LotsResponse;
+import com.aaacpl.rest.response.user.LoginResponse;
 import com.aaacpl.rest.util.ResponseGenerator;
-import com.aacpl.rest.response.auction.AuctionsListResponse;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -48,15 +51,30 @@ public class LotsService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/list")
-    public Response getAllLots() {
+    @Path("/list/{auctionId}")
+    public Response getAllLots(@PathParam("auctionId") int auctionId) {
         LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
         LotsListResponse lotsListResponse = new LotsListResponse();
 
         lotsListResponse
                 .setLotsResponseList(lotsRequestHandler
-                        .getAllLots());
+                        .getAllLots(auctionId));
         return ResponseGenerator.generateResponse(lotsListResponse);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/lotInfo/{id}")
+    public Response getLotInfo(@PathParam("id") int id) {
+        Object response = null;
+        try {
+            LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
+            response = lotsRequestHandler.getLotById(id);
+        }catch (LotNotFoundException l){
+            LotNotFoundResponse lotNotFoundResponse = new LotNotFoundResponse();
+            lotNotFoundResponse.setFailureMessage(l.getMessage());
+            return ResponseGenerator.generateResponse(lotNotFoundResponse);
+        }
+        return ResponseGenerator.generateResponse(response);
+    }
 }

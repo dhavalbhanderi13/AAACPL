@@ -1,18 +1,21 @@
 package com.aaacpl.dao;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
-import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.CreateLotResponseDTO;
 import com.aaacpl.dto.lots.LotDTO;
-import com.aaacpl.dto.user.UsersDTO;
 import com.aaacpl.exceptions.lotServiceException.LotNotFoundException;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
-
-import java.io.IOException;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LotsDAO {
     public CreateLotResponseDTO createLot(CreateLotRequestDTO createLotRequestDTO) throws SQLException, IOException{

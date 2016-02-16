@@ -4,13 +4,16 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.aaacpl.bo.request.auction.CreateAuctionRequestBO;
 import com.aaacpl.bo.response.AuctionResponseBO;
+import com.aaacpl.bo.response.ResourceNotFoundResponse;
 import com.aaacpl.requestHandlers.AuctionRequestHandler;
+import com.aaacpl.rest.exceptions.ResourceNotFoundException;
 import com.aaacpl.rest.request.auction.CreateAuctionRequest;
 import com.aaacpl.rest.util.ResponseGenerator;
 import com.aacpl.rest.response.auction.AuctionsListResponse;
@@ -36,30 +39,45 @@ public class AuctionService {
 				createAuctionRequest.getCreatedBy());
 		CreateAuctionResponse createDepartmentResponse = new CreateAuctionResponse();
 		AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
-		AuctionResponseBO auctionResponseBO = auctionRequestHandler.createAuction(createAuctionRequestBO);
+		AuctionResponseBO auctionResponseBO = auctionRequestHandler
+				.createAuction(createAuctionRequestBO);
 		if (auctionResponseBO.getId() != 0) {
 			createDepartmentResponse.setFailureMessage("");
-			createDepartmentResponse.setSuccessMessage(String.valueOf(auctionResponseBO.getId()));
+			createDepartmentResponse.setSuccessMessage(String
+					.valueOf(auctionResponseBO.getId()));
 		} else {
 			createDepartmentResponse.setFailureMessage("FAILURE");
 			createDepartmentResponse.setSuccessMessage("");
 		}
 		return ResponseGenerator.generateResponse(createDepartmentResponse);
 	}
-	
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/list")
-	public Response getAllAuctions() {
+	@Path("/list/{departmentId}")
+	public Response getAllAuctions(@PathParam("departmentId") int departmentId) {
 		AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
 		AuctionsListResponse auctionResponseList = new AuctionsListResponse();
-		
-		auctionResponseList
-				.setAuctionResponseList(auctionRequestHandler
-						.getAllAuctions());
+
+		auctionResponseList.setAuctionResponseList(auctionRequestHandler
+				.getAllAuctions(departmentId));
 		return ResponseGenerator.generateResponse(auctionResponseList);
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/auctionInfo/{id}")
+	public Response getAuctionInfo(@PathParam("id") int id) {
+		Object response = null;
+		try {
+			AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
+			response = auctionRequestHandler.getAuctionById(id);
+		} catch (ResourceNotFoundException l) {
+			ResourceNotFoundResponse resourceNotFoundResponse = new ResourceNotFoundResponse();
+			resourceNotFoundResponse.setFailureMessage(l.getMessage());
+			return ResponseGenerator.generateResponse(resourceNotFoundResponse);
+		}
+		return ResponseGenerator.generateResponse(response);
+	}
 
 }

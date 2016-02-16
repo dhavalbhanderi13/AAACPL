@@ -14,12 +14,13 @@ import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.auction.AuctionResponseDTO;
 import com.aaacpl.dto.auction.CreateAuctionDTO;
+import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
+import com.aaacpl.rest.exceptions.ResourceNotFoundException;
 
 public class AuctionDAO {
 
 	public AuctionResponseDTO insertAuction(CreateAuctionDTO createAuctionDTO)
 			throws SQLException, IOException {
-		boolean isCreated = false;
 		PreparedStatement preparedStatement = null;
 		Connection connection = null;
 		AuctionResponseDTO auctionResponseDTO = new AuctionResponseDTO();
@@ -54,20 +55,19 @@ public class AuctionDAO {
 			int i = preparedStatement.executeUpdate();
 			if (i > 0) {
 				connection.commit();
-				isCreated = Boolean.TRUE;
 			} else {
 				connection.rollback();
 			}
 
-			try{
+			try {
 				ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
 				if (generatedKeys.next()) {
 					auctionResponseDTO.setId(generatedKeys.getInt(1));
+				} else {
+					throw new SQLException(
+							"Creating user failed, no ID obtained.");
 				}
-				else {
-					throw new SQLException("Creating user failed, no ID obtained.");
-				}
-			}catch (SQLException e){
+			} catch (SQLException e) {
 				connection.rollback();
 				e.printStackTrace();
 			}
@@ -85,18 +85,20 @@ public class AuctionDAO {
 		return auctionResponseDTO;
 	}
 
-	public List<AuctionDTO> getAllAuctions() throws SQLException, IOException {
+	public List<AuctionDTO> getAllAuctions(int departmentId)
+			throws SQLException, IOException {
 		List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
 		Connection connection = null;
 		Statement statement = null;
 		try {
 			connection = new ConnectionPool().getConnection();
 			statement = connection.createStatement();
-			StringBuilder query = new StringBuilder("SELECT * FROM auction");
+			StringBuilder query = new StringBuilder(
+					"SELECT * FROM auction where dept_id = ")
+					.append(departmentId);
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
-				AuctionDTO auctionDTO = new AuctionDTO(
-						resultSet.getInt("id"),
+				AuctionDTO auctionDTO = new AuctionDTO(resultSet.getInt("id"),
 						resultSet.getString("auction_name"),
 						resultSet.getInt("auction_type_id"),
 						resultSet.getString("auction_des"),
@@ -119,6 +121,49 @@ public class AuctionDAO {
 			}
 		}
 		return auctionDTOs;
+	}
+
+	public AuctionDTO getLotById(int id) throws SQLException, IOException,
+			UserNotFoundException {
+		Connection connection = null;
+		Statement statement = null;
+		AuctionDTO auctionDTO = null;
+		try {
+			connection = new ConnectionPool().getConnection();
+			statement = connection.createStatement();
+			StringBuilder query = new StringBuilder(
+					"SELECT * FROM auction where id = ").append(id);
+			ResultSet resultSet = statement.executeQuery(query.toString());
+			int index = 0;
+			while (resultSet.next()) {
+				index++;
+				auctionDTO = new AuctionDTO(resultSet.getInt("id"),
+						resultSet.getString("name"),
+						resultSet.getInt("auction_type_id"),
+						resultSet.getString("description"),
+						resultSet.getInt("dept_id"),
+						resultSet.getInt("initial_bid"),
+						resultSet.getString("startdate"),
+						resultSet.getString("enddate"),
+						resultSet.getString("catalog"),
+						resultSet.getString("createdBy"));
+			}
+
+			if (index == 0) {
+				throw new ResourceNotFoundException("Auction ID " + id
+						+ "not found");
+			}
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return auctionDTO;
 	}
 
 }

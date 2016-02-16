@@ -12,7 +12,7 @@ public class Testing {
 
 		// Test for get auctions
 
-		System.out.println(as.getAllAuctions());
+		System.out.println(as.getAllAuctions(1));
 
 		// test for create Auction
 

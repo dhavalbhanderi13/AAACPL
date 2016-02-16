@@ -77,4 +77,17 @@ public class LotsService {
         }
         return ResponseGenerator.generateResponse(response);
     }
+
+    @GET
+    @Path("/byAccess/{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLotsByUserAccess(@PathParam("userId") int userId){
+        LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
+        LotsListResponse lotsListResponse = new LotsListResponse();
+
+        lotsListResponse
+                .setLotsResponseList(lotsRequestHandler
+                        .getLotsByAccess(userId));
+        return ResponseGenerator.generateResponse(lotsListResponse);
+    }
 }

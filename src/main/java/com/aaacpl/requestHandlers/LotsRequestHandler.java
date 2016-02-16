@@ -5,6 +5,7 @@ import com.aaacpl.bo.request.lots.CreateLotRequestBO;
 import com.aaacpl.bo.response.CreateLotResponseBO;
 import com.aaacpl.dao.AuctionDAO;
 import com.aaacpl.dao.LotsDAO;
+import com.aaacpl.dao.UserLotMapDAO;
 import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.LotDTO;
@@ -110,5 +111,23 @@ public class LotsRequestHandler {
                     lotDTO.getCreatedBy(),
                     lotDTO.getUpdatedBy());
         return lotsResponse;
+    }
+
+    public List<LotsResponse> getLotsByAccess(int userId){
+        List<LotsResponse> lotsResponseList = new ArrayList<LotsResponse>();
+        try {
+            LotsDAO lotsDAO = new LotsDAO();
+            UserLotMapDAO userLotMapDAO = new UserLotMapDAO();
+            List<Integer> lotIdList = userLotMapDAO.getLotsForUser(userId);
+            Iterator<Integer> lots = lotIdList.iterator();
+            while(lots.hasNext()){
+                lotsResponseList.add(buildLotResponseFromDTOs(lotsDAO.getLotById(lots.next())));
+            }
+        } catch (SQLException s) {
+            s.printStackTrace();
+        } catch (IOException s) {
+            s.printStackTrace();
+        }
+        return lotsResponseList;
     }
 }

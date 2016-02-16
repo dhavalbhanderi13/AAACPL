@@ -2,10 +2,13 @@ package com.aaacpl.api.services;
 
 import com.aaacpl.bo.request.lots.CreateLotRequestBO;
 import com.aaacpl.bo.response.CreateLotResponseBO;
+import com.aaacpl.requestHandlers.AuctionRequestHandler;
 import com.aaacpl.requestHandlers.LotsRequestHandler;
 import com.aaacpl.rest.request.lots.CreateLotRequest;
 import com.aaacpl.rest.response.lots.CreateLotResponse;
+import com.aaacpl.rest.response.lots.LotsListResponse;
 import com.aaacpl.rest.util.ResponseGenerator;
+import com.aacpl.rest.response.auction.AuctionsListResponse;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -45,8 +48,15 @@ public class LotsService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllLots(){
+    @Path("/list")
+    public Response getAllLots() {
         LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
-        return null;
+        LotsListResponse lotsListResponse = new LotsListResponse();
+
+        lotsListResponse
+                .setLotsResponseList(lotsRequestHandler
+                        .getAllLots());
+        return ResponseGenerator.generateResponse(lotsListResponse);
     }
+
 }

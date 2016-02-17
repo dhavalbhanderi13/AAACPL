@@ -9,11 +9,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.aaacpl.bo.request.lots.BidRequestBO;
 import com.aaacpl.bo.request.lots.CreateLotRequestBO;
 import com.aaacpl.bo.response.CreateLotResponseBO;
 import com.aaacpl.exceptions.lotServiceException.LotNotFoundException;
 import com.aaacpl.requestHandlers.LotsRequestHandler;
+import com.aaacpl.rest.request.lots.BidRequest;
 import com.aaacpl.rest.request.lots.CreateLotRequest;
+import com.aaacpl.rest.response.lots.BidResponse;
 import com.aaacpl.rest.response.lots.CreateLotResponse;
 import com.aaacpl.rest.response.lots.LotNotFoundResponse;
 import com.aaacpl.rest.response.lots.LotsListResponse;
@@ -90,4 +93,26 @@ public class LotsService {
 				.getLotsByAccess(userId));
 		return ResponseGenerator.generateResponse(lotsListResponse);
 	}
+
+	@POST
+	@Path("/bid")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response insertBid(BidRequest bidRequest) {
+		BidRequestBO bidRequestBO = new BidRequestBO(bidRequest.getLotId(),
+				bidRequest.getUserId(), bidRequest.getBidAmount(),
+				bidRequest.getIpAddress(), bidRequest.getCreated());
+
+		BidResponse bidResponse = new BidResponse();
+		LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
+		if (lotsRequestHandler.insertBid(bidRequestBO)) {
+			bidResponse.setFailureMessage("");
+			bidResponse.setSuccessMessage("Bid was Successful");
+		} else {
+			bidResponse.setFailureMessage("Bid Request Failed");
+			bidResponse.setSuccessMessage("");
+		}
+		return ResponseGenerator.generateResponse(bidResponse);
+	}
+
 }

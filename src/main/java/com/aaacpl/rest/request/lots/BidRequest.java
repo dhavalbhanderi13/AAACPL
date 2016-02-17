@@ -6,7 +6,7 @@ public class BidRequest {
 	private Integer userId;
 	private Long bidAmount;
 	private String ipAddress;
-	private String created;
+	private String localSystemTime;
 
 	public Integer getLotId() {
 		return lotId;
@@ -40,19 +40,19 @@ public class BidRequest {
 		this.ipAddress = ipAddress;
 	}
 
-	public String getCreated() {
-		return created;
+	public String getLocalSystemTime() {
+		return localSystemTime;
 	}
 
-	public void setCreated(String created) {
-		this.created = created;
+	public void setLocalSystemTime(String localSystemTime) {
+		this.localSystemTime = localSystemTime;
 	}
 
 	@Override
 	public String toString() {
 		return "BidRequest {'lotId'=" + lotId + ", 'userId'=" + userId
 				+ ", 'bidAmount'=" + bidAmount + ", 'ipAddress'='" + ipAddress
-				+ "', 'created'='" + created + "'}";
+				+ "', 'localSystemTime'='" + localSystemTime + "'}";
 	}
 
 }

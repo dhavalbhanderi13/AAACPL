@@ -1,20 +1,22 @@
 package com.aaacpl.dto.auction;
 
+import java.sql.Timestamp;
+
 public class CreateAuctionDTO {
 
 	private String name;
 	private int auctionTypeId;
 	private String description;
 	private Integer deptId;
-	private String startDate;
-	private String endDate;
+	private Timestamp startDate;
+	private Timestamp endDate;
 	private String catalog;
 	private Integer createdBy;
 	private Integer updatedBy;
 
 	public CreateAuctionDTO(String name, int auctionTypeId, String description,
-			Integer deptId, String startDate, String endDate, String catalog,
-			Integer createdBy, Integer updatedBy) {
+			Integer deptId, Timestamp startDate, Timestamp endDate,
+			String catalog, Integer createdBy, Integer updatedBy) {
 		this.name = name;
 		this.auctionTypeId = auctionTypeId;
 		this.description = description;
@@ -42,11 +44,11 @@ public class CreateAuctionDTO {
 		return deptId;
 	}
 
-	public String getStartDate() {
+	public Timestamp getStartDate() {
 		return startDate;
 	}
 
-	public String getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
 

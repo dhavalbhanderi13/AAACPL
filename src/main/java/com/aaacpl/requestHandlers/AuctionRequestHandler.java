@@ -11,6 +11,7 @@ import com.aaacpl.bo.response.AuctionResponseBO;
 import com.aaacpl.dao.AuctionDAO;
 import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.auction.CreateAuctionDTO;
+import com.aaacpl.util.DateUtil;
 import com.aacpl.rest.response.auction.AuctionResponse;
 
 public class AuctionRequestHandler {
@@ -24,9 +25,10 @@ public class AuctionRequestHandler {
 				createAuctionRequestBO.getAuctionTypeId(),
 				createAuctionRequestBO.getDescription(),
 				createAuctionRequestBO.getDeptId(),
-				createAuctionRequestBO.getStartDate(),
-				createAuctionRequestBO.getEndDate(),
-				createAuctionRequestBO.getCatalog(),
+				DateUtil.getTimeStampFromString(createAuctionRequestBO
+						.getStartDate()),
+				DateUtil.getTimeStampFromString(createAuctionRequestBO
+						.getEndDate()), createAuctionRequestBO.getCatalog(),
 				createAuctionRequestBO.getCreatedBy(),
 				createAuctionRequestBO.getUpdatedBy());
 
@@ -58,23 +60,6 @@ public class AuctionRequestHandler {
 		return departmentResponseList;
 	}
 
-	private List<AuctionResponse> buildListOfDepartmentResponseFromDTOs(
-			List<AuctionDTO> auctionDTOs) {
-		List<AuctionResponse> auctionResponseList = new ArrayList<AuctionResponse>();
-		Iterator<AuctionDTO> iterator = auctionDTOs.iterator();
-		while (iterator.hasNext()) {
-			AuctionDTO auctionDTO = iterator.next();
-			AuctionResponse auctionResponse = new AuctionResponse(
-					auctionDTO.getId(), auctionDTO.getName(),
-					auctionDTO.getAuctionTypeId(), auctionDTO.getDescription(),
-					auctionDTO.getDeptId(), auctionDTO.getStartDate(),
-					auctionDTO.getEndDate(), auctionDTO.getCatalog(),
-					auctionDTO.getCreatedBy(), auctionDTO.getUpdatedBy());
-			auctionResponseList.add(auctionResponse);
-		}
-		return auctionResponseList;
-	}
-
 	public AuctionResponse getAuctionById(int id) {
 		AuctionResponse auctionResponse = null;
 		try {
@@ -89,13 +74,37 @@ public class AuctionRequestHandler {
 		return auctionResponse;
 	}
 
+	private List<AuctionResponse> buildListOfDepartmentResponseFromDTOs(
+			List<AuctionDTO> auctionDTOs) {
+		List<AuctionResponse> auctionResponseList = new ArrayList<AuctionResponse>();
+		Iterator<AuctionDTO> iterator = auctionDTOs.iterator();
+		while (iterator.hasNext()) {
+			AuctionDTO auctionDTO = iterator.next();
+			AuctionResponse auctionResponse = new AuctionResponse(
+					auctionDTO.getId(),
+					auctionDTO.getName(),
+					auctionDTO.getAuctionTypeId(),
+					auctionDTO.getDescription(),
+					auctionDTO.getDeptId(),
+					DateUtil.getDateStringFromTimeStamp(auctionDTO
+							.getStartDate()),
+					DateUtil.getDateStringFromTimeStamp(auctionDTO.getEndDate()),
+					auctionDTO.getCatalog(), auctionDTO.getCreatedBy(),
+					auctionDTO.getUpdatedBy());
+			auctionResponseList.add(auctionResponse);
+		}
+		return auctionResponseList;
+	}
+
 	private AuctionResponse buildLotResponseFromDTOs(AuctionDTO auctionDTO) {
 		AuctionResponse auctionResponse = new AuctionResponse(
 				auctionDTO.getId(), auctionDTO.getName(),
 				auctionDTO.getAuctionTypeId(), auctionDTO.getDescription(),
-				auctionDTO.getDeptId(), auctionDTO.getStartDate(),
-				auctionDTO.getEndDate(), auctionDTO.getCatalog(),
-				auctionDTO.getCreatedBy(), auctionDTO.getUpdatedBy());
+				auctionDTO.getDeptId(),
+				DateUtil.getDateStringFromTimeStamp(auctionDTO.getStartDate()),
+				DateUtil.getDateStringFromTimeStamp(auctionDTO.getEndDate()),
+				auctionDTO.getCatalog(), auctionDTO.getCreatedBy(),
+				auctionDTO.getUpdatedBy());
 		return auctionResponse;
 	}
 

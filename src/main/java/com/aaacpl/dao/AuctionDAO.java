@@ -2,7 +2,6 @@ package com.aaacpl.dao;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +28,7 @@ public class AuctionDAO {
 			connection = new ConnectionPool().getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection
-					.prepareStatement("INSERT INTO auction(dept_id, auction_type_id, auction_name,auction_des,startdate,enddate,catalog,status,createdby,updatedby) VALUES (?,?,?,?,?,?,?,?,?,?);");
+					.prepareStatement("INSERT INTO auction(dept_id, auction_type_id, auction_name, auction_des, startdate, enddate, catalog, status, createdby, updatedby) VALUES (?,?,?,?,?,?,?,?,?,?);");
 
 			preparedStatement.setInt(parameterIndex++,
 					createAuctionDTO.getDeptId());
@@ -44,11 +43,11 @@ public class AuctionDAO {
 					createAuctionDTO.getDescription());
 
 			// Example : String date = "2000-11-21"; YYYY-MM-DD
-			preparedStatement.setDate(parameterIndex++,
-					Date.valueOf(createAuctionDTO.getStartDate()));
+			preparedStatement.setTimestamp(parameterIndex++,
+					createAuctionDTO.getStartDate());
 
-			preparedStatement.setDate(parameterIndex++,
-					Date.valueOf(createAuctionDTO.getEndDate()));
+			preparedStatement.setTimestamp(parameterIndex++,
+					createAuctionDTO.getEndDate());
 
 			preparedStatement.setString(parameterIndex++,
 					createAuctionDTO.getCatalog());
@@ -112,8 +111,8 @@ public class AuctionDAO {
 						resultSet.getInt("auction_type_id"),
 						resultSet.getString("auction_des"),
 						resultSet.getInt("dept_id"),
-						resultSet.getString("startdate"),
-						resultSet.getString("enddate"),
+						resultSet.getTimestamp("startdate"),
+						resultSet.getTimestamp("enddate"),
 						resultSet.getString("catalog"),
 						resultSet.getInt("createdBy"),
 						resultSet.getInt("updatedBy"));
@@ -151,8 +150,8 @@ public class AuctionDAO {
 						resultSet.getInt("auction_type_id"),
 						resultSet.getString("auction_des"),
 						resultSet.getInt("dept_id"),
-						resultSet.getString("startdate"),
-						resultSet.getString("enddate"),
+						resultSet.getTimestamp("startdate"),
+						resultSet.getTimestamp("enddate"),
 						resultSet.getString("catalog"),
 						resultSet.getInt("createdBy"),
 						resultSet.getInt("updatedBy"));

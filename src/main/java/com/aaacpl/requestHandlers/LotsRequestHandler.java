@@ -1,26 +1,19 @@
 package com.aaacpl.requestHandlers;
 
 
-import com.aaacpl.bo.request.lots.CreateLotRequestBO;
-import com.aaacpl.bo.response.CreateLotResponseBO;
-import com.aaacpl.dao.AuctionDAO;
-import com.aaacpl.dao.LotsDAO;
-import com.aaacpl.dao.UserLotMapDAO;
-import com.aaacpl.dto.auction.AuctionDTO;
-import com.aaacpl.dto.lots.CreateLotRequestDTO;
-import com.aaacpl.dto.lots.LotDTO;
-import com.aaacpl.rest.response.lots.CreateLotResponse;
-import com.aaacpl.rest.response.lots.LotsResponse;
-import com.aaacpl.util.DateUtil;
-import com.aacpl.rest.response.auction.AuctionResponse;
-
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import com.aaacpl.bo.request.lots.CreateLotRequestBO;
+import com.aaacpl.bo.response.CreateLotResponseBO;
+import com.aaacpl.dao.LotsDAO;
+import com.aaacpl.dto.lots.CreateLotRequestDTO;
+import com.aaacpl.dto.lots.LotDTO;
+import com.aaacpl.rest.response.lots.LotsResponse;
+import com.aaacpl.util.DateUtil;
 
 public class LotsRequestHandler {
     public CreateLotResponseBO createLot(CreateLotRequestBO createLotRequestBO) {

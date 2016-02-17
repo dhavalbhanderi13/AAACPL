@@ -114,6 +114,42 @@ public class LotsDAO {
         return lotDTOs;
     }
 
+    public List<LotDTO> getLotsByUser(int userId) throws SQLException, IOException {
+        List<LotDTO> lotDTOs = new ArrayList<LotDTO>();
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query = new StringBuilder("select * from lot where id IN(Select DISTINCT lot_id from lot_user_map where user_id =").append(userId).append(")");
+            ResultSet resultSet = statement.executeQuery(query.toString());
+            while (resultSet.next()) {
+                LotDTO lotDTO = new LotDTO(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("auction_id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("description"),
+                        resultSet.getString("start_bid"),
+                        resultSet.getInt("difference_factor"),
+                        resultSet.getString("startdate"),
+                        resultSet.getString("enddate"),
+                        resultSet.getInt("created_by"),
+                        resultSet.getInt("updated_by"));
+                lotDTOs.add(lotDTO);
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return lotDTOs;
+    }
+
 
     public LotDTO getLotById(int id) throws SQLException, IOException,
             UserNotFoundException {

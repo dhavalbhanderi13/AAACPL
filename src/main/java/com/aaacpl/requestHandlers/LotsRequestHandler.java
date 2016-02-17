@@ -117,12 +117,7 @@ public class LotsRequestHandler {
         List<LotsResponse> lotsResponseList = new ArrayList<LotsResponse>();
         try {
             LotsDAO lotsDAO = new LotsDAO();
-            UserLotMapDAO userLotMapDAO = new UserLotMapDAO();
-            List<Integer> lotIdList = userLotMapDAO.getLotsForUser(userId);
-            Iterator<Integer> lots = lotIdList.iterator();
-            while(lots.hasNext()){
-                lotsResponseList.add(buildLotResponseFromDTOs(lotsDAO.getLotById(lots.next())));
-            }
+            lotsResponseList = buildListOfLotsFromDTOs(lotsDAO.getLotsByUser(userId));
         } catch (SQLException s) {
             s.printStackTrace();
         } catch (IOException s) {

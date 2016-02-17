@@ -56,32 +56,4 @@ public class UserLotMapDAO {
         }
         return isInserted;
     }
-
-    public List<Integer> getLotsForUser(int userId) throws SQLException, IOException {
-        List<Integer> lotIdList = new ArrayList<Integer>();
-        Connection connection = null;
-        Statement statement = null;
-        try {
-            connection = new ConnectionPool().getConnection();
-            statement = connection.createStatement();
-            StringBuilder query = new StringBuilder(
-                    "SELECT DISTINCT lot_id FROM lot_user_map where user_id = ")
-                    .append(userId);
-            ResultSet resultSet = statement.executeQuery(query.toString());
-            while (resultSet.next()) {
-                lotIdList.add(resultSet.getInt("lot_id"));
-            }
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return lotIdList;
-    }
-
 }

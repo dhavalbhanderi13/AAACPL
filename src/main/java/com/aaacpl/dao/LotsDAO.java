@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.aaacpl.bo.request.lots.BidRequestBO;
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.CreateLotResponseDTO;
@@ -210,5 +211,166 @@ public class LotsDAO {
 			}
 		}
 		return lotDTO;
+	}
+
+	public Boolean insertBid(BidRequestBO bidRequestBO) throws SQLException,
+			IOException {
+		boolean isProcessed = false;
+		Connection connection = null;
+		try {
+			connection = new ConnectionPool().getConnection();
+			connection.setAutoCommit(false);
+
+			// First Log the bid request in lot_audit_log
+			if (insertIntoLotAuditLog(connection, bidRequestBO)) {
+
+				// returning true because we are not sure if the bid is max
+				isProcessed = Boolean.TRUE;
+
+				// Check if the current bid Amount is greater than Max
+				if (isBidAmtMax(connection, bidRequestBO)) {
+
+					// If true Insert/Update the Max value in live_audit_log
+					insertIntoLiveBidLog(connection, bidRequestBO);
+				}
+			}
+
+		} catch (SQLException sqlException) {
+			isProcessed = false;
+			connection.rollback();
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return isProcessed;
+	}
+
+	private boolean insertIntoLotAuditLog(Connection connection,
+			BidRequestBO bidRequestBO) throws SQLException, IOException {
+		PreparedStatement preparedStatement = null;
+		int parameterIndex = 1;
+		boolean isProcessed = false;
+		try {
+			preparedStatement = connection
+					.prepareStatement("INSERT INTO lot_audit_log(user_id, lot_id, bid_amt, ipAddress, created) "
+							+ " VALUES (?,?,?,?,?);");
+
+			preparedStatement
+					.setInt(parameterIndex++, bidRequestBO.getUserId());
+
+			preparedStatement.setInt(parameterIndex++, bidRequestBO.getLotId());
+
+			preparedStatement.setLong(parameterIndex++,
+					bidRequestBO.getBidAmount());
+
+			preparedStatement.setString(parameterIndex++,
+					bidRequestBO.getIpAddress());
+
+			preparedStatement.setString(parameterIndex++,
+					bidRequestBO.getCreated());
+
+			int i = preparedStatement.executeUpdate();
+
+			if (i > 0) {
+				isProcessed = true;
+				connection.commit();
+			} else {
+				connection.rollback();
+			}
+		} catch (SQLException sqlException) {
+			connection.rollback();
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				// Do Not close connection over here
+				preparedStatement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return isProcessed;
+	}
+
+	private Boolean isBidAmtMax(Connection connection, BidRequestBO bidRequestBO)
+			throws SQLException, IOException {
+		Statement statement = null;
+		Long maxValue = null;
+		Boolean isMax = Boolean.FALSE;
+		String query = "SELECT MAX(max_value) from live_bid_log WHERE lot_id="
+				+ bidRequestBO.getLotId();
+		try {
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(query);
+
+			maxValue = rs.getLong("max_value");
+
+			if (maxValue != null && bidRequestBO.getBidAmount() > maxValue) {
+				return Boolean.TRUE;
+			}
+
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				// Do Not close connection over here
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return isMax;
+	}
+
+	private boolean insertIntoLiveBidLog(Connection connection,
+			BidRequestBO bidRequestBO) throws SQLException, IOException {
+		PreparedStatement preparedStatement = null;
+		int parameterIndex = 1;
+		boolean isProcessed = false;
+		try {
+			preparedStatement = connection
+					.prepareStatement("INSERT INTO live_bid_log(user_id, lot_id, max_value, ipAddress, created) "
+							+ " VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE max_value="
+							+ bidRequestBO.getBidAmount() + ";");
+
+			preparedStatement
+					.setInt(parameterIndex++, bidRequestBO.getUserId());
+
+			preparedStatement.setInt(parameterIndex++, bidRequestBO.getLotId());
+
+			preparedStatement.setLong(parameterIndex++,
+					bidRequestBO.getBidAmount());
+
+			preparedStatement.setString(parameterIndex++,
+					bidRequestBO.getIpAddress());
+
+			preparedStatement.setString(parameterIndex++,
+					bidRequestBO.getCreated());
+
+			int i = preparedStatement.executeUpdate();
+
+			if (i > 0) {
+				isProcessed = true;
+				connection.commit();
+			} else {
+				connection.rollback();
+			}
+		} catch (SQLException sqlException) {
+			connection.rollback();
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				// Do Not close connection over here
+				preparedStatement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return isProcessed;
 	}
 }

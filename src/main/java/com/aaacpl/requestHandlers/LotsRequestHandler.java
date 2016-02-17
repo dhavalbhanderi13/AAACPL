@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.aaacpl.bo.request.lots.BidRequestBO;
 import com.aaacpl.bo.request.lots.CreateLotRequestBO;
 import com.aaacpl.bo.response.CreateLotResponseBO;
 import com.aaacpl.dao.LotsDAO;
@@ -114,5 +115,18 @@ public class LotsRequestHandler {
 			s.printStackTrace();
 		}
 		return lotsResponseList;
+	}
+
+	public Boolean insertBid(BidRequestBO bidRequestBO) {
+		LotsDAO lotsDAO = new LotsDAO();
+		boolean isProcessed = false;
+		try {
+			if(lotsDAO.insertBid(bidRequestBO)){
+				isProcessed = true;
+			}
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+		}
+		return isProcessed;
 	}
 }

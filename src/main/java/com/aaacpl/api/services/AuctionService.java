@@ -27,16 +27,18 @@ public class AuctionService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/create")
 	public Response create(CreateAuctionRequest createAuctionRequest) {
+		
 		CreateAuctionRequestBO createAuctionRequestBO = new CreateAuctionRequestBO(
 				createAuctionRequest.getName(),
 				createAuctionRequest.getAuctionTypeId(),
 				createAuctionRequest.getDescription(),
 				createAuctionRequest.getDeptId(),
-				createAuctionRequest.getInitialBid(),
 				createAuctionRequest.getStartDate(),
 				createAuctionRequest.getEndDate(),
 				createAuctionRequest.getCatalog(),
-				createAuctionRequest.getCreatedBy());
+				createAuctionRequest.getCreatedBy(),
+				createAuctionRequest.getUpdatedBy());
+		
 		CreateAuctionResponse createDepartmentResponse = new CreateAuctionResponse();
 		AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
 		AuctionResponseBO auctionResponseBO = auctionRequestHandler

@@ -6,11 +6,11 @@ public class CreateAuctionRequest {
 	private int auctionTypeId;
 	private String description;
 	private Integer deptId;
-	private Integer initialBid;
 	private String startDate;
 	private String endDate;
 	private String catalog;
-	private String createdBy;
+	private Integer createdBy;
+	private Integer updatedBy;
 
 	public String getName() {
 		return name;
@@ -19,7 +19,6 @@ public class CreateAuctionRequest {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public int getAuctionTypeId() {
 		return auctionTypeId;
@@ -43,14 +42,6 @@ public class CreateAuctionRequest {
 
 	public void setDeptId(Integer deptId) {
 		this.deptId = deptId;
-	}
-
-	public Integer getInitialBid() {
-		return initialBid;
-	}
-
-	public void setInitialBid(Integer initialBid) {
-		this.initialBid = initialBid;
 	}
 
 	public String getStartDate() {
@@ -77,19 +68,28 @@ public class CreateAuctionRequest {
 		this.catalog = catalog;
 	}
 
-	public String getCreatedBy() {
+	public Integer getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(Integer createdBy) {
 		this.createdBy = createdBy;
 	}
-	
+
+	public Integer getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Integer updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
 	@Override
 	public String toString() {
 		return "CreateAuctionRequestBO {'name': '" + name
-				+ "',  'auctionTypeId': '" + auctionTypeId + "',  'description': '" + description + "',  'deptId': '"
-				+ deptId + "',  'initialBid': '" + initialBid
+				+ "',  'auctionTypeId': '" + auctionTypeId
+				+ "',  'description': '" + description + "',  'deptId': '"
+				+ deptId + "',  'updatedBy': '" + updatedBy
 				+ "',  'startDate': '" + startDate + "',  'endDate': '" + name
 				+ "enddate',  'catalog': '" + catalog + "',  'createdBy': '"
 				+ createdBy + "'";

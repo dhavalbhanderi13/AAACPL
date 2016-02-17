@@ -29,29 +29,38 @@ public class AuctionDAO {
 			connection = new ConnectionPool().getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection
-					.prepareStatement("INSERT INTO auction(dept_id, auction_type_id, auction_name,auction_des,initial_bid,startdate,enddate,catalog,status,updatedby) VALUES (?,?,?,?,?,?,?,?,?,?);");
+					.prepareStatement("INSERT INTO auction(dept_id, auction_type_id, auction_name,auction_des,startdate,enddate,catalog,status,createdby,updatedby) VALUES (?,?,?,?,?,?,?,?,?,?);");
+
 			preparedStatement.setInt(parameterIndex++,
 					createAuctionDTO.getDeptId());
+
 			preparedStatement.setInt(parameterIndex++,
 					createAuctionDTO.getAuctionTypeId());
+
 			preparedStatement.setString(parameterIndex++,
 					createAuctionDTO.getName());
+
 			preparedStatement.setString(parameterIndex++,
 					createAuctionDTO.getDescription());
-			preparedStatement.setInt(parameterIndex++,
-					createAuctionDTO.getInitialBid());
 
 			// Example : String date = "2000-11-21"; YYYY-MM-DD
 			preparedStatement.setDate(parameterIndex++,
 					Date.valueOf(createAuctionDTO.getStartDate()));
+
 			preparedStatement.setDate(parameterIndex++,
 					Date.valueOf(createAuctionDTO.getEndDate()));
 
 			preparedStatement.setString(parameterIndex++,
 					createAuctionDTO.getCatalog());
+
 			preparedStatement.setString(parameterIndex++, "A");
-			preparedStatement.setString(parameterIndex++,
+
+			preparedStatement.setInt(parameterIndex++,
 					createAuctionDTO.getCreatedBy());
+
+			preparedStatement.setInt(parameterIndex++,
+					createAuctionDTO.getUpdatedBy());
+
 			int i = preparedStatement.executeUpdate();
 			if (i > 0) {
 				connection.commit();
@@ -103,11 +112,11 @@ public class AuctionDAO {
 						resultSet.getInt("auction_type_id"),
 						resultSet.getString("auction_des"),
 						resultSet.getInt("dept_id"),
-						resultSet.getInt("initial_bid"),
 						resultSet.getString("startdate"),
 						resultSet.getString("enddate"),
 						resultSet.getString("catalog"),
-						resultSet.getString("updatedBy"));
+						resultSet.getInt("createdBy"),
+						resultSet.getInt("updatedBy"));
 				auctionDTOs.add(auctionDTO);
 			}
 		} catch (SQLException sqlException) {
@@ -138,15 +147,15 @@ public class AuctionDAO {
 			while (resultSet.next()) {
 				index++;
 				auctionDTO = new AuctionDTO(resultSet.getInt("id"),
-						resultSet.getString("name"),
+						resultSet.getString("auction_name"),
 						resultSet.getInt("auction_type_id"),
-						resultSet.getString("description"),
+						resultSet.getString("auction_des"),
 						resultSet.getInt("dept_id"),
-						resultSet.getInt("initial_bid"),
 						resultSet.getString("startdate"),
 						resultSet.getString("enddate"),
 						resultSet.getString("catalog"),
-						resultSet.getString("createdBy"));
+						resultSet.getInt("createdBy"),
+						resultSet.getInt("updatedBy"));
 			}
 
 			if (index == 0) {

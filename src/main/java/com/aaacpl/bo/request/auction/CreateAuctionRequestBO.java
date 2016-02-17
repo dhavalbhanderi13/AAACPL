@@ -6,24 +6,24 @@ public class CreateAuctionRequestBO {
 	private int auctionTypeId;
 	private String description;
 	private Integer deptId;
-	private Integer initialBid;
 	private String startDate;
 	private String endDate;
 	private String catalog;
-	private String createdBy;
+	private Integer createdBy;
+	private Integer updatedBy;
 
-	public CreateAuctionRequestBO(String name, int auctionTypeId, String description,
-			Integer deptId, Integer initialBid, String startDate,
-			String endDate, String catalog, String createdBy) {
+	public CreateAuctionRequestBO(String name, int auctionTypeId,
+			String description, Integer deptId, String startDate,
+			String endDate, String catalog, Integer createdBy, Integer updatedBy) {
 		this.name = name;
-        this.auctionTypeId = auctionTypeId;
+		this.auctionTypeId = auctionTypeId;
 		this.description = description;
 		this.deptId = deptId;
-		this.initialBid = initialBid;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.catalog = catalog;
 		this.createdBy = createdBy;
+		this.updatedBy = updatedBy;
 
 	}
 
@@ -31,9 +31,9 @@ public class CreateAuctionRequestBO {
 		return name;
 	}
 
-    public int getAuctionTypeId(){
-        return auctionTypeId;
-    }
+	public int getAuctionTypeId() {
+		return auctionTypeId;
+	}
 
 	public String getDescription() {
 		return description;
@@ -41,10 +41,6 @@ public class CreateAuctionRequestBO {
 
 	public Integer getDeptId() {
 		return deptId;
-	}
-
-	public Integer getInitialBid() {
-		return initialBid;
 	}
 
 	public String getStartDate() {
@@ -59,15 +55,19 @@ public class CreateAuctionRequestBO {
 		return catalog;
 	}
 
-	public String getCreatedBy() {
+	public Integer getCreatedBy() {
 		return createdBy;
+	}
+
+	public Integer getUpdatedBy() {
+		return updatedBy;
 	}
 
 	@Override
 	public String toString() {
 		return "CreateAuctionRequestBO {'name': '" + name
 				+ "',  'description': '" + description + "',  'deptId': '"
-				+ deptId + "',  'initialBid': '" + initialBid
+				+ deptId + "',  'updatedBy': '" + updatedBy
 				+ "',  'startDate': '" + startDate + "',  'endDate': '" + name
 				+ "enddate',  'catalog': '" + catalog + "',  'createdBy': '"
 				+ createdBy + "'";

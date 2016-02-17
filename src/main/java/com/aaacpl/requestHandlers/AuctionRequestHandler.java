@@ -24,11 +24,11 @@ public class AuctionRequestHandler {
 				createAuctionRequestBO.getAuctionTypeId(),
 				createAuctionRequestBO.getDescription(),
 				createAuctionRequestBO.getDeptId(),
-				createAuctionRequestBO.getInitialBid(),
 				createAuctionRequestBO.getStartDate(),
 				createAuctionRequestBO.getEndDate(),
 				createAuctionRequestBO.getCatalog(),
-				createAuctionRequestBO.getCreatedBy());
+				createAuctionRequestBO.getCreatedBy(),
+				createAuctionRequestBO.getUpdatedBy());
 
 		try {
 
@@ -67,9 +67,9 @@ public class AuctionRequestHandler {
 			AuctionResponse auctionResponse = new AuctionResponse(
 					auctionDTO.getId(), auctionDTO.getName(),
 					auctionDTO.getAuctionTypeId(), auctionDTO.getDescription(),
-					auctionDTO.getDeptId(), auctionDTO.getInitialBid(),
-					auctionDTO.getStartDate(), auctionDTO.getEndDate(),
-					auctionDTO.getCatalog(), auctionDTO.getCreatedBy());
+					auctionDTO.getDeptId(), auctionDTO.getStartDate(),
+					auctionDTO.getEndDate(), auctionDTO.getCatalog(),
+					auctionDTO.getCreatedBy(), auctionDTO.getUpdatedBy());
 			auctionResponseList.add(auctionResponse);
 		}
 		return auctionResponseList;
@@ -93,9 +93,9 @@ public class AuctionRequestHandler {
 		AuctionResponse auctionResponse = new AuctionResponse(
 				auctionDTO.getId(), auctionDTO.getName(),
 				auctionDTO.getAuctionTypeId(), auctionDTO.getDescription(),
-				auctionDTO.getDeptId(), auctionDTO.getInitialBid(),
-				auctionDTO.getStartDate(), auctionDTO.getEndDate(),
-				auctionDTO.getCatalog(), auctionDTO.getCreatedBy());
+				auctionDTO.getDeptId(), auctionDTO.getStartDate(),
+				auctionDTO.getEndDate(), auctionDTO.getCatalog(),
+				auctionDTO.getCreatedBy(), auctionDTO.getUpdatedBy());
 		return auctionResponse;
 	}
 

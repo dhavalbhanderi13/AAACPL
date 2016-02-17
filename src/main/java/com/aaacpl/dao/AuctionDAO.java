@@ -65,7 +65,7 @@ public class AuctionDAO {
 					auctionResponseDTO.setId(generatedKeys.getInt(1));
 				} else {
 					throw new SQLException(
-							"Creating user failed, no ID obtained.");
+							"Creating auction failed, no ID obtained.");
 				}
 			} catch (SQLException e) {
 				connection.rollback();

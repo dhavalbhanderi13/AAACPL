@@ -1,5 +1,7 @@
 package com.aaacpl.dto.lots;
 
+import java.sql.Timestamp;
+
 /**
  * Created by Hp on 15-02-2016.
  */
@@ -9,11 +11,11 @@ public class CreateLotRequestDTO {
     private String description;
     private String startBid;
     private int differenceFactor;
-    private String startDate;
-    private String endDate;
+    private Timestamp startDate;
+    private Timestamp endDate;
     private int createdBy;
 
-    public CreateLotRequestDTO(int auctionId, String name, String description, String startBid, int differenceFactor, String startDate, String endDate, int createdBy) {
+    public CreateLotRequestDTO(int auctionId, String name, String description, String startBid, int differenceFactor, Timestamp startDate, Timestamp endDate, int createdBy) {
         this.auctionId = auctionId;
         this.name = name;
         this.description = description;
@@ -44,11 +46,11 @@ public class CreateLotRequestDTO {
         return differenceFactor;
     }
 
-    public String getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public String getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 

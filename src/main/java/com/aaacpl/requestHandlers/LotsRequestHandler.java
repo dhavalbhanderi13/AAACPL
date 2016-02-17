@@ -11,10 +11,13 @@ import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.LotDTO;
 import com.aaacpl.rest.response.lots.CreateLotResponse;
 import com.aaacpl.rest.response.lots.LotsResponse;
+import com.aaacpl.util.DateUtil;
 import com.aacpl.rest.response.auction.AuctionResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -41,8 +44,8 @@ public class LotsRequestHandler {
                 createLotRequestBO.getDescription(),
                 createLotRequestBO.getStartBid(),
                 createLotRequestBO.getDifferenceFactor(),
-                createLotRequestBO.getStartDate(),
-                createLotRequestBO.getEndDate(),
+                DateUtil.getTimeStampFromString(createLotRequestBO.getStartDate()),
+                DateUtil.getTimeStampFromString(createLotRequestBO.getEndDate()),
                 createLotRequestBO.getCreatedBy()
         );
         return createLotRequestDTO;
@@ -89,8 +92,8 @@ public class LotsRequestHandler {
                     lotDTO.getDescription(),
                     lotDTO.getStartBid(),
                     lotDTO.getDifferenceFactor(),
-                    lotDTO.getStartDate(),
-                    lotDTO.getEndDate(),
+                    DateUtil.getDateStringFromTimeStamp(lotDTO.getStartDate()),
+                    DateUtil.getDateStringFromTimeStamp(lotDTO.getEndDate()),
                     lotDTO.getCreatedBy(),
                     lotDTO.getUpdatedBy());
             lotsResponseList.add(auctionResponse);
@@ -100,20 +103,20 @@ public class LotsRequestHandler {
 
     private LotsResponse buildLotResponseFromDTOs(LotDTO lotDTO) {
         LotsResponse lotsResponse = new LotsResponse(
-                    lotDTO.getId(),
-                    lotDTO.getAuctionId(),
-                    lotDTO.getName(),
-                    lotDTO.getDescription(),
-                    lotDTO.getStartBid(),
-                    lotDTO.getDifferenceFactor(),
-                    lotDTO.getStartDate(),
-                    lotDTO.getEndDate(),
-                    lotDTO.getCreatedBy(),
-                    lotDTO.getUpdatedBy());
+                lotDTO.getId(),
+                lotDTO.getAuctionId(),
+                lotDTO.getName(),
+                lotDTO.getDescription(),
+                lotDTO.getStartBid(),
+                lotDTO.getDifferenceFactor(),
+                DateUtil.getDateStringFromTimeStamp(lotDTO.getStartDate()),
+                DateUtil.getDateStringFromTimeStamp(lotDTO.getEndDate()),
+                lotDTO.getCreatedBy(),
+                lotDTO.getUpdatedBy());
         return lotsResponse;
     }
 
-    public List<LotsResponse> getLotsByAccess(int userId){
+    public List<LotsResponse> getLotsByAccess(int userId) {
         List<LotsResponse> lotsResponseList = new ArrayList<LotsResponse>();
         try {
             LotsDAO lotsDAO = new LotsDAO();

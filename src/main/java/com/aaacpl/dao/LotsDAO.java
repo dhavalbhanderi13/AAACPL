@@ -5,7 +5,6 @@ import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.CreateLotResponseDTO;
 import com.aaacpl.dto.lots.LotDTO;
-import com.aaacpl.dto.user.UsersDTO;
 import com.aaacpl.exceptions.lotServiceException.LotNotFoundException;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 
@@ -37,10 +36,10 @@ public class LotsDAO {
                     createLotRequestDTO.getDifferenceFactor());
 
             // Example : String date = "2000-11-21"; YYYY-MM-DD
-            preparedStatement.setDate(parameterIndex++,
-                    Date.valueOf(createLotRequestDTO.getStartDate()));
-            preparedStatement.setDate(parameterIndex++,
-                    Date.valueOf(createLotRequestDTO.getEndDate()));
+            preparedStatement.setTimestamp(parameterIndex++,
+                    createLotRequestDTO.getStartDate());
+            preparedStatement.setTimestamp(parameterIndex++,
+                    createLotRequestDTO.getEndDate());
             preparedStatement.setInt(parameterIndex++,
                     createLotRequestDTO.getCreatedBy());
             preparedStatement.setInt(parameterIndex++,
@@ -95,8 +94,8 @@ public class LotsDAO {
                         resultSet.getString("description"),
                         resultSet.getString("start_bid"),
                         resultSet.getInt("difference_factor"),
-                        resultSet.getString("startdate"),
-                        resultSet.getString("enddate"),
+                        resultSet.getTimestamp("startdate"),
+                        resultSet.getTimestamp("enddate"),
                         resultSet.getInt("created_by"),
                         resultSet.getInt("updated_by"));
                 lotDTOs.add(lotDTO);
@@ -131,8 +130,8 @@ public class LotsDAO {
                         resultSet.getString("description"),
                         resultSet.getString("start_bid"),
                         resultSet.getInt("difference_factor"),
-                        resultSet.getString("startdate"),
-                        resultSet.getString("enddate"),
+                        resultSet.getTimestamp("startdate"),
+                        resultSet.getTimestamp("enddate"),
                         resultSet.getInt("created_by"),
                         resultSet.getInt("updated_by"));
                 lotDTOs.add(lotDTO);
@@ -171,8 +170,8 @@ public class LotsDAO {
                         resultSet.getString("description"),
                         resultSet.getString("start_bid"),
                         resultSet.getInt("difference_factor"),
-                        resultSet.getString("startdate"),
-                        resultSet.getString("enddate"),
+                        resultSet.getTimestamp("startdate"),
+                        resultSet.getTimestamp("enddate"),
                         resultSet.getInt("created_by"),
                         resultSet.getInt("updated_by"));
             }

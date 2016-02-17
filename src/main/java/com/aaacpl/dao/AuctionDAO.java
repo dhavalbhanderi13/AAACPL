@@ -29,7 +29,7 @@ public class AuctionDAO {
 			connection.setAutoCommit(false);
 			preparedStatement = connection
 					.prepareStatement("INSERT INTO auction(dept_id, auction_type_id, auction_name, auction_des, startdate, enddate, catalog, status, createdby, updatedby) VALUES (?,?,?,?,?,?,?,?,?,?);");
-
+			System.out.println("ACTION DTO : " + createAuctionDTO);
 			preparedStatement.setInt(parameterIndex++,
 					createAuctionDTO.getDeptId());
 
@@ -42,7 +42,6 @@ public class AuctionDAO {
 			preparedStatement.setString(parameterIndex++,
 					createAuctionDTO.getDescription());
 
-			// Example : String date = "2000-11-21"; YYYY-MM-DD
 			preparedStatement.setTimestamp(parameterIndex++,
 					createAuctionDTO.getStartDate());
 

@@ -1,5 +1,11 @@
 package com.aaacpl.requestHandlers;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.aaacpl.bo.request.department.CreateDepartmentRequestBO;
 import com.aaacpl.bo.request.department.UpdateDepartmentRequestBO;
 import com.aaacpl.bo.response.CreateDepartmentResponseBO;
@@ -9,16 +15,9 @@ import com.aaacpl.dto.department.DepartmentDTO;
 import com.aaacpl.dto.department.UpdateDepartmentDTO;
 import com.aaacpl.rest.response.department.DepartmentResponse;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 public class DepartmentRequestHandler {
 	public CreateDepartmentResponseBO createDepartment(
 			CreateDepartmentRequestBO createDepartmentRequestBO) {
-		Boolean isProcessed = Boolean.FALSE;
 		DepartmentDAO departmentDAO = new DepartmentDAO();
 		CreateDepartmentRequestDTO createDepartmentRequestDTO = new CreateDepartmentRequestDTO();
 		createDepartmentRequestDTO.setName(createDepartmentRequestBO.getName());
@@ -28,9 +27,7 @@ public class DepartmentRequestHandler {
 		try {
 			createDepartmentResponseBO.setId(departmentDAO.insertDepartment(createDepartmentRequestDTO).getId());
 		} catch (SQLException sq) {
-			isProcessed = false;
 		} catch (IOException sqlException) {
-			isProcessed = false;
 		}
 
 		return createDepartmentResponseBO;

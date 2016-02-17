@@ -1,15 +1,14 @@
 package com.aaacpl.requestHandlers;
 
-import com.aaacpl.bo.request.participator.CreateParticipatorRequestBO;
-import com.aaacpl.dao.UserLotMapDAO;
-import com.aaacpl.dto.participator.CreateParticipatorDTO;
-import com.aaacpl.rest.request.participator.ParticipatorInfo;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
+
+import com.aaacpl.bo.request.participator.CreateParticipatorRequestBO;
+import com.aaacpl.dao.UserLotMapDAO;
+import com.aaacpl.dto.participator.CreateParticipatorDTO;
+import com.aaacpl.rest.request.participator.ParticipatorInfo;
 
 public class ParticipatorRequestHandler {
     public Boolean createParticipator(CreateParticipatorRequestBO createParticipatorRequestBO) {

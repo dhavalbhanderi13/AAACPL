@@ -1,9 +1,7 @@
-package cpm.aaacpl.test;
-
-import javax.ws.rs.core.Response;
+package com.aaacpl.test;
 
 import com.aaacpl.api.services.AuctionService;
-import com.aaacpl.rest.request.auction.CreateAuctionRequest;
+import com.aaacpl.util.DateUtil;
 
 public class Testing {
 	static AuctionService as = new AuctionService();
@@ -12,7 +10,9 @@ public class Testing {
 
 		// Test for get auctions
 
-		System.out.println(as.getAllAuctions(1));
+		//System.out.println(as.getAllAuctions(1));
+		
+		System.out.println(DateUtil.getTimeStampFromString("2016-02-12 00:00:00"));
 
 		// test for create Auction
 

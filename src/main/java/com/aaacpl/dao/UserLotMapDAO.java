@@ -1,16 +1,14 @@
 package com.aaacpl.dao;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Iterator;
+
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
-import com.aaacpl.dto.auction.AuctionDTO;
-import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.CreateLotResponseDTO;
 import com.aaacpl.dto.participator.CreateParticipatorDTO;
-
-import java.io.IOException;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class UserLotMapDAO {
     public Boolean insertUserLotMapping(CreateParticipatorDTO createParticipatorDTO) throws SQLException, IOException {

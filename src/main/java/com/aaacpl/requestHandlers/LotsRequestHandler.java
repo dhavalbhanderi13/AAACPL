@@ -12,6 +12,8 @@ import com.aaacpl.bo.response.CreateLotResponseBO;
 import com.aaacpl.dao.LotsDAO;
 import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.LotDTO;
+import com.aaacpl.dto.lots.LotStatusDTO;
+import com.aaacpl.rest.response.lots.LotStatusResponse;
 import com.aaacpl.rest.response.lots.LotsResponse;
 import com.aaacpl.util.DateUtil;
 
@@ -121,12 +123,31 @@ public class LotsRequestHandler {
 		LotsDAO lotsDAO = new LotsDAO();
 		boolean isProcessed = false;
 		try {
-			if(lotsDAO.insertBid(bidRequestBO)){
+			if (lotsDAO.insertBid(bidRequestBO)) {
 				isProcessed = true;
 			}
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		return isProcessed;
+	}
+
+	public LotStatusResponse getLotStatus(int lotId) {
+		LotStatusResponse lotResponse = null;
+		try {
+			LotsDAO lotsDAO = new LotsDAO();
+			LotStatusDTO lotStatusDto = lotsDAO.getLotStatus(lotId);
+
+			lotResponse = new LotStatusResponse(lotStatusDto.getHighestBid(),
+					lotStatusDto.getHigestBidUser(),
+					lotStatusDto.getCurrentServerTime(),
+					lotStatusDto.getHasHigestBidChanged());
+
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (IOException s) {
+			s.printStackTrace();
+		}
+		return lotResponse;
 	}
 }

@@ -19,6 +19,7 @@ import com.aaacpl.rest.request.lots.CreateLotRequest;
 import com.aaacpl.rest.response.lots.BidResponse;
 import com.aaacpl.rest.response.lots.CreateLotResponse;
 import com.aaacpl.rest.response.lots.LotNotFoundResponse;
+import com.aaacpl.rest.response.lots.LotStatusResponse;
 import com.aaacpl.rest.response.lots.LotsListResponse;
 import com.aaacpl.rest.util.ResponseGenerator;
 
@@ -101,7 +102,7 @@ public class LotsService {
 	public Response insertBid(BidRequest bidRequest) {
 		BidRequestBO bidRequestBO = new BidRequestBO(bidRequest.getLotId(),
 				bidRequest.getUserId(), bidRequest.getBidAmount(),
-				bidRequest.getIpAddress(), bidRequest.getCreated());
+				bidRequest.getIpAddress(), bidRequest.getLocalSystemTime());
 
 		BidResponse bidResponse = new BidResponse();
 		LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
@@ -115,4 +116,15 @@ public class LotsService {
 		return ResponseGenerator.generateResponse(bidResponse);
 	}
 
+	@POST
+	@Path("/status/{lotId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStatus(@PathParam("lotId") int lotId) {
+
+		LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
+		LotStatusResponse lotStatusresponse = lotsRequestHandler
+				.getLotStatus(lotId);
+		return ResponseGenerator.generateResponse(lotStatusresponse);
+	}
 }

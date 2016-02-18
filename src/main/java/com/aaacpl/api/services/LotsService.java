@@ -84,14 +84,14 @@ public class LotsService {
 	}
 
 	@GET
-	@Path("/byAccess/{userId}")
+	@Path("/byAccess/auction/{auctionId}/user/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getLotsByUserAccess(@PathParam("userId") int userId) {
+	public Response getLotsByUserAccess(@PathParam("userId") int userId, @PathParam("auctionId") int auctionId) {
 		LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
 		LotsListResponse lotsListResponse = new LotsListResponse();
 
 		lotsListResponse.setLotsResponseList(lotsRequestHandler
-				.getLotsByAccess(userId));
+				.getLotsByAccess(userId, auctionId));
 		return ResponseGenerator.generateResponse(lotsListResponse);
 	}
 

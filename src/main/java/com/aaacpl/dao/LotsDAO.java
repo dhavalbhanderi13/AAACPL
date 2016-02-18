@@ -32,7 +32,7 @@ public class LotsDAO {
 			connection.setAutoCommit(false);
 			preparedStatement = connection
 					.prepareStatement("INSERT INTO lot(auction_id, name, description, start_bid, difference_factor, "
-							+ "startdate, enddate, created_by, updated_by) VALUES (?,?,?,?,?,?,?,?,?);");
+							+ "startdate, enddate, createdby, updatedby) VALUES (?,?,?,?,?,?,?,?,?);");
 
 			preparedStatement.setInt(parameterIndex++,
 					createLotRequestDTO.getAuctionId());
@@ -60,7 +60,7 @@ public class LotsDAO {
 					createLotRequestDTO.getCreatedBy());
 
 			preparedStatement.setInt(parameterIndex++,
-					createLotRequestDTO.getUpdatedBy());
+					createLotRequestDTO.getCreatedBy());
 
 			int i = preparedStatement.executeUpdate();
 
@@ -117,8 +117,8 @@ public class LotsDAO {
 						resultSet.getInt("difference_factor"),
 						resultSet.getTimestamp("startdate"),
 						resultSet.getTimestamp("enddate"),
-						resultSet.getInt("created_by"),
-						resultSet.getInt("updated_by"));
+						resultSet.getInt("createdby"),
+						resultSet.getInt("updatedby"));
 				lotDTOs.add(lotDTO);
 			}
 		} catch (SQLException sqlException) {
@@ -134,7 +134,7 @@ public class LotsDAO {
 		return lotDTOs;
 	}
 
-	public List<LotDTO> getLotsByUser(int userId) throws SQLException,
+	public List<LotDTO> getLotsByUser(int userId, int auctionId) throws SQLException,
 			IOException {
 		List<LotDTO> lotDTOs = new ArrayList<LotDTO>();
 		Connection connection = null;
@@ -144,7 +144,7 @@ public class LotsDAO {
 			statement = connection.createStatement();
 			StringBuilder query = new StringBuilder(
 					"select * from lot where id IN(Select DISTINCT lot_id from lot_user_map where user_id =")
-					.append(userId).append(")");
+					.append(userId).append(") AND lot.auction_id = ").append(auctionId);
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
 				LotDTO lotDTO = new LotDTO(resultSet.getInt("id"),
@@ -155,8 +155,8 @@ public class LotsDAO {
 						resultSet.getInt("difference_factor"),
 						resultSet.getTimestamp("startdate"),
 						resultSet.getTimestamp("enddate"),
-						resultSet.getInt("created_by"),
-						resultSet.getInt("updated_by"));
+						resultSet.getInt("createdby"),
+						resultSet.getInt("updatedby"));
 				lotDTOs.add(lotDTO);
 			}
 		} catch (SQLException sqlException) {
@@ -194,8 +194,8 @@ public class LotsDAO {
 						resultSet.getInt("difference_factor"),
 						resultSet.getTimestamp("startdate"),
 						resultSet.getTimestamp("enddate"),
-						resultSet.getInt("created_by"),
-						resultSet.getInt("updated_by"));
+						resultSet.getInt("createdby"),
+						resultSet.getInt("updatedby"));
 			}
 
 			if (index == 0) {

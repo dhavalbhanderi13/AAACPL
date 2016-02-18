@@ -60,6 +60,36 @@ public class AuctionRequestHandler {
 		return departmentResponseList;
 	}
 
+	public List<AuctionResponse> getAllUpcomingAuctions() {
+		List<AuctionResponse> departmentResponseList = new ArrayList<AuctionResponse>();
+		try {
+			AuctionDAO auctionDAO = new AuctionDAO();
+			List<AuctionDTO> auctionsDTOs = auctionDAO
+					.getUpcomingAuctions();
+			departmentResponseList = buildListOfDepartmentResponseFromDTOs(auctionsDTOs);
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (IOException s) {
+			s.printStackTrace();
+		}
+		return departmentResponseList;
+	}
+
+    public List<AuctionResponse> getLiveAuctions() {
+		List<AuctionResponse> departmentResponseList = new ArrayList<AuctionResponse>();
+		try {
+			AuctionDAO auctionDAO = new AuctionDAO();
+			List<AuctionDTO> auctionsDTOs = auctionDAO
+					.getLiveAuctions();
+			departmentResponseList = buildListOfDepartmentResponseFromDTOs(auctionsDTOs);
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (IOException s) {
+			s.printStackTrace();
+		}
+		return departmentResponseList;
+	}
+
 	public AuctionResponse getAuctionById(int id) {
 		AuctionResponse auctionResponse = null;
 		try {

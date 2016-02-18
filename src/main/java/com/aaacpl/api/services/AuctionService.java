@@ -82,4 +82,28 @@ public class AuctionService {
 		return ResponseGenerator.generateResponse(response);
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/upcoming")
+	public Response getUpcomingAuctions(){
+        AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
+        AuctionsListResponse auctionResponseList = new AuctionsListResponse();
+
+        auctionResponseList.setAuctionResponseList(auctionRequestHandler
+                .getAllUpcomingAuctions());
+        return ResponseGenerator.generateResponse(auctionResponseList);
+	}
+
+    @GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/live")
+	public Response getLiveAuctions(){
+        AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
+        AuctionsListResponse auctionResponseList = new AuctionsListResponse();
+
+        auctionResponseList.setAuctionResponseList(auctionRequestHandler
+                .getAllUpcomingAuctions());
+        return ResponseGenerator.generateResponse(auctionResponseList);
+	}
+
 }

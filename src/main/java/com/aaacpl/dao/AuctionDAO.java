@@ -1,11 +1,7 @@
 package com.aaacpl.dao;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +24,7 @@ public class AuctionDAO {
 			connection = new ConnectionPool().getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection
-					.prepareStatement("INSERT INTO auction(dept_id, auction_type_id, auction_name, auction_des, startdate, enddate, catalog, status, createdby, updatedby) VALUES (?,?,?,?,?,?,?,?,?,?);");
-			System.out.println("ACTION DTO : " + createAuctionDTO);
+					.prepareStatement("INSERT INTO auction(dept_id, auction_type_id, auction_name, auction_des, startdate, enddate, catalog, status, createdby, updatedby, createdDate) VALUES (?,?,?,?,?,?,?,?,?,?,?);");
 			preparedStatement.setInt(parameterIndex++,
 					createAuctionDTO.getDeptId());
 
@@ -57,8 +52,9 @@ public class AuctionDAO {
 					createAuctionDTO.getCreatedBy());
 
 			preparedStatement.setInt(parameterIndex++,
-					createAuctionDTO.getUpdatedBy());
-
+					createAuctionDTO.getCreatedBy());
+            preparedStatement.setTimestamp(parameterIndex++,
+                    new Timestamp(new java.util.Date().getTime()));
 			int i = preparedStatement.executeUpdate();
 			if (i > 0) {
 				connection.commit();
@@ -173,4 +169,81 @@ public class AuctionDAO {
 		return auctionDTO;
 	}
 
+	public List<AuctionDTO> getUpcomingAuctions() throws SQLException, IOException{
+        List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
+		Connection connection = null;
+		Statement statement = null;
+		try {
+			connection = new ConnectionPool().getConnection();
+			statement = connection.createStatement();
+			StringBuilder query = new StringBuilder(
+					"select * from auction where startdate >= CONVERT_TZ(CURDATE(), \"-5:00\", \"+5:30\") + interval 1 day;");
+			ResultSet resultSet = statement.executeQuery(query.toString());
+			int index = 0;
+			while (resultSet.next()) {
+				index++;
+				AuctionDTO auctionDTO = new AuctionDTO(resultSet.getInt("id"),
+						resultSet.getString("auction_name"),
+						resultSet.getInt("auction_type_id"),
+						resultSet.getString("auction_des"),
+						resultSet.getInt("dept_id"),
+						resultSet.getTimestamp("startdate"),
+						resultSet.getTimestamp("enddate"),
+						resultSet.getString("catalog"),
+						resultSet.getInt("createdBy"),
+						resultSet.getInt("updatedBy"));
+                auctionDTOs.add(auctionDTO);
+			}
+
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return auctionDTOs;
+	}
+
+    public List<AuctionDTO> getLiveAuctions() throws SQLException, IOException{
+        List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
+		Connection connection = null;
+		Statement statement = null;
+		try {
+			connection = new ConnectionPool().getConnection();
+			statement = connection.createStatement();
+			StringBuilder query = new StringBuilder(
+					"select * from auction where startdate <= CONVERT_TZ(CURDATE(), \"-5:00\", \"+5:30\") AND enddate >= CONVERT_TZ(CURDATE(), \"-5:00\", \"+5:30\");");
+			ResultSet resultSet = statement.executeQuery(query.toString());
+			int index = 0;
+			while (resultSet.next()) {
+				index++;
+				AuctionDTO auctionDTO = new AuctionDTO(resultSet.getInt("id"),
+						resultSet.getString("auction_name"),
+						resultSet.getInt("auction_type_id"),
+						resultSet.getString("auction_des"),
+						resultSet.getInt("dept_id"),
+						resultSet.getTimestamp("startdate"),
+						resultSet.getTimestamp("enddate"),
+						resultSet.getString("catalog"),
+						resultSet.getInt("createdBy"),
+						resultSet.getInt("updatedBy"));
+                auctionDTOs.add(auctionDTO);
+			}
+
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return auctionDTOs;
+	}
 }

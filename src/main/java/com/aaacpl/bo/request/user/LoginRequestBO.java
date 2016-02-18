@@ -1,15 +1,15 @@
 package com.aaacpl.bo.request.user;
 
 public class LoginRequestBO {
-	private String name;
+	private String email;
 	private String password;
 
-	public String getName() {
-		return name;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -24,7 +24,7 @@ public class LoginRequestBO {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result
 				+ ((password == null) ? 0 : password.hashCode());
 		return result;
@@ -39,10 +39,10 @@ public class LoginRequestBO {
 		if (getClass() != obj.getClass())
 			return false;
 		LoginRequestBO other = (LoginRequestBO) obj;
-		if (name == null) {
-			if (other.name != null)
+		if (email == null) {
+			if (other.email != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!email.equals(other.email))
 			return false;
 		if (password == null) {
 			if (other.password != null)
@@ -54,7 +54,7 @@ public class LoginRequestBO {
 
 	@Override
 	public String toString() {
-		return "LoginRequestBO [name=" + name + ", password=" + password + "]";
+		return "LoginRequestBO [email=" + email + ", password=" + password + "]";
 	}
 
 }

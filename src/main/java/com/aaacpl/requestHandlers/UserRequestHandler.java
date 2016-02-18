@@ -42,10 +42,10 @@ public class UserRequestHandler {
 		UsersValidation usersValidation = new UsersValidation();
 		UsersDAO usersDAO = new UsersDAO();
 		LoginResponseDTO loginResponseDTO = usersDAO
-				.getNamePasswordForLoginValidationForName(loginRequestBO
-						.getName());
+				.getNamePasswordForLoginValidationForEmail(loginRequestBO
+						.getEmail());
 		LoginResponseBO loginResponseBO = new LoginResponseBO();
-		Boolean isValidUser = usersValidation.validateUserNamePassword(
+		Boolean isValidUser = usersValidation.validateEmailPassword(
 				loginRequestBO, loginResponseDTO);
 		if(isValidUser){
             Long sessionId = new Date().getTime();

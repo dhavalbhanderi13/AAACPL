@@ -16,11 +16,7 @@ import com.aaacpl.exceptions.lotServiceException.LotNotFoundException;
 import com.aaacpl.requestHandlers.LotsRequestHandler;
 import com.aaacpl.rest.request.lots.BidRequest;
 import com.aaacpl.rest.request.lots.CreateLotRequest;
-import com.aaacpl.rest.response.lots.BidResponse;
-import com.aaacpl.rest.response.lots.CreateLotResponse;
-import com.aaacpl.rest.response.lots.LotNotFoundResponse;
-import com.aaacpl.rest.response.lots.LotStatusResponse;
-import com.aaacpl.rest.response.lots.LotsListResponse;
+import com.aaacpl.rest.response.lots.*;
 import com.aaacpl.rest.util.ResponseGenerator;
 
 @Path("/lots")
@@ -88,7 +84,7 @@ public class LotsService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getLotsByUserAccess(@PathParam("userId") int userId, @PathParam("auctionId") int auctionId) {
 		LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
-		LotsListResponse lotsListResponse = new LotsListResponse();
+		LotsListByAccessResponse lotsListResponse = new LotsListByAccessResponse();
 
 		lotsListResponse.setLotsResponseList(lotsRequestHandler
 				.getLotsByAccess(userId, auctionId));

@@ -33,7 +33,7 @@ public class UsersService {
 	@Path("/login")
 	public Response login(LoginRequest loginRequest) {
 		LoginRequestBO loginRequestBO = new LoginRequestBO();
-		loginRequestBO.setName(loginRequest.getName());
+		loginRequestBO.setEmail(loginRequest.getEmail());
 		loginRequestBO.setPassword(loginRequest.getPassword());
 		UserRequestHandler userRequestHandler = new UserRequestHandler();
 		LoginResponse loginResponse = new LoginResponse();

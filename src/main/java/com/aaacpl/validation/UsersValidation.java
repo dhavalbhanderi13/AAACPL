@@ -11,7 +11,7 @@ public class UsersValidation {
 		return Boolean.TRUE;
 	}
 
-	public Boolean validateUserNamePassword(LoginRequestBO loginRequestBo,
+	public Boolean validateEmailPassword(LoginRequestBO loginRequestBo,
 			LoginResponseDTO loginResponseDTO) {
 		Boolean isValid = Boolean.FALSE;
 		if (loginResponseDTO == null) {

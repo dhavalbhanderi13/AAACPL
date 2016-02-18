@@ -15,6 +15,8 @@
 
 package com.aaacpl.rest.response.lots;
 
+import java.util.List;
+
 public class LotsResponse {
 
 	private int id;
@@ -27,9 +29,10 @@ public class LotsResponse {
 	private String endDate;
 	private int createdBy;
 	private int updatedBy;
+	private List<Integer> linkedUserIds;
 
 	public LotsResponse(final int id, final int auctionId, final String name, final String description, final String startBid,
-			final int differenceFactor, final String startDate, final String endDate, final int createdBy, final int updatedBy) {
+			final int differenceFactor, final String startDate, final String endDate, final int createdBy, final int updatedBy, final List<Integer> linkedUserIds) {
 		this.id = id;
 		this.auctionId = auctionId;
 		this.name = name;
@@ -40,6 +43,7 @@ public class LotsResponse {
 		this.endDate = endDate;
 		this.createdBy = createdBy;
 		this.updatedBy = updatedBy;
+		this.linkedUserIds = linkedUserIds;
 	}
 
 	public int getId() {
@@ -82,19 +86,24 @@ public class LotsResponse {
 		return updatedBy;
 	}
 
-	@Override
-	public String toString() {
-		return "LotsResponse{" +
-				"id=" + id +
-				", auctionId=" + auctionId +
-				", name='" + name + '\'' +
-				", description='" + description + '\'' +
-				", startBid='" + startBid + '\'' +
-				", differenceFactor=" + differenceFactor +
-				", startDate='" + startDate + '\'' +
-				", endDate='" + endDate + '\'' +
-				", createdBy='" + createdBy + '\'' +
-				", updatedBy='" + updatedBy + '\'' +
-				'}';
-	}
+    public List<Integer> getLinkedUserIds() {
+        return linkedUserIds;
+    }
+
+    @Override
+    public String toString() {
+        return "LotsResponse{" +
+                "id=" + id +
+                ", auctionId=" + auctionId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", startBid='" + startBid + '\'' +
+                ", differenceFactor=" + differenceFactor +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", createdBy=" + createdBy +
+                ", updatedBy=" + updatedBy +
+                ", linkedUserIds=" + linkedUserIds +
+                '}';
+    }
 }

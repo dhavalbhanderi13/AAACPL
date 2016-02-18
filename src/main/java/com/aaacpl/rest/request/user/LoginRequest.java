@@ -1,7 +1,7 @@
 package com.aaacpl.rest.request.user;
 
 public class LoginRequest {
-	private String name;
+	private String email;
 	private String password;
 	private Long authSessionId;
 
@@ -13,12 +13,12 @@ public class LoginRequest {
 		this.authSessionId = authSessionId;
 	}
 
-	public String getName() {
-		return name;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -31,7 +31,10 @@ public class LoginRequest {
 
 	@Override
 	public String toString() {
-		return "LoginRequest{" + "name='" + name + '\'' + ", password='"
-				+ password + '\'' + ", authSessionId=" + authSessionId + '}';
+		return "LoginRequest{" +
+				"email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", authSessionId=" + authSessionId +
+				'}';
 	}
 }

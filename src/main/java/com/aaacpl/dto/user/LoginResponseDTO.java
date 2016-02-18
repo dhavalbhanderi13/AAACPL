@@ -3,15 +3,15 @@ package com.aaacpl.dto.user;
 public class LoginResponseDTO {
 	private Boolean isValidUser;
 	private int id;
-	private String name;
+	private String email;
 	private String password;
 
-	public String getName() {
-		return name;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -49,7 +49,7 @@ public class LoginResponseDTO {
 
 		if (id != that.id)
 			return false;
-		if (name != null ? !name.equals(that.name) : that.name != null)
+		if (email != null ? !email.equals(that.email) : that.email != null)
 			return false;
 		return password != null ? password.equals(that.password)
 				: that.password == null;
@@ -59,14 +59,14 @@ public class LoginResponseDTO {
 	@Override
 	public int hashCode() {
 		int result = id;
-		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (email != null ? email.hashCode() : 0);
 		result = 31 * result + (password != null ? password.hashCode() : 0);
 		return result;
 	}
 
 	@Override
 	public String toString() {
-		return "LoginResponseDTO{" + "id=" + id + ", name='" + name + '\''
+		return "LoginResponseDTO{" + "id=" + id + ", email='" + email + '\''
 				+ ", password='" + password + '\'' + '}';
 	}
 }

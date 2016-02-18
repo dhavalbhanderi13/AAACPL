@@ -12,7 +12,7 @@ import com.aaacpl.dto.user.LoginResponseDTO;
 import com.aaacpl.dto.user.UsersDTO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 
-public class UsersDAO implements IUsersDAO {
+public class UsersDAO {
 	public Boolean insertUser(UsersDTO usersDTO) throws SQLException,
 			IOException {
 		boolean isCreated = false;
@@ -107,8 +107,7 @@ public class UsersDAO implements IUsersDAO {
 		return isUpdated;
 	}
 
-	@Override
-	public LoginResponseDTO getNamePasswordForLoginValidationForName(String name)
+	public LoginResponseDTO getNamePasswordForLoginValidationForEmail(String email)
 			throws SQLException, IOException, UserNotFoundException {
 		Connection connection = null;
 		Statement statement = null;
@@ -118,12 +117,12 @@ public class UsersDAO implements IUsersDAO {
 			statement = connection.createStatement();
 			StringBuilder query = new StringBuilder(
 					"SELECT id, password FROM users where email = \"").append(
-					name).append("\"");
+					email).append("\"");
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			int rowCount = 0;
 			loginResponseDTO = new LoginResponseDTO();
 			while (resultSet.next()) {
-				loginResponseDTO.setName(name);
+				loginResponseDTO.setEmail(email);
 				loginResponseDTO.setId(resultSet.getInt(1));
 				loginResponseDTO.setPassword(resultSet.getString(2));
 				rowCount++;

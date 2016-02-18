@@ -9,6 +9,6 @@ import com.aaacpl.dto.user.UsersDTO;
 public interface IUsersDAO {
 	Boolean insertUser(UsersDTO usersDTO) throws SQLException, IOException;
 
-	LoginResponseDTO getNamePasswordForLoginValidationForName(String name)
+	LoginResponseDTO getNamePasswordForLoginValidationForName(String email)
 			throws SQLException, IOException;
 }

@@ -134,8 +134,8 @@ public class LotsDAO {
 		return lotDTOs;
 	}
 
-	public List<LotDTO> getLotsByUser(int userId, int auctionId) throws SQLException,
-			IOException {
+	public List<LotDTO> getLotsByUser(int userId, int auctionId)
+			throws SQLException, IOException {
 		List<LotDTO> lotDTOs = new ArrayList<LotDTO>();
 		Connection connection = null;
 		Statement statement = null;
@@ -144,7 +144,8 @@ public class LotsDAO {
 			statement = connection.createStatement();
 			StringBuilder query = new StringBuilder(
 					"select * from lot where id IN(Select DISTINCT lot_id from lot_user_map where user_id =")
-					.append(userId).append(") AND lot.auction_id = ").append(auctionId);
+					.append(userId).append(") AND lot.auction_id = ")
+					.append(auctionId);
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
 				LotDTO lotDTO = new LotDTO(resultSet.getInt("id"),
@@ -313,7 +314,7 @@ public class LotsDAO {
 	private Boolean isBidAmtMax(Connection connection, BidRequestBO bidRequestBO)
 			throws SQLException, IOException {
 		Statement statement = null;
-		Long maxValue = null;
+		Long maxValue = 0L;
 		Boolean isMax = Boolean.FALSE;
 		String query = "SELECT MAX(max_value) from live_bid_log WHERE lot_id="
 				+ bidRequestBO.getLotId();
@@ -321,9 +322,10 @@ public class LotsDAO {
 			statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(query);
 
-			maxValue = rs.getLong("max_value");
-
-			if (maxValue != null && bidRequestBO.getBidAmount() > maxValue) {
+			while (rs.next()) {
+				maxValue = rs.getLong("MAX(max_value)");
+			}
+			if (bidRequestBO.getBidAmount() > maxValue) {
 				return Boolean.TRUE;
 			}
 
@@ -350,7 +352,7 @@ public class LotsDAO {
 					.prepareStatement("INSERT INTO live_bid_log(user_id, lot_id, max_value, ipAddress, localSystemTime, hasHighestBidChanged) "
 							+ " VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE max_value="
 							+ bidRequestBO.getBidAmount()
-							+ ", hasHighestBidChanged = true;");
+							+ ", hasHighestBidChanged = 'true';");
 
 			preparedStatement
 					.setInt(parameterIndex++, bidRequestBO.getUserId());
@@ -366,7 +368,7 @@ public class LotsDAO {
 			preparedStatement.setString(parameterIndex++,
 					bidRequestBO.getLocalSystemTime());
 
-			preparedStatement.setBoolean(parameterIndex++, true);
+			preparedStatement.setString(parameterIndex++, "true");
 
 			int i = preparedStatement.executeUpdate();
 
@@ -395,7 +397,8 @@ public class LotsDAO {
 			BidRequestBO bidRequestBO) throws SQLException, IOException {
 		Boolean isProcessed = false;
 		Statement statement = null;
-		String query = "UPDATE live_bid_log(hasHighestBidChanged) values('false') WHERE lot_id="
+		String query = "UPDATE live_bid_log SET hasHighestBidChanged = 'false' WHERE lot_id="
+
 				+ bidRequestBO.getLotId();
 		try {
 			statement = connection.createStatement();
@@ -403,9 +406,13 @@ public class LotsDAO {
 
 			if (x > 0) {
 				isProcessed = true;
+				connection.commit();
+			} else {
+				connection.rollback();
 			}
 
 		} catch (SQLException sqlException) {
+			connection.rollback();
 			sqlException.printStackTrace();
 		} finally {
 			try {

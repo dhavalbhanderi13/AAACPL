@@ -8,6 +8,11 @@ public class LotStatusDTO {
 
 	public LotStatusDTO(Integer highestBid, String higestBiduser,
 			String currentServerTime, Boolean hasHigestBidChanged) {
+		this.highestBid = highestBid;
+		this.higestBidUser = higestBiduser;
+		this.currentServerTime = currentServerTime;
+		this.hasHigestBidChanged = hasHigestBidChanged;
+
 	}
 
 	public Integer getHighestBid() {
@@ -25,7 +30,7 @@ public class LotStatusDTO {
 	public Boolean getHasHigestBidChanged() {
 		return hasHigestBidChanged;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "LotStatusDTO {'highestBid'=" + highestBid

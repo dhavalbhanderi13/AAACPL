@@ -73,6 +73,8 @@ public class UserRequestHandler {
 		usersDTO.setPin(requestBO.getPin());
 		usersDTO.setRegistrationDate(requestBO.getRegistrationDate());
 		usersDTO.setTypeId(requestBO.getTypeId());
+		usersDTO.setMobile(requestBO.getMobile());
+		usersDTO.setPhone(requestBO.getPhone());
 		return usersDTO;
 	}
 

@@ -31,8 +31,8 @@ public class UsersBO {
 	private int pin;
 	private String panNumber;
 	private String vatNumber;
-	private int mobile;
-	private int phone;
+	private String mobile;
+	private String phone;
 
 	public int getId() {
 		return id;
@@ -160,20 +160,20 @@ public class UsersBO {
 		return this;
 	}
 
-	public int getMobile() {
+	public String getMobile() {
 		return mobile;
 	}
 
-	public UsersBO setMobile(final int mobile) {
+	public UsersBO setMobile(final String mobile) {
 		this.mobile = mobile;
 		return this;
 	}
 
-	public int getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
-	public UsersBO setPhone(final int phone) {
+	public UsersBO setPhone(final String phone) {
 		this.phone = phone;
 		return this;
 	}

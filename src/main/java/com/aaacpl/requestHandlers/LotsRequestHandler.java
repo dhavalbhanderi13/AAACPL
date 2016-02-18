@@ -126,7 +126,9 @@ public class LotsRequestHandler {
 			if (lotsDAO.insertBid(bidRequestBO)) {
 				isProcessed = true;
 			}
-		} catch (SQLException | IOException e) {
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e){
 			e.printStackTrace();
 		}
 		return isProcessed;

@@ -16,8 +16,8 @@ public class RegistrationRequestBO {
 	private int pin;
 	private String panNumber;
 	private String vatNumber;
-	private long mobile;
-	private long phone;
+	private String mobile;
+	private String phone;
 	private Date registrationDate;
 
 	public int getTypeId() {
@@ -124,19 +124,19 @@ public class RegistrationRequestBO {
 		this.vatNumber = vatNumber;
 	}
 
-	public long getMobile() {
+	public String getMobile() {
 		return mobile;
 	}
 
-	public void setMobile(long mobile) {
+	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
 
-	public long getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
-	public void setPhone(long phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
@@ -148,126 +148,73 @@ public class RegistrationRequestBO {
 		this.registrationDate = registrationDate;
 	}
 
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		RegistrationRequestBO that = (RegistrationRequestBO) o;
+
+		if (typeId != that.typeId) return false;
+		if (pin != that.pin) return false;
+		if (name != null ? !name.equals(that.name) : that.name != null) return false;
+		if (companyName != null ? !companyName.equals(that.companyName) : that.companyName != null) return false;
+		if (email != null ? !email.equals(that.email) : that.email != null) return false;
+		if (password != null ? !password.equals(that.password) : that.password != null) return false;
+		if (material != null ? !material.equals(that.material) : that.material != null) return false;
+		if (address != null ? !address.equals(that.address) : that.address != null) return false;
+		if (city != null ? !city.equals(that.city) : that.city != null) return false;
+		if (country != null ? !country.equals(that.country) : that.country != null) return false;
+		if (state != null ? !state.equals(that.state) : that.state != null) return false;
+		if (panNumber != null ? !panNumber.equals(that.panNumber) : that.panNumber != null) return false;
+		if (vatNumber != null ? !vatNumber.equals(that.vatNumber) : that.vatNumber != null) return false;
+		if (mobile != null ? !mobile.equals(that.mobile) : that.mobile != null) return false;
+		if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+		return registrationDate != null ? registrationDate.equals(that.registrationDate) : that.registrationDate == null;
+
+	}
+
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((city == null) ? 0 : city.hashCode());
-		result = prime * result
-				+ ((companyName == null) ? 0 : companyName.hashCode());
-		result = prime * result + ((country == null) ? 0 : country.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result
-				+ ((material == null) ? 0 : material.hashCode());
-		result = prime * result + (int) (mobile ^ (mobile >>> 32));
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((panNumber == null) ? 0 : panNumber.hashCode());
-		result = prime * result
-				+ ((password == null) ? 0 : password.hashCode());
-		result = prime * result + (int) (phone ^ (phone >>> 32));
-		result = prime * result + pin;
-		result = prime
-				* result
-				+ ((registrationDate == null) ? 0 : registrationDate.hashCode());
-		result = prime * result + ((state == null) ? 0 : state.hashCode());
-		result = prime * result + typeId;
-		result = prime * result
-				+ ((vatNumber == null) ? 0 : vatNumber.hashCode());
+		int result = typeId;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (companyName != null ? companyName.hashCode() : 0);
+		result = 31 * result + (email != null ? email.hashCode() : 0);
+		result = 31 * result + (password != null ? password.hashCode() : 0);
+		result = 31 * result + (material != null ? material.hashCode() : 0);
+		result = 31 * result + (address != null ? address.hashCode() : 0);
+		result = 31 * result + (city != null ? city.hashCode() : 0);
+		result = 31 * result + (country != null ? country.hashCode() : 0);
+		result = 31 * result + (state != null ? state.hashCode() : 0);
+		result = 31 * result + pin;
+		result = 31 * result + (panNumber != null ? panNumber.hashCode() : 0);
+		result = 31 * result + (vatNumber != null ? vatNumber.hashCode() : 0);
+		result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
+		result = 31 * result + (phone != null ? phone.hashCode() : 0);
+		result = 31 * result + (registrationDate != null ? registrationDate.hashCode() : 0);
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RegistrationRequestBO other = (RegistrationRequestBO) obj;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		} else if (!address.equals(other.address))
-			return false;
-		if (city == null) {
-			if (other.city != null)
-				return false;
-		} else if (!city.equals(other.city))
-			return false;
-		if (companyName == null) {
-			if (other.companyName != null)
-				return false;
-		} else if (!companyName.equals(other.companyName))
-			return false;
-		if (country == null) {
-			if (other.country != null)
-				return false;
-		} else if (!country.equals(other.country))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (material == null) {
-			if (other.material != null)
-				return false;
-		} else if (!material.equals(other.material))
-			return false;
-		if (mobile != other.mobile)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (panNumber == null) {
-			if (other.panNumber != null)
-				return false;
-		} else if (!panNumber.equals(other.panNumber))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (phone != other.phone)
-			return false;
-		if (pin != other.pin)
-			return false;
-		if (registrationDate == null) {
-			if (other.registrationDate != null)
-				return false;
-		} else if (!registrationDate.equals(other.registrationDate))
-			return false;
-		if (state == null) {
-			if (other.state != null)
-				return false;
-		} else if (!state.equals(other.state))
-			return false;
-		if (typeId != other.typeId)
-			return false;
-		if (vatNumber == null) {
-			if (other.vatNumber != null)
-				return false;
-		} else if (!vatNumber.equals(other.vatNumber))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
-		return "RegistrationRequestBO [typeId=" + typeId + ", name=" + name
-				+ ", companyName=" + companyName + ", email=" + email
-				+ ", password=" + password + ", material=" + material
-				+ ", address=" + address + ", city=" + city + ", country="
-				+ country + ", state=" + state + ", pin=" + pin
-				+ ", panNumber=" + panNumber + ", vatNumber=" + vatNumber
-				+ ", mobile=" + mobile + ", phone=" + phone
-				+ ", registrationDate=" + registrationDate + "]";
+		return "RegistrationRequestBO{" +
+				"typeId=" + typeId +
+				", name='" + name + '\'' +
+				", companyName='" + companyName + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", material='" + material + '\'' +
+				", address='" + address + '\'' +
+				", city='" + city + '\'' +
+				", country='" + country + '\'' +
+				", state='" + state + '\'' +
+				", pin=" + pin +
+				", panNumber='" + panNumber + '\'' +
+				", vatNumber='" + vatNumber + '\'' +
+				", mobile='" + mobile + '\'' +
+				", phone='" + phone + '\'' +
+				", registrationDate=" + registrationDate +
+				'}';
 	}
-
 }

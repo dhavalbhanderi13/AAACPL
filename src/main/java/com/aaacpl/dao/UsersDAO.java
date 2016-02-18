@@ -40,10 +40,10 @@ public class UsersDAO implements IUsersDAO {
 			preparedStatement
 					.setString(parameterIndex++, usersDTO.getCountry());
 			preparedStatement.setInt(parameterIndex++, usersDTO.getPin());
-			preparedStatement.setLong(parameterIndex++,
-					Long.valueOf(usersDTO.getPhone()));
-			preparedStatement.setLong(parameterIndex++,
-					Long.valueOf(usersDTO.getMobile()));
+			preparedStatement.setString(parameterIndex++,
+					usersDTO.getPhone());
+			preparedStatement.setString(parameterIndex++,
+					usersDTO.getMobile());
 			preparedStatement.setString(parameterIndex++,
 					usersDTO.getPanNumber());
 			preparedStatement.setString(parameterIndex++,
@@ -161,22 +161,23 @@ public class UsersDAO implements IUsersDAO {
 			usersDTO = new UsersDTO();
 			int index = 1;
 			while (resultSet.next()) {
-				usersDTO.setId(resultSet.getInt(index++));
-				usersDTO.setTypeId(resultSet.getInt(index++));
-				usersDTO.setName(resultSet.getString(index++));
-				usersDTO.setCompanyName(resultSet.getString(index++));
-				usersDTO.setEmail(resultSet.getString(index++));
-				usersDTO.setPassword(resultSet.getString(index++));
-				usersDTO.setMaterial(resultSet.getString(index++));
-				usersDTO.setAddress(resultSet.getString(index++));
-				usersDTO.setCity(resultSet.getString(index++));
-				usersDTO.setState(resultSet.getString(index++));
-				usersDTO.setCountry(resultSet.getString(index++));
-				usersDTO.setPin(resultSet.getInt(index++));
-				usersDTO.setPhone(resultSet.getInt(index++));
-				usersDTO.setMobile(resultSet.getInt(index++));
-				usersDTO.setPanNumber(resultSet.getString(index++));
-				usersDTO.setVatNumber(resultSet.getString(index++));
+				usersDTO.setId(resultSet.getInt("id"));
+				usersDTO.setTypeId(resultSet.getInt("type_id"));
+				usersDTO.setName(resultSet.getString("name"));
+				usersDTO.setCompanyName(resultSet.getString("company_name"));
+				usersDTO.setEmail(resultSet.getString("email"));
+				usersDTO.setPassword(resultSet.getString("password"));
+				usersDTO.setMaterial(resultSet.getString("material"));
+				usersDTO.setAddress(resultSet.getString("address"));
+				usersDTO.setCity(resultSet.getString("city"));
+				usersDTO.setState(resultSet.getString("state"));
+				usersDTO.setCountry(resultSet.getString("country"));
+				usersDTO.setPin(resultSet.getInt("pin"));
+				usersDTO.setPhone(resultSet.getString("phone"));
+				usersDTO.setMobile(resultSet.getString("mobile"));
+				usersDTO.setPanNumber(resultSet.getString("pan_number"));
+				usersDTO.setVatNumber(resultSet.getString("vat_number"));
+				index++;
 			}
 
 			if (index == 1) {

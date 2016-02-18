@@ -17,8 +17,8 @@ public class UsersDTO {
 	private int pin;
 	private String panNumber;
 	private String vatNumber;
-	private int mobile;
-	private int phone;
+	private String mobile;
+	private String phone;
 	private Date registrationDate;
 	private char status;
 
@@ -134,19 +134,19 @@ public class UsersDTO {
 		this.vatNumber = vatNumber;
 	}
 
-	public int getMobile() {
+	public String getMobile() {
 		return mobile;
 	}
 
-	public void setMobile(int mobile) {
+	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
 
-	public int getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
-	public void setPhone(int phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 

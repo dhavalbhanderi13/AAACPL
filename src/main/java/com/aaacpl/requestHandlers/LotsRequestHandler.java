@@ -48,7 +48,7 @@ public class LotsRequestHandler {
 						.getStartDate()),
 				DateUtil.getTimeStampFromString(createLotRequestBO.getEndDate()),
 				createLotRequestBO.getCreatedBy(), createLotRequestBO
-						.getUpdatedBy());
+				.getUpdatedBy());
 		return createLotRequestDTO;
 	}
 
@@ -98,7 +98,7 @@ public class LotsRequestHandler {
 		return lotsResponseList;
 	}
 
-    private List<LotsByAccessResponse> buildListOfLotsByAccessFromDTOs(List<LotDTO> lotDTOs) throws SQLException, IOException {
+	private List<LotsByAccessResponse> buildListOfLotsByAccessFromDTOs(List<LotDTO> lotDTOs) throws SQLException, IOException {
 		List<LotsByAccessResponse> lotsResponseList = new ArrayList<LotsByAccessResponse>();
 		Iterator<LotDTO> iterator = lotDTOs.iterator();
 		while (iterator.hasNext()) {
@@ -140,7 +140,7 @@ public class LotsRequestHandler {
 		return lotsResponseList;
 	}
 
-	public Boolean insertBid(BidRequestBO bidRequestBO) {
+	public synchronized Boolean insertBid(BidRequestBO bidRequestBO) {
 		LotsDAO lotsDAO = new LotsDAO();
 		boolean isProcessed = false;
 		try {

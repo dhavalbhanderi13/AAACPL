@@ -14,6 +14,7 @@ import com.aaacpl.dao.UserLotMapDAO;
 import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.LotDTO;
 import com.aaacpl.dto.lots.LotStatusDTO;
+import com.aaacpl.rest.request.lots.StatusRequest;
 import com.aaacpl.rest.response.lots.LotStatusResponse;
 import com.aaacpl.rest.response.lots.LotsByAccessResponse;
 import com.aaacpl.rest.response.lots.LotsResponse;
@@ -154,11 +155,11 @@ public class LotsRequestHandler {
 		return isProcessed;
 	}
 
-	public LotStatusResponse getLotStatus(int lotId) {
+	public LotStatusResponse getLotStatus(StatusRequest statusRequest) {
 		LotStatusResponse lotResponse = null;
 		try {
 			LotsDAO lotsDAO = new LotsDAO();
-			LotStatusDTO lotStatusDto = lotsDAO.getLotStatus(lotId);
+			LotStatusDTO lotStatusDto = lotsDAO.getLotStatus(statusRequest);
 
 			lotResponse = new LotStatusResponse(lotStatusDto.getHighestBid(),
 					lotStatusDto.getHigestBidUser(),

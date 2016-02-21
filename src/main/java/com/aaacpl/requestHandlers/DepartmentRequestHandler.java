@@ -21,11 +21,12 @@ public class DepartmentRequestHandler {
 		DepartmentDAO departmentDAO = new DepartmentDAO();
 		CreateDepartmentRequestDTO createDepartmentRequestDTO = new CreateDepartmentRequestDTO();
 		createDepartmentRequestDTO.setName(createDepartmentRequestBO.getName());
-		createDepartmentRequestDTO
-				.setLogoPath(createDepartmentRequestBO.getLogoPath());
+		createDepartmentRequestDTO.setLogoPath(createDepartmentRequestBO
+				.getLogoPath());
 		CreateDepartmentResponseBO createDepartmentResponseBO = new CreateDepartmentResponseBO();
 		try {
-			createDepartmentResponseBO.setId(departmentDAO.insertDepartment(createDepartmentRequestDTO).getId());
+			createDepartmentResponseBO.setId(departmentDAO.insertDepartment(
+					createDepartmentRequestDTO).getId());
 		} catch (SQLException sq) {
 		} catch (IOException sqlException) {
 		}
@@ -71,6 +72,8 @@ public class DepartmentRequestHandler {
 		updateDepartmentDTO.setName(updateDepartmentRequestBO.getName());
 		updateDepartmentDTO
 				.setLogoPath(updateDepartmentRequestBO.getLogoPath());
+		updateDepartmentDTO.setStatus(updateDepartmentRequestBO.getStatus());
+		updateDepartmentDTO.setDeptId(updateDepartmentRequestBO.getDeptId());
 		try {
 			isProcessed = departmentDAO.updateDepartment(updateDepartmentDTO);
 		} catch (SQLException sq) {

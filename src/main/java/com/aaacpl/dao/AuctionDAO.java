@@ -1,7 +1,12 @@
 package com.aaacpl.dao;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +14,7 @@ import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.auction.AuctionResponseDTO;
 import com.aaacpl.dto.auction.CreateAuctionDTO;
+import com.aaacpl.dto.auction.UpdateAuctionDTO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.rest.exceptions.ResourceNotFoundException;
 
@@ -53,8 +59,10 @@ public class AuctionDAO {
 
 			preparedStatement.setInt(parameterIndex++,
 					createAuctionDTO.getCreatedBy());
-            preparedStatement.setTimestamp(parameterIndex++,
-                    new Timestamp(new java.util.Date().getTime()));
+
+			preparedStatement.setTimestamp(parameterIndex++, new Timestamp(
+					new java.util.Date().getTime()));
+
 			int i = preparedStatement.executeUpdate();
 			if (i > 0) {
 				connection.commit();
@@ -169,8 +177,9 @@ public class AuctionDAO {
 		return auctionDTO;
 	}
 
-	public List<AuctionDTO> getUpcomingAuctions() throws SQLException, IOException{
-        List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
+	public List<AuctionDTO> getUpcomingAuctions() throws SQLException,
+			IOException {
+		List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
 		Connection connection = null;
 		Statement statement = null;
 		try {
@@ -179,9 +188,7 @@ public class AuctionDAO {
 			StringBuilder query = new StringBuilder(
 					"select * from auction where startdate >= CONVERT_TZ(CURDATE(), \"-5:00\", \"+5:30\") + interval 1 day;");
 			ResultSet resultSet = statement.executeQuery(query.toString());
-			int index = 0;
 			while (resultSet.next()) {
-				index++;
 				AuctionDTO auctionDTO = new AuctionDTO(resultSet.getInt("id"),
 						resultSet.getString("auction_name"),
 						resultSet.getInt("auction_type_id"),
@@ -192,7 +199,7 @@ public class AuctionDAO {
 						resultSet.getString("catalog"),
 						resultSet.getInt("createdBy"),
 						resultSet.getInt("updatedBy"));
-                auctionDTOs.add(auctionDTO);
+				auctionDTOs.add(auctionDTO);
 			}
 
 		} catch (SQLException sqlException) {
@@ -208,8 +215,8 @@ public class AuctionDAO {
 		return auctionDTOs;
 	}
 
-    public List<AuctionDTO> getLiveAuctions() throws SQLException, IOException{
-        List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
+	public List<AuctionDTO> getLiveAuctions() throws SQLException, IOException {
+		List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
 		Connection connection = null;
 		Statement statement = null;
 		try {
@@ -218,9 +225,7 @@ public class AuctionDAO {
 			StringBuilder query = new StringBuilder(
 					"select * from auction where startdate <= CONVERT_TZ(CURDATE(), \"-5:00\", \"+5:30\") AND enddate >= CONVERT_TZ(CURDATE(), \"-5:00\", \"+5:30\");");
 			ResultSet resultSet = statement.executeQuery(query.toString());
-			int index = 0;
 			while (resultSet.next()) {
-				index++;
 				AuctionDTO auctionDTO = new AuctionDTO(resultSet.getInt("id"),
 						resultSet.getString("auction_name"),
 						resultSet.getInt("auction_type_id"),
@@ -231,7 +236,7 @@ public class AuctionDAO {
 						resultSet.getString("catalog"),
 						resultSet.getInt("createdBy"),
 						resultSet.getInt("updatedBy"));
-                auctionDTOs.add(auctionDTO);
+				auctionDTOs.add(auctionDTO);
 			}
 
 		} catch (SQLException sqlException) {
@@ -245,5 +250,77 @@ public class AuctionDAO {
 			}
 		}
 		return auctionDTOs;
+	}
+
+	public AuctionResponseDTO updateAuction(UpdateAuctionDTO auctionDTO)
+			throws SQLException, IOException {
+
+		PreparedStatement preparedStatement = null;
+		Connection connection = null;
+		AuctionResponseDTO auctionResponseDTO = new AuctionResponseDTO();
+		try {
+			int parameterIndex = 1;
+
+			connection = new ConnectionPool().getConnection();
+
+			connection.setAutoCommit(false);
+
+			preparedStatement = connection
+					.prepareStatement("UPDATE auction SET dept_id = ?, auction_type_id= ?, "
+							+ "auction_name= ?, auction_des= ?, startdate= ?, enddate= ?, catalog= ?,"
+							+ " status= ?, createdby= ?, updatedby= ? WHERE id= ?");
+
+			preparedStatement.setInt(parameterIndex++, auctionDTO.getDeptId());
+
+			preparedStatement.setInt(parameterIndex++,
+					auctionDTO.getAuctionTypeId());
+
+			preparedStatement.setString(parameterIndex++, auctionDTO.getName());
+
+			preparedStatement.setString(parameterIndex++,
+					auctionDTO.getDescription());
+
+			preparedStatement.setTimestamp(parameterIndex++,
+					auctionDTO.getStartDate());
+
+			preparedStatement.setTimestamp(parameterIndex++,
+					auctionDTO.getEndDate());
+
+			preparedStatement.setString(parameterIndex++,
+					auctionDTO.getCatalog());
+
+			preparedStatement.setString(parameterIndex++,
+					auctionDTO.getStatus());
+
+			preparedStatement.setInt(parameterIndex++,
+					auctionDTO.getCreatedBy());
+
+			preparedStatement.setInt(parameterIndex++,
+					auctionDTO.getUpdatedBy());
+
+			preparedStatement.setInt(parameterIndex++, auctionDTO.getId());
+
+			int i = preparedStatement.executeUpdate();
+			if (i > 0) {
+				connection.commit();
+			} else {
+				connection.rollback();
+			}
+
+			auctionResponseDTO.setId(auctionDTO.getId());
+
+		} catch (SQLException sqlException) {
+			connection.rollback();
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				preparedStatement.close();
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return auctionResponseDTO;
+
 	}
 }

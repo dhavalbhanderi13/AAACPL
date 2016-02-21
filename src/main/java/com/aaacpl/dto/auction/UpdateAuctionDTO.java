@@ -1,6 +1,8 @@
-package com.aaacpl.bo.request.auction;
+package com.aaacpl.dto.auction;
 
-public class UpdateAuctionRequestBO {
+import java.sql.Timestamp;
+
+public class UpdateAuctionDTO {
 
 	private Integer id;
 	private String status;
@@ -8,15 +10,15 @@ public class UpdateAuctionRequestBO {
 	private int auctionTypeId;
 	private String description;
 	private Integer deptId;
-	private String startDate;
-	private String endDate;
+	private Timestamp startDate;
+	private Timestamp endDate;
 	private String catalog;
 	private Integer createdBy;
 	private Integer updatedBy;
 
-	public UpdateAuctionRequestBO(Integer id, String status, String name,
+	public UpdateAuctionDTO(Integer id, String status, String name,
 			int auctionTypeId, String description, Integer deptId,
-			String startDate, String endDate, String catalog,
+			Timestamp startDate, Timestamp endDate, String catalog,
 			Integer createdBy, Integer updatedBy) {
 		this.id = id;
 		this.status = status;
@@ -48,11 +50,11 @@ public class UpdateAuctionRequestBO {
 		return deptId;
 	}
 
-	public String getStartDate() {
+	public Timestamp getStartDate() {
 		return startDate;
 	}
 
-	public String getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
 
@@ -78,7 +80,7 @@ public class UpdateAuctionRequestBO {
 
 	@Override
 	public String toString() {
-		return "UpdateAuctionRequestBO {'id': '" + id + "'name': '" + name
+		return "UpdateAuctionDTO {'id': '" + id + "'name': '" + name
 				+ "'status': '" + status + "',  'description': '" + description
 				+ "',  'deptId': '" + deptId + "',  'updatedBy': '" + updatedBy
 				+ "',  'startDate': '" + startDate + "',  'endDate': '" + name

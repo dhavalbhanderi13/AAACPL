@@ -56,8 +56,8 @@ public class DepartmentDAO {
 			sqlException.printStackTrace();
 		} finally {
 			try {
-				connection.close();
 				preparedStatement.close();
+				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -75,7 +75,6 @@ public class DepartmentDAO {
 			statement = connection.createStatement();
 			StringBuilder query = new StringBuilder("SELECT * FROM department");
 			ResultSet resultSet = statement.executeQuery(query.toString());
-			// int row = resultSet.getRow();
 			while (resultSet.next()) {
 				DepartmentDTO departmentDTO = new DepartmentDTO();
 				departmentDTO.setId(resultSet.getInt(1));
@@ -99,7 +98,49 @@ public class DepartmentDAO {
 
 	public Boolean updateDepartment(UpdateDepartmentDTO updateDepartmentDTO)
 			throws SQLException, IOException {
-		return null; // TODO
+		boolean isProcessed = false;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			connection = new ConnectionPool().getConnection();
+			connection.setAutoCommit(false);
+			int parameterIndex = 1;
+
+			preparedStatement = connection
+					.prepareStatement("UPDATE department SET name = ? , logo_path = ?, status = ? WHERE id = ?;");
+
+			preparedStatement.setString(parameterIndex++,
+					updateDepartmentDTO.getName());
+
+			preparedStatement.setString(parameterIndex++,
+					updateDepartmentDTO.getLogoPath());
+
+			preparedStatement.setString(parameterIndex++,
+					updateDepartmentDTO.getStatus());
+
+			preparedStatement.setInt(parameterIndex++,
+					updateDepartmentDTO.getDeptId());
+
+			int i = preparedStatement.executeUpdate();
+			if (i > 0) {
+				connection.commit();
+				isProcessed = true;
+			} else {
+				connection.rollback();
+			}
+
+		} catch (SQLException sqlException) {
+			connection.rollback();
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				preparedStatement.close();
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return isProcessed;
 	}
 
 }

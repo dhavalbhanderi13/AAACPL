@@ -38,7 +38,8 @@ public class DepartmentService {
 				.createDepartment(createDepartmentRequestBO);
 		if (createDepartmentResponseBO.getId() != 0) {
 			createDepartmentResponse.setFailureMessage("");
-			createDepartmentResponse.setSuccessMessage(String.valueOf(createDepartmentResponseBO.getId()));
+			createDepartmentResponse.setSuccessMessage(String
+					.valueOf(createDepartmentResponseBO.getId()));
 		} else {
 			createDepartmentResponse.setFailureMessage("FAILURE");
 			createDepartmentResponse.setSuccessMessage("");
@@ -69,6 +70,9 @@ public class DepartmentService {
 		updateDepartmentRequestBO.setName(updateDepartmentRequest.getName());
 		updateDepartmentRequestBO.setLogoPath(updateDepartmentRequest
 				.getLogoPath());
+		updateDepartmentRequestBO
+				.setStatus(updateDepartmentRequest.getStatus());
+		updateDepartmentRequestBO.setDeptId(updateDepartmentRequest.getId());
 
 		DepartmentRequestHandler departmentRequestHandler = new DepartmentRequestHandler();
 		UpdateDepartmentResponse updateResponse = new UpdateDepartmentResponse();
@@ -82,5 +86,4 @@ public class DepartmentService {
 		}
 		return ResponseGenerator.generateResponse(updateResponse);
 	}
-
 }

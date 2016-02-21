@@ -4,7 +4,8 @@ public class UpdateDepartmentDTO {
 
 	private String name;
 	private String logoPath;
-	private String deptId;
+	private Integer deptId;
+	private String status;
 
 	public String getName() {
 		return name;
@@ -22,12 +23,20 @@ public class UpdateDepartmentDTO {
 		this.logoPath = logoPath;
 	}
 
-	public String getDeptId() {
+	public Integer getDeptId() {
 		return deptId;
 	}
 
-	public void setDeptId(String deptId) {
+	public void setDeptId(Integer deptId) {
 		this.deptId = deptId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	@Override

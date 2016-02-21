@@ -3,7 +3,8 @@ package com.aaacpl.bo.request.department;
 public class UpdateDepartmentRequestBO {
 	private String name;
 	private String logoPath;
-	private String deptId;
+	private Integer id;
+	private String status;
 
 	public String getName() {
 		return name;
@@ -21,19 +22,26 @@ public class UpdateDepartmentRequestBO {
 		this.logoPath = logoPath;
 	}
 
-	public String getDeptId() {
-		return deptId;
+	public Integer getDeptId() {
+		return id;
 	}
 
-	public void setDeptId(String deptId) {
-		this.deptId = deptId;
+	public void setDeptId(Integer id) {
+		this.id = id;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	@Override
 	public String toString() {
-		return "UpdateDepartmentRequestBO{" + "departmentId='" + deptId + "\'"
-				+ ", name='" + name + '\'' + ", logoPath='" + logoPath + '\''
-				+ '}';
+		return "UpdateDepartmentRequestBO{" + "id='" + id + "\'" + ", name='"
+				+ name + '\'' + ", logoPath='" + logoPath + '\'' + '}';
 	}
 
 }

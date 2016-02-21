@@ -8,13 +8,16 @@ import java.util.List;
 
 import com.aaacpl.bo.request.lots.BidRequestBO;
 import com.aaacpl.bo.request.lots.CreateLotRequestBO;
+import com.aaacpl.bo.request.lots.UpdateLotBO;
 import com.aaacpl.bo.response.CreateLotResponseBO;
+import com.aaacpl.bo.response.UpdateLotResponseBO;
 import com.aaacpl.dao.LotsDAO;
 import com.aaacpl.dao.UserLotMapDAO;
 import com.aaacpl.dto.lots.CreateLotRequestDTO;
 import com.aaacpl.dto.lots.LotDTO;
 import com.aaacpl.dto.lots.LotStatusDTO;
 import com.aaacpl.rest.request.lots.StatusRequest;
+import com.aaacpl.rest.response.lots.BidHistoryResponse;
 import com.aaacpl.rest.response.lots.LotStatusResponse;
 import com.aaacpl.rest.response.lots.LotsByAccessResponse;
 import com.aaacpl.rest.response.lots.LotsResponse;
@@ -48,7 +51,7 @@ public class LotsRequestHandler {
 						.getStartDate()),
 				DateUtil.getTimeStampFromString(createLotRequestBO.getEndDate()),
 				createLotRequestBO.getCreatedBy(), createLotRequestBO
-				.getUpdatedBy());
+						.getUpdatedBy());
 		return createLotRequestDTO;
 	}
 
@@ -80,7 +83,8 @@ public class LotsRequestHandler {
 		return lotsResponse;
 	}
 
-	private List<LotsResponse> buildListOfLotsFromDTOs(List<LotDTO> lotDTOs) throws SQLException, IOException {
+	private List<LotsResponse> buildListOfLotsFromDTOs(List<LotDTO> lotDTOs)
+			throws SQLException, IOException {
 		List<LotsResponse> lotsResponseList = new ArrayList<LotsResponse>();
 		Iterator<LotDTO> iterator = lotDTOs.iterator();
 		while (iterator.hasNext()) {
@@ -91,20 +95,21 @@ public class LotsRequestHandler {
 					lotDTO.getDifferenceFactor(),
 					DateUtil.getDateStringFromTimeStamp(lotDTO.getStartDate()),
 					DateUtil.getDateStringFromTimeStamp(lotDTO.getEndDate()),
-					lotDTO.getCreatedBy(), lotDTO.getUpdatedBy(), new UserLotMapDAO().getListOfUsers(lotDTO.getId())
-			);
+					lotDTO.getCreatedBy(), lotDTO.getUpdatedBy(),
+					new UserLotMapDAO().getListOfUsers(lotDTO.getId()));
 			lotsResponseList.add(lotsResponse);
 		}
 		return lotsResponseList;
 	}
 
-	private List<LotsByAccessResponse> buildListOfLotsByAccessFromDTOs(List<LotDTO> lotDTOs) throws SQLException, IOException {
+	private List<LotsByAccessResponse> buildListOfLotsByAccessFromDTOs(
+			List<LotDTO> lotDTOs) throws SQLException, IOException {
 		List<LotsByAccessResponse> lotsResponseList = new ArrayList<LotsByAccessResponse>();
 		Iterator<LotDTO> iterator = lotDTOs.iterator();
 		while (iterator.hasNext()) {
 			LotDTO lotDTO = iterator.next();
-			LotsByAccessResponse lotsResponse = new LotsByAccessResponse(lotDTO.getId(),
-					lotDTO.getAuctionId(), lotDTO.getName(),
+			LotsByAccessResponse lotsResponse = new LotsByAccessResponse(
+					lotDTO.getId(), lotDTO.getAuctionId(), lotDTO.getName(),
 					lotDTO.getDescription(), lotDTO.getStartBid(),
 					lotDTO.getDifferenceFactor(),
 					DateUtil.getDateStringFromTimeStamp(lotDTO.getStartDate()),
@@ -115,14 +120,16 @@ public class LotsRequestHandler {
 		return lotsResponseList;
 	}
 
-	private LotsResponse buildLotResponseFromDTOs(LotDTO lotDTO) throws SQLException, IOException {
+	private LotsResponse buildLotResponseFromDTOs(LotDTO lotDTO)
+			throws SQLException, IOException {
 		LotsResponse lotsResponse = new LotsResponse(lotDTO.getId(),
 				lotDTO.getAuctionId(), lotDTO.getName(),
 				lotDTO.getDescription(), lotDTO.getStartBid(),
 				lotDTO.getDifferenceFactor(),
 				DateUtil.getDateStringFromTimeStamp(lotDTO.getStartDate()),
 				DateUtil.getDateStringFromTimeStamp(lotDTO.getEndDate()),
-				lotDTO.getCreatedBy(), lotDTO.getUpdatedBy(), new UserLotMapDAO().getListOfUsers(lotDTO.getId()));
+				lotDTO.getCreatedBy(), lotDTO.getUpdatedBy(),
+				new UserLotMapDAO().getListOfUsers(lotDTO.getId()));
 		return lotsResponse;
 	}
 
@@ -149,7 +156,7 @@ public class LotsRequestHandler {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return isProcessed;
@@ -172,5 +179,33 @@ public class LotsRequestHandler {
 			s.printStackTrace();
 		}
 		return lotResponse;
+	}
+
+	public UpdateLotResponseBO updateLot(UpdateLotBO updateLotRequestBO) {
+		UpdateLotResponseBO updateLotResponse = null;
+		try {
+			LotsDAO lotsDAO = new LotsDAO();
+			updateLotResponse = lotsDAO.updateLot(updateLotRequestBO);
+
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (IOException s) {
+			s.printStackTrace();
+		}
+		return updateLotResponse;
+	}
+
+	public List<BidHistoryResponse> getBidHistory(int lotId) {
+		List<BidHistoryResponse> bidHistoryList = null;
+		try {
+			LotsDAO lotsDAO = new LotsDAO();
+			bidHistoryList = lotsDAO.getBidHistoryList(lotId);
+
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (IOException s) {
+			s.printStackTrace();
+		}
+		return bidHistoryList;
 	}
 }

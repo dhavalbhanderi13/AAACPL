@@ -1,10 +1,11 @@
 package com.aaacpl.test;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.aaacpl.api.services.AuctionService;
+import com.aaacpl.api.services.LotsService;
+import com.aaacpl.rest.request.lots.UpdateLotRequest;
 
 public class Testing {
 	static AuctionService as = new AuctionService();
@@ -18,14 +19,23 @@ public class Testing {
 
 	public static void main(String[] args) {
 
-		File file = new File("C://Users/dhaval/Desktop/test/1");
-		System.out.println(file.exists());
-
-		if (!file.exists()) {
-			file.mkdirs();
+		LotsService lotService = new LotsService();
+		UpdateLotRequest updatecreateLotRequest = new UpdateLotRequest();
+		{
 		}
-
-		System.out.println(file.exists());
+		updatecreateLotRequest.setId(1);
+		updatecreateLotRequest.setStatus("A");
+		updatecreateLotRequest.setAuctionId(1);
+		updatecreateLotRequest.setName("DHAVAL_LOT");
+		updatecreateLotRequest.setDescription("TESTING PURPOSE");
+		updatecreateLotRequest.setStartBid("100");
+		updatecreateLotRequest.setDifferenceFactor(150);
+		updatecreateLotRequest.setStartDate("2016-02-12 00:00:00.0");
+		updatecreateLotRequest.setEndDate("2016-03-12 00:00:00.0");
+		updatecreateLotRequest.setCreatedBy(1);
+		updatecreateLotRequest.setUpdatedBy(1);
+		// lotService.getBidHistory(1);
+		lotService.updateLot(updatecreateLotRequest);
 
 		// LotsDAO dao = new LotsDAO();
 		// BidRequestBO bidRequestBO = new BidRequestBO(2, 1, 800L, "10.17.150",

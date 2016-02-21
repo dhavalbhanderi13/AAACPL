@@ -25,12 +25,12 @@ public class Testing {
 		BidRequestBO bidRequestBO = new BidRequestBO(2, 1, 800L, "10.17.150",
 				getCurrentServerTime());
 
-		try {
-			// dao.insertBid(bidRequestBO);
-			System.out.println(dao.getLotStatus(1));
-		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-		}
+//		try {
+//			// dao.insertBid(bidRequestBO);
+//			//System.out.println(dao.getLotStatus(1));
+//		} catch (SQLException | IOException e) {
+//			// TODO Auto-generated catch block
+//		}
 
 		// Test for get auctions
 

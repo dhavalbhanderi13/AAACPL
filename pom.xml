@@ -46,10 +46,10 @@
 			<version>1.17.1</version>
 		</dependency>
 		<dependency>
-        	<groupId>com.sun.jersey.contribs</groupId>
-        	<artifactId>jersey-multipart</artifactId>
-        	<version>1.17.1</version>
-    	</dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-multipart</artifactId>
+			<version>1.17.1</version>
+		</dependency>
 		<!-- Jersey Dependency ends here -->
 
 
@@ -66,6 +66,12 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.0.6</version>
 		</dependency>
 
 	</dependencies>

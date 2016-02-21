@@ -53,8 +53,8 @@ public class AuctionDAO {
 
 			preparedStatement.setInt(parameterIndex++,
 					createAuctionDTO.getCreatedBy());
-            preparedStatement.setTimestamp(parameterIndex++,
-                    new Timestamp(new java.util.Date().getTime()));
+			preparedStatement.setTimestamp(parameterIndex++, new Timestamp(
+					new java.util.Date().getTime()));
 			int i = preparedStatement.executeUpdate();
 			if (i > 0) {
 				connection.commit();
@@ -169,8 +169,9 @@ public class AuctionDAO {
 		return auctionDTO;
 	}
 
-	public List<AuctionDTO> getUpcomingAuctions() throws SQLException, IOException{
-        List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
+	public List<AuctionDTO> getUpcomingAuctions() throws SQLException,
+			IOException {
+		List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
 		Connection connection = null;
 		Statement statement = null;
 		try {
@@ -192,7 +193,7 @@ public class AuctionDAO {
 						resultSet.getString("catalog"),
 						resultSet.getInt("createdBy"),
 						resultSet.getInt("updatedBy"));
-                auctionDTOs.add(auctionDTO);
+				auctionDTOs.add(auctionDTO);
 			}
 
 		} catch (SQLException sqlException) {
@@ -208,8 +209,8 @@ public class AuctionDAO {
 		return auctionDTOs;
 	}
 
-    public List<AuctionDTO> getLiveAuctions() throws SQLException, IOException{
-        List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
+	public List<AuctionDTO> getLiveAuctions() throws SQLException, IOException {
+		List<AuctionDTO> auctionDTOs = new ArrayList<AuctionDTO>();
 		Connection connection = null;
 		Statement statement = null;
 		try {
@@ -231,7 +232,7 @@ public class AuctionDAO {
 						resultSet.getString("catalog"),
 						resultSet.getInt("createdBy"),
 						resultSet.getInt("updatedBy"));
-                auctionDTOs.add(auctionDTO);
+				auctionDTOs.add(auctionDTO);
 			}
 
 		} catch (SQLException sqlException) {

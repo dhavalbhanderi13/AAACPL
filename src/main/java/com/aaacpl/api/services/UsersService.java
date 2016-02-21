@@ -2,6 +2,7 @@ package com.aaacpl.api.services;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -22,6 +23,7 @@ import com.aaacpl.rest.request.user.LogoutRequest;
 import com.aaacpl.rest.request.user.RegistrationRequest;
 import com.aaacpl.rest.response.user.LoginResponse;
 import com.aaacpl.rest.response.user.RegistrationResponse;
+import com.aaacpl.rest.response.user.UserResponseList;
 import com.aaacpl.rest.response.user.UserTypesResponse;
 import com.aaacpl.rest.util.ResponseGenerator;
 
@@ -43,7 +45,8 @@ public class UsersService {
 			if (loginResponseBO.getValidUser()) {
 				loginResponse.setFailureMessage("");
 				loginResponse.setUserId(loginResponseBO.getId());
-				loginResponse.setSuccessMessage(String.valueOf(loginResponseBO.getSessionId()));
+				loginResponse.setSuccessMessage(String.valueOf(loginResponseBO
+						.getSessionId()));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -111,7 +114,6 @@ public class UsersService {
 		Object response = null;
 		try {
 			response = userRequestHandler.getUserById(id);
-			System.out.println(response);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -129,18 +131,38 @@ public class UsersService {
 	@Path("/logout")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response logout(LogoutRequest logoutRequest){
+	public Response logout(LogoutRequest logoutRequest) {
 		UserRequestHandler userRequestHandler = new UserRequestHandler();
-		Boolean isLoggedOut = userRequestHandler.logout(logoutRequest.getUserId());
-        LoginResponse loginResponse = new LoginResponse();
-        if(isLoggedOut){
-            loginResponse.setSuccessMessage("SUCCESS");
-            loginResponse.setFailureMessage("");
-            return ResponseGenerator.generateResponse(loginResponse);
-        }else{
-            loginResponse.setSuccessMessage("");
-            loginResponse.setFailureMessage("FAILURE");
-            return ResponseGenerator.generateResponse(loginResponse);
-        }
+		Boolean isLoggedOut = userRequestHandler.logout(logoutRequest
+				.getUserId());
+		LoginResponse loginResponse = new LoginResponse();
+		if (isLoggedOut) {
+			loginResponse.setSuccessMessage("SUCCESS");
+			loginResponse.setFailureMessage("");
+			return ResponseGenerator.generateResponse(loginResponse);
+		} else {
+			loginResponse.setSuccessMessage("");
+			loginResponse.setFailureMessage("FAILURE");
+			return ResponseGenerator.generateResponse(loginResponse);
+		}
 	}
+
+	@GET
+	@Path("/list")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserList() {
+		UserRequestHandler userRequestHandler = new UserRequestHandler();
+		List<UserResponseList> response = null;
+		try {
+			response = userRequestHandler.getUsersList();
+		} catch (UserNotFoundException e) {
+			LoginResponse loginResponse = new LoginResponse();
+			loginResponse.setSuccessMessage("");
+			loginResponse.setFailureMessage(e.getMessage());
+			return ResponseGenerator.generateResponse(loginResponse);
+		}
+		return ResponseGenerator.generateResponse(response);
+	}
+
 }

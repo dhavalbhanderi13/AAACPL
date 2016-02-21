@@ -6,11 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.user.LoginResponseDTO;
 import com.aaacpl.dto.user.UsersDTO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
+import com.aaacpl.rest.response.user.UserResponseList;
 
 public class UsersDAO {
 	public Boolean insertUser(UsersDTO usersDTO) throws SQLException,
@@ -40,10 +43,8 @@ public class UsersDAO {
 			preparedStatement
 					.setString(parameterIndex++, usersDTO.getCountry());
 			preparedStatement.setInt(parameterIndex++, usersDTO.getPin());
-			preparedStatement.setString(parameterIndex++,
-					usersDTO.getPhone());
-			preparedStatement.setString(parameterIndex++,
-					usersDTO.getMobile());
+			preparedStatement.setString(parameterIndex++, usersDTO.getPhone());
+			preparedStatement.setString(parameterIndex++, usersDTO.getMobile());
 			preparedStatement.setString(parameterIndex++,
 					usersDTO.getPanNumber());
 			preparedStatement.setString(parameterIndex++,
@@ -53,13 +54,13 @@ public class UsersDAO {
 			preparedStatement.setDate(parameterIndex++,
 					new java.sql.Date(today.getTime()));
 			preparedStatement.setString(parameterIndex++, "A");
-            int i = preparedStatement.executeUpdate();
-            if (i > 0) {
-                connection.commit();
-                isCreated = Boolean.TRUE;
-            } else {
-                connection.rollback();
-            }
+			int i = preparedStatement.executeUpdate();
+			if (i > 0) {
+				connection.commit();
+				isCreated = Boolean.TRUE;
+			} else {
+				connection.rollback();
+			}
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		} finally {
@@ -73,27 +74,26 @@ public class UsersDAO {
 		return isCreated;
 	}
 
-    public Boolean updateSessionId(int userId, Long sessionId) throws SQLException,
-			IOException {
+	public Boolean updateSessionId(int userId, Long sessionId)
+			throws SQLException, IOException {
 		boolean isUpdated = false;
 		PreparedStatement preparedStatement = null;
 		Connection connection = null;
 		try {
-			int parameterIndex = 1;
 			connection = new ConnectionPool().getConnection();
 			connection.setAutoCommit(false);
-            StringBuffer query = new StringBuffer("UPDATE users SET sessionId = ").append(sessionId)
-                    .append(" WHERE id = ").append(userId);
-			preparedStatement = connection
-					.prepareStatement(query.toString());
+			StringBuffer query = new StringBuffer(
+					"UPDATE users SET sessionId = ").append(sessionId)
+					.append(" WHERE id = ").append(userId);
+			preparedStatement = connection.prepareStatement(query.toString());
 
-            int i = preparedStatement.executeUpdate();
-            if (i > 0) {
-                connection.commit();
-                isUpdated = Boolean.TRUE;
-            } else {
-                connection.rollback();
-            }
+			int i = preparedStatement.executeUpdate();
+			if (i > 0) {
+				connection.commit();
+				isUpdated = Boolean.TRUE;
+			} else {
+				connection.rollback();
+			}
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		} finally {
@@ -107,8 +107,9 @@ public class UsersDAO {
 		return isUpdated;
 	}
 
-	public LoginResponseDTO getNamePasswordForLoginValidationForEmail(String email)
-			throws SQLException, IOException, UserNotFoundException {
+	public LoginResponseDTO getNamePasswordForLoginValidationForEmail(
+			String email) throws SQLException, IOException,
+			UserNotFoundException {
 		Connection connection = null;
 		Statement statement = null;
 		LoginResponseDTO loginResponseDTO = null;
@@ -195,5 +196,37 @@ public class UsersDAO {
 		}
 
 		return usersDTO;
+	}
+
+	public List<UserResponseList> getUsersList() throws SQLException,
+			IOException {
+		Connection connection = null;
+		Statement statement = null;
+		List<UserResponseList> userResponseList = new ArrayList<UserResponseList>();
+		try {
+			connection = new ConnectionPool().getConnection();
+			statement = connection.createStatement();
+			String query = "SELECT * FROM users ";
+			ResultSet resultSet = statement.executeQuery(query);
+
+			while (resultSet.next()) {
+				UserResponseList userResponse = new UserResponseList(
+						resultSet.getInt("id"), resultSet.getString("name"),
+						resultSet.getString("company_name"));
+				userResponseList.add(userResponse);
+			}
+
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				statement.close();
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return userResponseList;
 	}
 }

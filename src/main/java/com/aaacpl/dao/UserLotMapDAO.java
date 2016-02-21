@@ -1,14 +1,16 @@
 package com.aaacpl.dao;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
-import com.aaacpl.dto.lots.CreateLotResponseDTO;
-import com.aaacpl.dto.lots.LotDTO;
 import com.aaacpl.dto.participator.CreateParticipatorDTO;
 
 public class UserLotMapDAO {
@@ -19,7 +21,6 @@ public class UserLotMapDAO {
 		Boolean isInserted = Boolean.FALSE;
 		PreparedStatement preparedStatement = null;
 		Connection connection = null;
-		CreateLotResponseDTO createLotResponseDTO = new CreateLotResponseDTO(0);
 		try {
 			Iterator<Integer> userIdsIterator = createParticipatorDTO
 					.getUserIds().iterator();

@@ -6,9 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.participator.CreateParticipatorDTO;
@@ -87,5 +85,33 @@ public class UserLotMapDAO {
 			}
 		}
 		return userIds;
+	}
+
+	public Map<Integer, String> getUserNameIdMap(int lotId) throws SQLException,
+			IOException {
+		Map<Integer, String> userIdNameMap = new HashMap<Integer, String>();
+		Connection connection = null;
+		Statement statement = null;
+		try {
+			connection = new ConnectionPool().getConnection();
+			statement = connection.createStatement();
+			StringBuilder query = new StringBuilder(
+					"select id, name from users where id in(select user_id from lot_audit_log where lot_id = ")
+					.append(lotId).append(")");
+			ResultSet resultSet = statement.executeQuery(query.toString());
+			while (resultSet.next()) {
+                userIdNameMap.put(resultSet.getInt("id"), resultSet.getString("name"));
+			}
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return userIdNameMap;
 	}
 }

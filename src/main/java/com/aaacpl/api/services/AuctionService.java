@@ -139,7 +139,7 @@ public class AuctionService {
 		AuctionsListResponse auctionResponseList = new AuctionsListResponse();
 
 		auctionResponseList.setAuctionResponseList(auctionRequestHandler
-				.getAllUpcomingAuctions());
+				.getLiveAuctions());
 		return ResponseGenerator.generateResponse(auctionResponseList);
 	}
 

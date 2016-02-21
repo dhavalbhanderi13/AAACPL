@@ -1,13 +1,10 @@
 package com.aaacpl.test;
 
-import java.io.IOException;
-import java.sql.SQLException;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.aaacpl.api.services.AuctionService;
-import com.aaacpl.bo.request.lots.BidRequestBO;
-import com.aaacpl.dao.LotsDAO;
 
 public class Testing {
 	static AuctionService as = new AuctionService();
@@ -21,16 +18,25 @@ public class Testing {
 
 	public static void main(String[] args) {
 
-		LotsDAO dao = new LotsDAO();
-		BidRequestBO bidRequestBO = new BidRequestBO(2, 1, 800L, "10.17.150",
-				getCurrentServerTime());
+		File file = new File("C://Users/dhaval/Desktop/test/1");
+		System.out.println(file.exists());
 
-//		try {
-//			// dao.insertBid(bidRequestBO);
-//			//System.out.println(dao.getLotStatus(1));
-//		} catch (SQLException | IOException e) {
-//			// TODO Auto-generated catch block
-//		}
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+
+		System.out.println(file.exists());
+
+		// LotsDAO dao = new LotsDAO();
+		// BidRequestBO bidRequestBO = new BidRequestBO(2, 1, 800L, "10.17.150",
+		// getCurrentServerTime());
+
+		// try {
+		// // dao.insertBid(bidRequestBO);
+		// //System.out.println(dao.getLotStatus(1));
+		// } catch (SQLException | IOException e) {
+		// // TODO Auto-generated catch block
+		// }
 
 		// Test for get auctions
 

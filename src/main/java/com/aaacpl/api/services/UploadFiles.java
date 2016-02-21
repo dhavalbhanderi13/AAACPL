@@ -14,6 +14,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.aaacpl.rest.response.user.UploadResponse;
+import com.aaacpl.rest.util.ResponseGenerator;
 import com.sun.jersey.core.header.ContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
@@ -21,7 +23,10 @@ import com.sun.jersey.multipart.FormDataMultiPart;
 @Path("/files")
 public class UploadFiles {
 
-	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps/tmp/";
+	// private static final String SERVER_UPLOAD_LOCATION_FOLDER =
+	// "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps/tmp/";
+
+	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "C://Users/dhaval/Desktop/tmp/";
 
 	/**
 	 * Upload a File
@@ -45,7 +50,10 @@ public class UploadFiles {
 		// save the file to the server
 		saveFile(fileInputStream, filePath, id);
 
-		return Response.status(200).entity(filePath).build();
+		UploadResponse response = new UploadResponse();
+		response.setFilePath(filePath);
+		
+		return ResponseGenerator.generateResponse(response);
 
 	}
 

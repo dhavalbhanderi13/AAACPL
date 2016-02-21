@@ -1,6 +1,5 @@
 package com.aaacpl.rest.response.lots;
 
-import java.util.List;
 
 /**
  * Created by Hp on 18-02-2016.

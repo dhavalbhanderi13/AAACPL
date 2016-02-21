@@ -17,6 +17,7 @@ import com.aaacpl.dto.user.UsersDTO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.rest.response.user.GetTypesResponse;
 import com.aaacpl.rest.response.user.GetUserResponse;
+import com.aaacpl.rest.response.user.UserResponseList;
 import com.aaacpl.validation.UsersValidation;
 
 public class UserRequestHandler {
@@ -47,9 +48,9 @@ public class UserRequestHandler {
 		LoginResponseBO loginResponseBO = new LoginResponseBO();
 		Boolean isValidUser = usersValidation.validateEmailPassword(
 				loginRequestBO, loginResponseDTO);
-		if(isValidUser){
-            Long sessionId = new Date().getTime();
-            usersDAO.updateSessionId(loginResponseDTO.getId(), sessionId);
+		if (isValidUser) {
+			Long sessionId = new Date().getTime();
+			usersDAO.updateSessionId(loginResponseDTO.getId(), sessionId);
 			loginResponseBO.setSessionId(sessionId);
 		}
 		loginResponseBO.setValidUser(isValidUser);
@@ -133,16 +134,29 @@ public class UserRequestHandler {
 		return userResponse;
 	}
 
-    public Boolean logout(int userId){
-        Boolean isLoggedOut = Boolean.FALSE;
-        try {
-            UsersDAO usersDAO = new UsersDAO();
-            isLoggedOut = usersDAO.updateSessionId(userId, null);
-        }catch (SQLException s){
-            s.printStackTrace();
-        }catch (IOException s){
-            s.printStackTrace();
-        }
-        return isLoggedOut;
-    }
+	public Boolean logout(int userId) {
+		Boolean isLoggedOut = Boolean.FALSE;
+		try {
+			UsersDAO usersDAO = new UsersDAO();
+			isLoggedOut = usersDAO.updateSessionId(userId, null);
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (IOException s) {
+			s.printStackTrace();
+		}
+		return isLoggedOut;
+	}
+
+	public List<UserResponseList> getUsersList() {
+		List<UserResponseList> userList = null;
+		try {
+			UsersDAO usersDAO = new UsersDAO();
+			userList = usersDAO.getUsersList();
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (IOException s) {
+			s.printStackTrace();
+		}
+		return userList;
+	}
 }

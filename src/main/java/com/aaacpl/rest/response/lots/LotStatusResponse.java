@@ -8,6 +8,10 @@ public class LotStatusResponse {
     private Boolean hasHigestBidChanged;
 
     public LotStatusResponse(Integer highestBid, Integer higestBidUser, String currentServerTime, Boolean hasHigestBidChanged) {
+        this.highestBid = highestBid;
+        this.higestBidUser = higestBidUser;
+        this.currentServerTime = currentServerTime;
+        this.hasHigestBidChanged = hasHigestBidChanged;
     }
 
     public Integer getHighestBid() {

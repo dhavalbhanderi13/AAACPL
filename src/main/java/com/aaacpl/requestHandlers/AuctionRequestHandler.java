@@ -94,7 +94,7 @@ public class AuctionRequestHandler {
 		AuctionResponse auctionResponse = null;
 		try {
 			AuctionDAO auctionDAO = new AuctionDAO();
-			AuctionDTO auctionDTO = auctionDAO.getLotById(id);
+			AuctionDTO auctionDTO = auctionDAO.getAuctionById(id);
 			auctionResponse = buildLotResponseFromDTOs(auctionDTO);
 		} catch (SQLException s) {
 			s.printStackTrace();

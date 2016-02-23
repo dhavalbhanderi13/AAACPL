@@ -11,11 +11,11 @@ public class DateUtil {
 	}
 
 	public static String getDateStringFromTimeStamp(Timestamp timestamp) {
-		return new SimpleDateFormat("YYYY-MM-DD HH:mm:ss").format(timestamp);
+		return new SimpleDateFormat("yyyy-mm-dd HH:mm:ss").format(timestamp);
 	}
 
 	public static String getCurrentServerTime() {
-		String timeStamp = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss")
+		String timeStamp = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss")
 				.format(new Timestamp(new Date().getTime()));
 
 		return timeStamp;

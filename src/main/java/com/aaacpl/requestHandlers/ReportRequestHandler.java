@@ -1,8 +1,10 @@
 package com.aaacpl.requestHandlers;
 
+import com.aaacpl.dao.AuctionDAO;
 import com.aaacpl.dao.LotAuditLogDAO;
 import com.aaacpl.dao.LotsDAO;
 import com.aaacpl.dao.UserLotMapDAO;
+import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.lotAuditLog.LotAuditLogDTO;
 import com.aaacpl.dto.lots.LotDTO;
 import com.aaacpl.util.LotWiseBidHistoryPDFCreator;
@@ -29,9 +31,11 @@ public class ReportRequestHandler {
             file = new File(absolutePath, fileName);
             docWriter = PdfWriter.getInstance(doc, new FileOutputStream(absolutePath+fileName));
             LotsDAO lotsDAO = new LotsDAO();
+            AuctionDAO auctionDAO = new AuctionDAO();
             UserLotMapDAO userLotMapDAO = new UserLotMapDAO();
             LotAuditLogDAO lotAuditLogDAO = new LotAuditLogDAO();
             List<LotDTO> lotDTOList = lotsDAO.getAllLots(auctionId);
+            AuctionDTO auctionDTO = auctionDAO.getAuctionById(auctionId);
             System.out.println("lotDTOList = "+lotDTOList);
             Iterator<LotDTO> iterator = lotDTOList.iterator();
             doc.open();
@@ -51,8 +55,9 @@ public class ReportRequestHandler {
                     doc.addCreator("AAACPL.com");
                     doc.addTitle("LotWise Bid History");
                     doc.setPageSize(PageSize.LETTER);
-                    doc.add(new LotWiseBidHistoryPDFCreator().createPDF(doc, absolutePath + fileName, userNameIdMap, lotAuditLogDTOs));
-                    //doc.close();
+                    doc.add(new LotWiseBidHistoryPDFCreator().createPDF(userNameIdMap, lotAuditLogDTOs, lotDTO, auctionDTO));
+                }else{
+                    doc.add(new LotWiseBidHistoryPDFCreator().createPDF(userNameIdMap, lotAuditLogDTOs, lotDTO, auctionDTO));
                 }
 
             }

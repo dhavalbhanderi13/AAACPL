@@ -134,7 +134,7 @@ public class AuctionDAO {
 		return auctionDTOs;
 	}
 
-	public AuctionDTO getLotById(int id) throws SQLException, IOException,
+	public AuctionDTO getAuctionById(int id) throws SQLException, IOException,
 			UserNotFoundException {
 		Connection connection = null;
 		Statement statement = null;

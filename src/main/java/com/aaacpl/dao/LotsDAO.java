@@ -438,7 +438,7 @@ public class LotsDAO {
 			preparedStatement = connection
 					.prepareStatement("UPDATE lot SET auction_id = ? , name = ? , description = ? ,"
 							+ " start_bid = ? , difference_factor = ? , startdate = ? , enddate = ? ,"
-							+ " created_by = ? , updated_by = ? WHERE id = ? ;");
+							+ " createdby = ? , updatedby = ? WHERE id = ? ;");
 
 			preparedStatement.setInt(parameterIndex++,
 					updateLotRequestBO.getAuctionId());

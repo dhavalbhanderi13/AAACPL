@@ -29,6 +29,7 @@ import com.aaacpl.rest.util.ResponseGenerator;
 
 @Path("/user")
 public class UsersService {
+	
 	@POST()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

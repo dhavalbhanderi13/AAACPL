@@ -18,6 +18,7 @@ import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.rest.response.user.GetTypesResponse;
 import com.aaacpl.rest.response.user.GetUserResponse;
 import com.aaacpl.rest.response.user.UserResponseList;
+import com.aaacpl.rest.util.EmailService;
 import com.aaacpl.validation.UsersValidation;
 
 public class UserRequestHandler {
@@ -33,6 +34,11 @@ public class UserRequestHandler {
 			isProcessed = false;
 		} catch (IOException sqlException) {
 			isProcessed = false;
+		}
+
+		if (isProcessed) {
+			EmailService emailService = new EmailService(null, null, null, null);
+			//emailService.sendNewUserEmail(registrationRequestBO.getEmail());
 		}
 
 		return isProcessed;

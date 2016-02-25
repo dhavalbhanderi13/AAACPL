@@ -20,4 +20,8 @@ public class DateUtil {
 
 		return timeStamp;
 	}
+
+	public static String getTimestampForReport(Timestamp timestamp){
+		return new SimpleDateFormat("HH:mm:ss").format(timestamp);
+	}
 }

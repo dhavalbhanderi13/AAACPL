@@ -165,5 +165,24 @@ public class UsersService {
 		}
 		return ResponseGenerator.generateResponse(response);
 	}
+	
+	@GET
+	@Path("/forgot")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response forgotPassword(@PathParam("emailId") String emailId) {
+		UserRequestHandler userRequestHandler = new UserRequestHandler();
+		Boolean mailSent = userRequestHandler.forgotPassword(emailId);
+		LoginResponse loginResponse = new LoginResponse();
+		if (mailSent) {
+			loginResponse.setSuccessMessage("SUCCESS");
+			loginResponse.setFailureMessage("");
+			return ResponseGenerator.generateResponse(loginResponse);
+		} else {
+			loginResponse.setSuccessMessage("");
+			loginResponse.setFailureMessage("FAILURE");
+			return ResponseGenerator.generateResponse(loginResponse);
+		}
+	}
 
 }

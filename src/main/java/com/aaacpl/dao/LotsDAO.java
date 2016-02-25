@@ -149,7 +149,7 @@ public class LotsDAO {
 			StringBuilder query = new StringBuilder(
 					"select * from lot where id IN(Select DISTINCT lot_id from lot_user_map where user_id =")
 					.append(userId).append(") AND lot.auction_id = ")
-					.append(auctionId);
+					.append(auctionId).append(" AND enddate > CURRENT_TIMESTAMP()");
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
 				LotDTO lotDTO = new LotDTO(resultSet.getInt("id"),

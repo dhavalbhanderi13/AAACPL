@@ -11,7 +11,6 @@ public class UpdateAuctionRequest {
 	private String startDate;
 	private String endDate;
 	private String catalog;
-	private Integer createdBy;
 	private Integer updatedBy;
 
 	public String getName() {
@@ -70,14 +69,6 @@ public class UpdateAuctionRequest {
 		this.catalog = catalog;
 	}
 
-	public Integer getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(Integer createdBy) {
-		this.createdBy = createdBy;
-	}
-
 	public Integer getUpdatedBy() {
 		return updatedBy;
 	}
@@ -104,12 +95,17 @@ public class UpdateAuctionRequest {
 
 	@Override
 	public String toString() {
-		return "UpdateAuctionRequest {'id': '" + id + "'name': '" + name
-				+ "'status': '" + status + "',  'description': '" + description
-				+ "',  'deptId': '" + deptId + "',  'updatedBy': '" + updatedBy
-				+ "',  'startDate': '" + startDate + "',  'endDate': '" + name
-				+ "enddate',  'catalog': '" + catalog + "',  'createdBy': '"
-				+ createdBy + "'";
+		return "UpdateAuctionRequest{" +
+				"status='" + status + '\'' +
+				", id=" + id +
+				", name='" + name + '\'' +
+				", auctionTypeId=" + auctionTypeId +
+				", description='" + description + '\'' +
+				", deptId=" + deptId +
+				", startDate='" + startDate + '\'' +
+				", endDate='" + endDate + '\'' +
+				", catalog='" + catalog + '\'' +
+				", updatedBy=" + updatedBy +
+				'}';
 	}
-
 }

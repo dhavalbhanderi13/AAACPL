@@ -2,7 +2,6 @@ package com.aaacpl.dao;
 
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.lotAuditLog.LotAuditLogDTO;
-import com.aaacpl.dto.lots.LotDTO;
 
 import java.io.IOException;
 import java.sql.Connection;

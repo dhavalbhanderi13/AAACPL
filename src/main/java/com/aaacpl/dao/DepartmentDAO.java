@@ -95,6 +95,34 @@ public class DepartmentDAO {
 		}
 		return departmentDTOs;
 	}
+public DepartmentDTO getDepartmentById(int departmentId) throws SQLException,
+			IOException {
+		DepartmentDTO departmentDTO = new DepartmentDTO();
+		Connection connection = null;
+		Statement statement = null;
+		try {
+			connection = new ConnectionPool().getConnection();
+			statement = connection.createStatement();
+			StringBuilder query = new StringBuilder("SELECT * FROM department where id = ").append(departmentId);
+			ResultSet resultSet = statement.executeQuery(query.toString());
+			while (resultSet.next()) {
+				departmentDTO.setId(resultSet.getInt(1));
+				departmentDTO.setName(resultSet.getString(2));
+				departmentDTO.setLogoPath(resultSet.getString(3));
+				departmentDTO.setLogoPath(resultSet.getString(4));
+			}
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return departmentDTO;
+	}
 
 	public Boolean updateDepartment(UpdateDepartmentDTO updateDepartmentDTO)
 			throws SQLException, IOException {

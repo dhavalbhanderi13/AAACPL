@@ -268,7 +268,7 @@ public class AuctionDAO {
 			preparedStatement = connection
 					.prepareStatement("UPDATE auction SET dept_id = ?, auction_type_id= ?, "
 							+ "auction_name= ?, auction_des= ?, startdate= ?, enddate= ?, catalog= ?,"
-							+ " status= ?, createdby= ?, updatedby= ? WHERE id= ?");
+							+ " status= ?, updatedby= ? WHERE id= ?");
 
 			preparedStatement.setInt(parameterIndex++, auctionDTO.getDeptId());
 
@@ -291,9 +291,6 @@ public class AuctionDAO {
 
 			preparedStatement.setString(parameterIndex++,
 					auctionDTO.getStatus());
-
-			preparedStatement.setInt(parameterIndex++,
-					auctionDTO.getCreatedBy());
 
 			preparedStatement.setInt(parameterIndex++,
 					auctionDTO.getUpdatedBy());

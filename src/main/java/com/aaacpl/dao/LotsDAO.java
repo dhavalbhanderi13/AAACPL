@@ -438,7 +438,7 @@ public class LotsDAO {
 			preparedStatement = connection
 					.prepareStatement("UPDATE lot SET auction_id = ? , name = ? , description = ? ,"
 							+ " start_bid = ? , difference_factor = ? , startdate = ? , enddate = ? ,"
-							+ " created_by = ? , updated_by = ? WHERE id = ? ;");
+							+ " updatedby = ? WHERE id = ? ;");
 
 			preparedStatement.setInt(parameterIndex++,
 					updateLotRequestBO.getAuctionId());
@@ -461,9 +461,6 @@ public class LotsDAO {
 
 			preparedStatement.setTimestamp(parameterIndex++,
 					updateLotRequestBO.getEndDate());
-
-			preparedStatement.setInt(parameterIndex++,
-					updateLotRequestBO.getCreatedBy());
 
 			preparedStatement.setInt(parameterIndex++,
 					updateLotRequestBO.getUpdatedBy());

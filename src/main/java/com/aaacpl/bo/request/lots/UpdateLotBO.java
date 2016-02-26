@@ -13,13 +13,11 @@ public class UpdateLotBO {
 	private int differenceFactor;
 	private Timestamp startDate;
 	private Timestamp endDate;
-	private int createdBy;
 	private Integer updatedBy;
 
 	public UpdateLotBO(int id, String status, int auctionId, String name,
 			String description, String startBid, int differenceFactor,
-			Timestamp startDate, Timestamp endDate, int createdBy,
-			Integer updatedBy) {
+			Timestamp startDate, Timestamp endDate,	Integer updatedBy) {
 
 		this.id = id;
 		this.status = status;
@@ -30,7 +28,6 @@ public class UpdateLotBO {
 		this.differenceFactor = differenceFactor;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.createdBy = createdBy;
 		this.updatedBy = updatedBy;
 	}
 
@@ -62,10 +59,6 @@ public class UpdateLotBO {
 		return endDate;
 	}
 
-	public int getCreatedBy() {
-		return createdBy;
-	}
-
 	public Integer getUpdatedBy() {
 		return updatedBy;
 	}
@@ -84,7 +77,6 @@ public class UpdateLotBO {
 				+ '\'' + ", description='" + description + '\''
 				+ ", startBid='" + startBid + '\'' + ", differenceFactor="
 				+ differenceFactor + ", startDate='" + startDate + '\''
-				+ ", endDate='" + endDate + '\'' + ", createdBy='" + createdBy
-				+ '\'' + ", updatedBy='" + updatedBy + '\'' + '}';
+				+ ", endDate='" + endDate + '\'' + ", updatedBy='" + updatedBy + '\'' + '}';
 	}
 }

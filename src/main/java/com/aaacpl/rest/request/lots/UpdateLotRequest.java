@@ -11,7 +11,6 @@ public class UpdateLotRequest {
 	private int differenceFactor;
 	private String startDate;
 	private String endDate;
-	private int createdBy;
 	private Integer updatedBy;
 
 	public int getAuctionId() {
@@ -70,14 +69,6 @@ public class UpdateLotRequest {
 		this.endDate = endDate;
 	}
 
-	public int getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(int createdBy) {
-		this.createdBy = createdBy;
-	}
-
 	public Integer getUpdatedBy() {
 		return updatedBy;
 	}
@@ -108,8 +99,7 @@ public class UpdateLotRequest {
 				+ name + '\'' + ", description='" + description + '\''
 				+ ", startBid='" + startBid + '\'' + ", differenceFactor="
 				+ differenceFactor + ", startDate='" + startDate + '\''
-				+ ", endDate='" + endDate + '\'' + ", createdBy='" + createdBy
-				+ '\'' + ", updatedBy='" + updatedBy + '\'' + '}';
+				+ ", endDate='" + endDate + '\'' + ", updatedBy='" + updatedBy + '\'' + '}';
 	}
 
 }

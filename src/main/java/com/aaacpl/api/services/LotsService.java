@@ -82,7 +82,7 @@ public class LotsService {
 				DateUtil.getTimeStampFromString(updatecreateLotRequest
 						.getStartDate()),
 				DateUtil.getTimeStampFromString(updatecreateLotRequest
-						.getEndDate()), updatecreateLotRequest.getCreatedBy(),
+						.getEndDate()),
 				updatecreateLotRequest.getUpdatedBy());
 
 		UpdateLotResponse createLotResponse = new UpdateLotResponse();

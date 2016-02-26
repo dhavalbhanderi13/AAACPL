@@ -73,7 +73,6 @@ public class AuctionService {
 				updateAuctionRequest.getStartDate(),
 				updateAuctionRequest.getEndDate(),
 				updateAuctionRequest.getCatalog(),
-				updateAuctionRequest.getCreatedBy(),
 				updateAuctionRequest.getUpdatedBy());
 
 		UpdateAuctionResponse updateAuctionResponse = new UpdateAuctionResponse();

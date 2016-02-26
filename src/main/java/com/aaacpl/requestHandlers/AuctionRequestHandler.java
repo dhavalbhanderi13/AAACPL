@@ -156,7 +156,6 @@ public class AuctionRequestHandler {
 						.getStartDate()),
 				DateUtil.getTimeStampFromString(updateAuctionRequestBO
 						.getEndDate()), updateAuctionRequestBO.getCatalog(),
-				updateAuctionRequestBO.getCreatedBy(),
 				updateAuctionRequestBO.getUpdatedBy());
 
 		try {

@@ -3,6 +3,7 @@ package com.aaacpl.util;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class DateUtil {
 	public static Timestamp getTimeStampFromString(String dateStr) {
@@ -14,10 +15,9 @@ public class DateUtil {
 	}
 
 	public static String getCurrentServerTime() {
-		String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-				.format(new Timestamp(new Date().getTime()));
-
-		return timeStamp;
+		SimpleDateFormat sdfAmerica = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		sdfAmerica.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+		return sdfAmerica.format(new Date());
 	}
 
 	public static String getTimestampForReport(Timestamp timestamp){

@@ -33,10 +33,10 @@ public class ReportService {
         File file = new File("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps", "123.pdf");*/
        // String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
         String absoluteDiskPath = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps";
-        File file = new ReportRequestHandler().getLotWiseHistoryReport(absoluteDiskPath, "/lotWiseReport.pdf", auctionId);
+        File file = new ReportRequestHandler().getLotWiseHistoryReport(absoluteDiskPath, "/Lotwise Bid History.pdf", auctionId);
         Response.ResponseBuilder response = Response.ok(file);
         response.header("Content-Disposition",
-                "attachment; filename=lotWiseReport.pdf");
+                "attachment; filename=Lotwise Bid History.pdf");
         return response.build();
 
     }
@@ -50,10 +50,10 @@ public class ReportService {
         File file = new File("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps", "123.pdf");*/
        // String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
         String absoluteDiskPath = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps";
-        File file = new ReportRequestHandler().getBidHistoryReport(absoluteDiskPath, "/bidHistory.pdf", auctionId);
+        File file = new ReportRequestHandler().getBidHistoryReport(absoluteDiskPath, "/Combine Bid History Prepare Automatically Between Auction.pdf", auctionId);
         Response.ResponseBuilder response = Response.ok(file);
         response.header("Content-Disposition",
-                "attachment; filename=bidHistory.pdf");
+                "attachment; filename=Combine Bid History Prepare Automatically Between Auction.pdf");
         return response.build();
 
     }
@@ -67,10 +67,10 @@ public class ReportService {
         File file = new File("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps", "123.pdf");*/
        // String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
         String absoluteDiskPath = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps";
-        File file = new ReportRequestHandler().getBidSheetReport(absoluteDiskPath, "/bidHistory.pdf", auctionId);
+        File file = new ReportRequestHandler().getBidSheetReport(absoluteDiskPath, "/Bid Sheet.pdf", auctionId);
         Response.ResponseBuilder response = Response.ok(file);
         response.header("Content-Disposition",
-                "attachment; filename=bidHistory.pdf");
+                "attachment; filename=Bid Sheet.pdf");
         return response.build();
 
     }

@@ -11,6 +11,7 @@ import com.aaacpl.reports.BidSheetPDFCreator;
 import com.aaacpl.util.LotWiseBidHistoryPDFCreator;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -160,22 +161,21 @@ public class ReportRequestHandler {
         File file = null;
         Document doc = new Document(PageSize.A4);
         PdfWriter docWriter = null;
+        long highestBidTotal = 0l;
         try {
             file = new File(absolutePath, fileName);
             docWriter = PdfWriter.getInstance(doc, new FileOutputStream(absolutePath + fileName));
             LotsDAO lotsDAO = new LotsDAO();
             AuctionDAO auctionDAO = new AuctionDAO();
             UserLotMapDAO userLotMapDAO = new UserLotMapDAO();
-            LotAuditLogDAO lotAuditLogDAO = new LotAuditLogDAO();
             List<LotDTO> lotDTOList = lotsDAO.getAllLots(auctionId);
             AuctionDTO auctionDTO = auctionDAO.getAuctionById(auctionId);
             DepartmentDAO departmentDAO = new DepartmentDAO();
             DepartmentDTO departmentDTO = departmentDAO.getDepartmentById(auctionDTO.getDeptId());
             Iterator<LotDTO> iterator = lotDTOList.iterator();
 
-            Font fonForDescription = new Font(Font.FontFamily.COURIER, 8);
-            Font fontForTitle = new Font(Font.FontFamily.COURIER, 16, Font.BOLD, new BaseColor(0, 0, 0));
-
+            Font bfBold12 = new Font(Font.FontFamily.COURIER, 14, Font.BOLD);
+            Font bf12 = new Font(Font.FontFamily.COURIER, 9);
             doc.open();
             Boolean isForFirstTime = Boolean.TRUE;
             int counter = 1;
@@ -204,29 +204,30 @@ public class ReportRequestHandler {
                     titlePara.setAlignment(Paragraph.ALIGN_CENTER);
                     Chunk title = new Chunk("BID-SHEET");
                     title.setUnderline(0.1f, -2f); //0.1 thick, -2 y-location
-                    title.setFont(fontForTitle);
+                    title.setFont(bfBold12);
                     titlePara.add(title);
                     doc.add(titlePara);
 
                     Paragraph paragraphAuctionHeader1 = new Paragraph("A. A. Auctioneers & Contractors Pvt. Ltd.");
                     paragraphAuctionHeader1.setAlignment(Paragraph.ALIGN_CENTER);
-                    paragraphAuctionHeader1.setFont(fonForDescription);
+                    paragraphAuctionHeader1.setFont(bf12);
                     doc.add(paragraphAuctionHeader1);
 
                     Paragraph paragraphAuctionHeader2 = new Paragraph("GOVT. APPROVED AUCTIONEER");
                     paragraphAuctionHeader2.setAlignment(Paragraph.ALIGN_CENTER);
-                    paragraphAuctionHeader2.setFont(fonForDescription);
+                    paragraphAuctionHeader2.setFont(bf12);
                     doc.add(paragraphAuctionHeader2);
 
                     Paragraph paragraphAddress = new Paragraph("19/B, Kohinoor Society, Opp BMC School, Link Road, Sakinaka, Mumbai-400072 Phone:25145853");
                     paragraphAddress.setAlignment(Paragraph.ALIGN_CENTER);
-                    paragraphAddress.setFont(fonForDescription);
+                    paragraphAddress.setFont(bf12);
                     doc.add(paragraphAddress);
 
                     StringBuilder auctionInfo = new StringBuilder("Auction Sale held at (www.aaacpl.com) on ").append(auctionDTO.getStartDate())
                             .append(" Auction Sale No. (").append(auctionDTO.getDescription()).append(")");
                     Paragraph paragraphAuctionInfo = new Paragraph(auctionInfo.toString());
                     paragraphAuctionInfo.setAlignment(Paragraph.ALIGN_CENTER);
+                    paragraphAddress.setFont(bf12);
                     doc.add(paragraphAuctionInfo);
 
                     StringBuilder departmentInfo = new StringBuilder("Under Instructions From (")
@@ -234,15 +235,44 @@ public class ReportRequestHandler {
                             .append(")");
                     Paragraph paragraphDeptInfo = new Paragraph(departmentInfo.toString());
                     paragraphDeptInfo.setAlignment(Paragraph.ALIGN_CENTER);
+                    paragraphAddress.setFont(bf12);
                     doc.add(paragraphDeptInfo);
                     isForFirstTime = Boolean.FALSE;
                     doc.add(Chunk.NEWLINE);
                 }
 
+                if(liveBidLogDTO != null) {
+                    highestBidTotal = highestBidTotal + liveBidLogDTO.getMaxValue();
+                }
                 Paragraph paragraphs = new BidSheetPDFCreator().createPDF(userNameIdMap, liveBidLogDTO, lotDTO, counter);
                 doc.add(paragraphs);
                 counter++;
             }
+
+            Paragraph highestBidTotalInfo = new Paragraph("Total of Highest Bid Amount: "+highestBidTotal);
+            highestBidTotalInfo.setAlignment(Paragraph.ALIGN_LEFT);
+            highestBidTotalInfo.setFont(bf12);
+            doc.add(highestBidTotalInfo);
+
+            Chunk glue = new Chunk(new VerticalPositionMark());
+            Paragraph p = new Paragraph("Signature of Auctioneer");
+            p.add(new Chunk(glue));
+            p.add("Signature                 ");
+            p.setFont(bf12);
+            doc.add(p);
+
+            Paragraph p1 = new Paragraph("For A. A. Auctioneers & Contractors Pvt. Ltd.");
+            p1.add(new Chunk(glue));
+            p1.add("Supervising Officer        ");
+            p1.setFont(bf12);
+            doc.add(p1);
+            doc.add(Chunk.NEWLINE);
+
+            Paragraph p2 = new Paragraph("Auctioneer");
+            p2.add(new Chunk(glue));
+            p2.add("Designation               ");
+            p2.setFont(bf12);
+            doc.add(p2);
         } catch (SQLException s) {
             s.printStackTrace();
         } catch (IOException e) {

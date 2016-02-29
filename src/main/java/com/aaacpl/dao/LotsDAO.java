@@ -283,7 +283,7 @@ public class LotsDAO {
 					bidRequestBO.getIpAddress());
 
 			preparedStatement.setString(parameterIndex++,
-					bidRequestBO.getLocalSystemTime());
+					DateUtil.getCurrentServerTime());
 
 			int i = preparedStatement.executeUpdate();
 
@@ -362,7 +362,7 @@ public class LotsDAO {
 					bidRequestBO.getIpAddress());
 
 			preparedStatement.setString(parameterIndex++,
-					bidRequestBO.getLocalSystemTime());
+					DateUtil.getCurrentServerTime());
 
 			int i = preparedStatement.executeUpdate();
 
@@ -404,8 +404,7 @@ public class LotsDAO {
 				int maxValue = rs.getInt("max_value");
 				int userId = rs.getInt("user_id");
 				String currentServerTime = DateUtil.getCurrentServerTime();
-				if (statusRequest.getCurrentBidMax() != null
-						&& statusRequest.getCurrentBidMax() != 0) {
+				if (statusRequest.getCurrentBidMax() != null) {
 					hasHighestBidChanged = (maxValue > statusRequest
 							.getCurrentBidMax());
 				}

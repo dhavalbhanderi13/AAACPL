@@ -1,5 +1,9 @@
 package com.aaacpl.util;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
+import org.joda.time.DateTimeZone;
+
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,5 +26,14 @@ public class DateUtil {
 
 	public static String getTimestampForReport(Timestamp timestamp){
 		return new SimpleDateFormat("HH:mm:ss").format(timestamp);
+	}
+
+	public static int compareTimestampWithCurrentDate(Timestamp timestamp){
+		DateTime dt = new DateTime(timestamp,
+				DateTimeZone.forID("Asia/Kolkata"));
+		DateTime currentDate = new DateTime(new Date(),
+				DateTimeZone.forID("Asia/Kolkata"));
+		DateTimeComparator comparator = DateTimeComparator.getDateOnlyInstance();
+		return comparator.compare(dt,currentDate);
 	}
 }

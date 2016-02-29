@@ -167,11 +167,17 @@ public class LotsRequestHandler {
 		try {
 			LotsDAO lotsDAO = new LotsDAO();
 			LotStatusDTO lotStatusDto = lotsDAO.getLotStatus(statusRequest);
-
-			lotResponse = new LotStatusResponse(lotStatusDto.getHighestBid(),
-					lotStatusDto.getHigestBidUser(),
-					lotStatusDto.getCurrentServerTime(),
-					lotStatusDto.getHasHigestBidChanged());
+			if(lotStatusDto != null) {
+				lotResponse = new LotStatusResponse(lotStatusDto.getHighestBid(),
+						lotStatusDto.getHigestBidUser(),
+						lotStatusDto.getCurrentServerTime(),
+						lotStatusDto.getHasHigestBidChanged());
+			}else{
+				lotResponse = new LotStatusResponse(0,
+						0,
+						"",
+						false);
+			}
 
 		} catch (SQLException s) {
 			s.printStackTrace();

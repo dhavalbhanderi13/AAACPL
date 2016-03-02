@@ -23,6 +23,7 @@ import com.aaacpl.rest.request.user.LogoutRequest;
 import com.aaacpl.rest.request.user.RegistrationRequest;
 import com.aaacpl.rest.response.user.LoginResponse;
 import com.aaacpl.rest.response.user.RegistrationResponse;
+import com.aaacpl.rest.response.user.UserLoggedInResponse;
 import com.aaacpl.rest.response.user.UserResponseList;
 import com.aaacpl.rest.response.user.UserTypesResponse;
 import com.aaacpl.rest.util.ResponseGenerator;
@@ -164,6 +165,42 @@ public class UsersService {
 			return ResponseGenerator.generateResponse(loginResponse);
 		}
 		return ResponseGenerator.generateResponse(response);
+	}
+	
+	@GET
+	@Path("/loggedIn")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserLoggedIn() {
+		UserRequestHandler userRequestHandler = new UserRequestHandler();
+		List<UserLoggedInResponse> response = null;
+		try {
+			response = userRequestHandler.getUserLoggedIn();
+		} catch (UserNotFoundException e) {
+			LoginResponse loginResponse = new LoginResponse();
+			loginResponse.setSuccessMessage("");
+			loginResponse.setFailureMessage(e.getMessage());
+			return ResponseGenerator.generateResponse(loginResponse);
+		}
+		return ResponseGenerator.generateResponse(response);
+	}
+	
+	@GET
+	@Path("/forgot")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response forgotPassword(@PathParam("emailId") String emailId) {
+		UserRequestHandler userRequestHandler = new UserRequestHandler();
+		Boolean mailSent = userRequestHandler.forgotPassword(emailId);
+		LoginResponse loginResponse = new LoginResponse();
+		if (mailSent) {
+			loginResponse.setSuccessMessage("SUCCESS");
+			loginResponse.setFailureMessage("");
+			return ResponseGenerator.generateResponse(loginResponse);
+		} else {
+			loginResponse.setSuccessMessage("");
+			loginResponse.setFailureMessage("FAILURE");
+			return ResponseGenerator.generateResponse(loginResponse);
+		}
 	}
 
 }

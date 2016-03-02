@@ -5,6 +5,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -17,6 +18,7 @@ import com.aaacpl.rest.request.department.CreateDepartmentRequest;
 import com.aaacpl.rest.request.department.UpdateDepartmentRequest;
 import com.aaacpl.rest.response.department.CreateDepartmentResponse;
 import com.aaacpl.rest.response.department.DepartmentListResponse;
+import com.aaacpl.rest.response.department.DepartmentResponse;
 import com.aaacpl.rest.response.department.UpdateDepartmentResponse;
 import com.aaacpl.rest.util.ResponseGenerator;
 
@@ -57,6 +59,15 @@ public class DepartmentService {
 				.setDepartmentResponseList(departmentRequestHandler
 						.getAllDepartments());
 		return ResponseGenerator.generateResponse(departmentListResponse);
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/deptInfo/{id}")
+	public Response getDepartmentById(@PathParam("id") int id) {
+		DepartmentRequestHandler departmentRequestHandler = new DepartmentRequestHandler();
+		DepartmentResponse departmentResponse = departmentRequestHandler.getDepartmentById(id);
+		return ResponseGenerator.generateResponse(departmentResponse);
 	}
 
 	@PUT

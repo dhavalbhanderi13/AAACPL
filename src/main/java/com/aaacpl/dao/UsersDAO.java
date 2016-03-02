@@ -13,6 +13,7 @@ import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.user.LoginResponseDTO;
 import com.aaacpl.dto.user.UsersDTO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
+import com.aaacpl.rest.response.user.UserLoggedInResponse;
 import com.aaacpl.rest.response.user.UserResponseList;
 
 public class UsersDAO {
@@ -228,5 +229,37 @@ public class UsersDAO {
 		}
 
 		return userResponseList;
+	}
+
+	public List<UserLoggedInResponse> getUserLoggedIn() throws SQLException,
+			IOException {
+		Connection connection = null;
+		Statement statement = null;
+		List<UserLoggedInResponse> userLoggedinList = new ArrayList<UserLoggedInResponse>();
+		try {
+			connection = new ConnectionPool().getConnection();
+			statement = connection.createStatement();
+			String query = "SELECT * FROM users WHERE sessionId IS NOT NULL";
+			ResultSet resultSet = statement.executeQuery(query);
+
+			while (resultSet.next()) {
+				UserLoggedInResponse userResponse = new UserLoggedInResponse(
+						resultSet.getInt("id"),
+						resultSet.getString("company_name"));
+				userLoggedinList.add(userResponse);
+			}
+
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				statement.close();
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return userLoggedinList;
 	}
 }

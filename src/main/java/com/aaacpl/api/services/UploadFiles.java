@@ -23,10 +23,10 @@ import com.sun.jersey.multipart.FormDataMultiPart;
 @Path("/files")
 public class UploadFiles {
 
-	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps/tmp/";
-
 	// private static final String SERVER_UPLOAD_LOCATION_FOLDER =
-	// "C://Users/dhaval/Desktop/tmp/";
+	// "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps/tmp/";
+
+	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "C://Users/dhaval/Desktop/tmp/";
 
 	/**
 	 * Upload a File
@@ -36,7 +36,8 @@ public class UploadFiles {
 	@Path("/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response uploadFile(FormDataMultiPart form, @QueryParam("id") int id) {
+	public Response uploadFile(FormDataMultiPart form,
+			@QueryParam("fn") String fileName) {
 
 		FormDataBodyPart filePart = form.getField("file");
 
@@ -44,14 +45,15 @@ public class UploadFiles {
 
 		InputStream fileInputStream = filePart.getValueAs(InputStream.class);
 
-		String filePath = SERVER_UPLOAD_LOCATION_FOLDER + id + "/"
+		String filePath = SERVER_UPLOAD_LOCATION_FOLDER + fileName + "/"
 				+ headerOfFilePart.getFileName();
 
 		// save the file to the server
-		saveFile(fileInputStream, filePath, id);
+		saveFile(fileInputStream, filePath, fileName);
 
 		UploadResponse response = new UploadResponse();
-		response.setFilePath(filePath);
+		String fileResponse = fileName + "/" + headerOfFilePart.getFileName();
+		response.setFilePath(fileResponse);
 
 		return ResponseGenerator.generateResponse(response);
 
@@ -59,10 +61,10 @@ public class UploadFiles {
 
 	// save uploaded file to a defined location on the server
 	private void saveFile(InputStream uploadedInputStream,
-			String serverLocation, int id) {
+			String serverLocation, String fileName) {
 
 		try {
-			File file = new File(SERVER_UPLOAD_LOCATION_FOLDER + id);
+			File file = new File(SERVER_UPLOAD_LOCATION_FOLDER + fileName);
 
 			if (!file.exists()) {
 				file.mkdirs();

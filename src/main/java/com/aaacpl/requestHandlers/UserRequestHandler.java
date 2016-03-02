@@ -17,6 +17,7 @@ import com.aaacpl.dto.user.UsersDTO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.rest.response.user.GetTypesResponse;
 import com.aaacpl.rest.response.user.GetUserResponse;
+import com.aaacpl.rest.response.user.UserLoggedInResponse;
 import com.aaacpl.rest.response.user.UserResponseList;
 import com.aaacpl.rest.util.EmailService;
 import com.aaacpl.validation.UsersValidation;
@@ -38,7 +39,7 @@ public class UserRequestHandler {
 
 		if (isProcessed) {
 			EmailService emailService = new EmailService(null, null, null, null);
-			//emailService.sendNewUserEmail(registrationRequestBO.getEmail());
+			// emailService.sendNewUserEmail(registrationRequestBO.getEmail());
 		}
 
 		return isProcessed;
@@ -162,6 +163,38 @@ public class UserRequestHandler {
 			s.printStackTrace();
 		} catch (IOException s) {
 			s.printStackTrace();
+		}
+		return userList;
+	}
+
+	public Boolean forgotPassword(String emailId) {
+		Boolean isProcessed = Boolean.FALSE;
+		UsersDAO usersDAO = new UsersDAO();
+		try {
+			LoginResponseDTO dto = usersDAO
+					.getNamePasswordForLoginValidationForEmail(emailId);
+			if (dto != null && dto.getId() != 0 && dto.getValidUser()
+					&& dto.getPassword() != null) {
+				EmailService emailService = new EmailService(null, null, null,
+						null);
+				isProcessed = emailService.sendForgotPasswordEmail(emailId,
+						dto.getPassword());
+			}
+		} catch (UserNotFoundException | SQLException | IOException e) {
+			e.printStackTrace();
+		}
+		return isProcessed;
+	}
+
+	public List<UserLoggedInResponse> getUserLoggedIn() {
+		UsersDAO usersDAO = new UsersDAO();
+		List<UserLoggedInResponse> userList = null;
+		try {
+			userList = usersDAO.getUserLoggedIn();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return userList;
 	}

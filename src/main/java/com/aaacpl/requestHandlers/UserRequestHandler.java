@@ -17,6 +17,7 @@ import com.aaacpl.dto.user.UsersDTO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.rest.response.user.GetTypesResponse;
 import com.aaacpl.rest.response.user.GetUserResponse;
+import com.aaacpl.rest.response.user.UserLoggedInResponse;
 import com.aaacpl.rest.response.user.UserResponseList;
 import com.aaacpl.rest.util.EmailService;
 import com.aaacpl.validation.UsersValidation;
@@ -183,5 +184,18 @@ public class UserRequestHandler {
 			e.printStackTrace();
 		}
 		return isProcessed;
+	}
+
+	public List<UserLoggedInResponse> getUserLoggedIn() {
+		UsersDAO usersDAO = new UsersDAO();
+		List<UserLoggedInResponse> userList = null;
+		try {
+			userList = usersDAO.getUserLoggedIn();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return userList;
 	}
 }

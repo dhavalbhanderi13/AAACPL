@@ -38,8 +38,7 @@ public class UserRequestHandler {
 		}
 
 		if (isProcessed) {
-			EmailService emailService = new EmailService(null, null, null, null);
-			// emailService.sendNewUserEmail(registrationRequestBO.getEmail());
+			EmailService.sendNewUserEmail(registrationRequestBO.getEmail());
 		}
 
 		return isProcessed;
@@ -175,9 +174,7 @@ public class UserRequestHandler {
 					.getNamePasswordForLoginValidationForEmail(emailId);
 			if (dto != null && dto.getId() != 0 && dto.getValidUser()
 					&& dto.getPassword() != null) {
-				EmailService emailService = new EmailService(null, null, null,
-						null);
-				isProcessed = emailService.sendForgotPasswordEmail(emailId,
+				isProcessed = EmailService.sendForgotPasswordEmail(emailId,
 						dto.getPassword());
 			}
 		} catch (UserNotFoundException | SQLException | IOException e) {

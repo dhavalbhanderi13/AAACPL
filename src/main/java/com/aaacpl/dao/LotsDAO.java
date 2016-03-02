@@ -1,11 +1,7 @@
 package com.aaacpl.dao;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,7 +145,7 @@ public class LotsDAO {
 			StringBuilder query = new StringBuilder(
 					"select * from lot where id IN(Select DISTINCT lot_id from lot_user_map where user_id =")
 					.append(userId).append(") AND lot.auction_id = ")
-					.append(auctionId).append(" AND enddate > CURRENT_TIMESTAMP()");
+					.append(auctionId).append(" AND enddate > CONVERT_TZ(CURRENT_TIMESTAMP(), \"-5:00\", \"+5:30\")");
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
 				LotDTO lotDTO = new LotDTO(resultSet.getInt("id"),
@@ -393,7 +389,7 @@ public class LotsDAO {
 		Connection connection = null;
 		LotStatusDTO lotStatusResponse = null;
 		boolean hasHighestBidChanged = false;
-		String query = "SELECT * from live_bid_log WHERE lot_id="
+		String query = "select l.startdate, l.enddate, lb.user_id, lb.max_value from lot as l, live_bid_log as lb where lb.lot_id = l.id and lb.lot_id ="
 				+ statusRequest.getLotid();
 		try {
 			connection = new ConnectionPool().getConnection();
@@ -401,15 +397,17 @@ public class LotsDAO {
 			ResultSet rs = statement.executeQuery(query);
 
 			while (rs.next()) {
-				int maxValue = rs.getInt("max_value");
-				int userId = rs.getInt("user_id");
+				int maxValue = rs.getInt("lb.max_value");
+				int userId = rs.getInt("lb.user_id");
+				Timestamp startDate = rs.getTimestamp("l.startdate");
+				Timestamp endDate = rs.getTimestamp("l.enddate");
 				String currentServerTime = DateUtil.getCurrentServerTime();
 				if (statusRequest.getCurrentBidMax() != null) {
 					hasHighestBidChanged = (maxValue > statusRequest
 							.getCurrentBidMax());
 				}
 				lotStatusResponse = new LotStatusDTO(maxValue, userId,
-						currentServerTime, hasHighestBidChanged);
+						currentServerTime, hasHighestBidChanged, startDate, endDate);
 			}
 
 		} catch (SQLException sqlException) {

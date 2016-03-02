@@ -6,12 +6,14 @@ public class LotStatusResponse {
     private Integer higestBidUser;
     private String currentServerTime;
     private Boolean hasHigestBidChanged;
+    private String currentLotStatus;
 
-    public LotStatusResponse(Integer highestBid, Integer higestBidUser, String currentServerTime, Boolean hasHigestBidChanged) {
+    public LotStatusResponse(Boolean hasHigestBidChanged, Integer highestBid, Integer higestBidUser, String currentServerTime, String currentLotStatus) {
+        this.hasHigestBidChanged = hasHigestBidChanged;
         this.highestBid = highestBid;
         this.higestBidUser = higestBidUser;
         this.currentServerTime = currentServerTime;
-        this.hasHigestBidChanged = hasHigestBidChanged;
+        this.currentLotStatus = currentLotStatus;
     }
 
     public Integer getHighestBid() {
@@ -30,10 +32,18 @@ public class LotStatusResponse {
         return hasHigestBidChanged;
     }
 
-    @Override
-    public String toString() {
-        return "LotStatusResponse {'highestBid'=" + highestBid + ", 'higestBidUser'='" + higestBidUser + "', 'currentServerTime'='"
-                + currentServerTime + "', 'hasHigestBidChanged'='" + hasHigestBidChanged + "'}";
+    public String getCurrentLotStatus() {
+        return currentLotStatus;
     }
 
+    @Override
+    public String toString() {
+        return "LotStatusResponse{" +
+                "highestBid=" + highestBid +
+                ", higestBidUser=" + higestBidUser +
+                ", currentServerTime='" + currentServerTime + '\'' +
+                ", hasHigestBidChanged=" + hasHigestBidChanged +
+                ", currentLotStatus=" + currentLotStatus +
+                '}';
+    }
 }

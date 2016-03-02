@@ -84,4 +84,22 @@ public class DepartmentRequestHandler {
 
 		return isProcessed;
 	}
+
+	public DepartmentResponse getDepartmentById(int id) {
+		DepartmentResponse departmentResponse = null;
+		DepartmentDAO departmentDAO = new DepartmentDAO();
+		try {
+			DepartmentDTO departmentDTO = departmentDAO.getDepartmentById(id);
+			departmentResponse = new DepartmentResponse();
+			departmentResponse.setId(departmentDTO.getId());
+			departmentResponse.setName(departmentDTO.getName());
+			departmentResponse.setLogoPath(departmentDTO.getLogoPath());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return departmentResponse;
+	}
 }

@@ -213,7 +213,18 @@ public class UsersDAO {
 			while (resultSet.next()) {
 				UserResponseList userResponse = new UserResponseList(
 						resultSet.getInt("id"), resultSet.getString("name"),
-						resultSet.getString("company_name"));
+						resultSet.getString("company_name"),
+						resultSet.getInt("type_id"),
+						resultSet.getString("email"),
+						resultSet.getString("material"),
+						resultSet.getString("address"),
+						resultSet.getString("city"),
+						resultSet.getString("country"),
+						resultSet.getString("state"), resultSet.getInt("pin"),
+						resultSet.getString("pan_number"),
+						resultSet.getString("vat_number"),
+						resultSet.getString("mobile"),
+						resultSet.getString("phone"));
 				userResponseList.add(userResponse);
 			}
 

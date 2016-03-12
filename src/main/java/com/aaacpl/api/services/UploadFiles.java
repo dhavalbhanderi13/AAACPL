@@ -23,10 +23,7 @@ import com.sun.jersey.multipart.FormDataMultiPart;
 @Path("/files")
 public class UploadFiles {
 
-	// private static final String SERVER_UPLOAD_LOCATION_FOLDER =
-	// "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps/tmp/";
-
-	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "C://Users/dhaval/Desktop/tmp/";
+	 private static final String SERVER_UPLOAD_LOCATION_FOLDER = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps/tmp/";
 
 	/**
 	 * Upload a File

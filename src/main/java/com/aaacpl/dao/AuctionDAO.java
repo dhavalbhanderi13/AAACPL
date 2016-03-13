@@ -17,6 +17,7 @@ import com.aaacpl.dto.auction.CreateAuctionDTO;
 import com.aaacpl.dto.auction.UpdateAuctionDTO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.rest.exceptions.ResourceNotFoundException;
+import com.aaacpl.util.DateUtil;
 
 public class AuctionDAO {
 
@@ -222,8 +223,11 @@ public class AuctionDAO {
 		try {
 			connection = new ConnectionPool().getConnection();
 			statement = connection.createStatement();
+			String serverTimeStamp = DateUtil.getCurrentServerTime();
+			String serverDate = DateUtil.getCurrentServerDate();
 			StringBuilder query = new StringBuilder(
-					"select * from auction where startdate <= CONVERT_TZ(CURDATE(), \"-5:00\", \"+5:30\") AND enddate >= CONVERT_TZ(CURDATE(), \"-5:00\", \"+5:30\");");
+					"select * from auction where date(startdate) <= '"+serverDate+"' AND enddate >= '"+serverTimeStamp+"';");
+            System.out.println("Query = "+query.toString());
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
 				AuctionDTO auctionDTO = new AuctionDTO(resultSet.getInt("id"),

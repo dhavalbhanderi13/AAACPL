@@ -218,7 +218,7 @@ public class ReportRequestHandler {
                     paragraphAuctionHeader2.setFont(bf12);
                     doc.add(paragraphAuctionHeader2);
 
-                    Paragraph paragraphAddress = new Paragraph("19/B, Kohinoor Society, Opp BMC School, Link Road, Sakinaka, Mumbai-400072 Phone:25145853");
+                    Paragraph paragraphAddress = new Paragraph("20, Kohinoor Society, Opp BMC School, Link Road, Sakinaka, Mumbai-400072 Phone:25145853");
                     paragraphAddress.setAlignment(Paragraph.ALIGN_CENTER);
                     paragraphAddress.setFont(bf12);
                     doc.add(paragraphAddress);

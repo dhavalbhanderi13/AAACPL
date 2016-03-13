@@ -20,14 +20,13 @@ public class BidSheetPDFCreator {
         Font bfBold12 = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
         Font bf12 = new Font(Font.FontFamily.COURIER, 11);
 
-        float[] columnWidths = {1f, 1.5f, 2.5f, 2f, 4f, 1.5f, 2.5f, 1.5f, 1.5f, 2f, 1.5f};
+        float[] columnWidths = {1f, 2.5f, 2.5f, 4f, 1.5f, 2.5f, 1.5f, 1.5f, 2f, 1.5f};
         PdfPTable table = new PdfPTable(columnWidths); //specify column widths
         table.setWidthPercentage(100f);
         if (counter == 1) {
             insertCell(table, "Sr No.", Element.ALIGN_CENTER, 1, bfBold12);
             insertCell(table, "Lot No.", Element.ALIGN_CENTER, 1, bfBold12);
             insertCell(table, "Description", Element.ALIGN_CENTER, 1, bfBold12);
-            insertCell(table, "Quantity", Element.ALIGN_CENTER, 1, bfBold12);
             insertCell(table, "Company's/Individual Name", Element.ALIGN_CENTER, 1, bfBold12);
             insertCell(table, "Rate", Element.ALIGN_CENTER, 1, bfBold12);
             insertCell(table, "Highest Bid Amount", Element.ALIGN_CENTER, 1, bfBold12);
@@ -41,7 +40,6 @@ public class BidSheetPDFCreator {
             insertCell(table, counter + "", Element.ALIGN_RIGHT, 1, bf12);
             insertCell(table, lotDTO.getName(), Element.ALIGN_LEFT, 1, bf12);
             insertCell(table, lotDTO.getDescription(), Element.ALIGN_LEFT, 1, bf12);
-            insertCell(table, "", Element.ALIGN_LEFT, 1, bf12);
             insertCell(table, userIdNameMap.get(liveBidLogDTO.getUserId()), Element.ALIGN_LEFT, 1, bf12);
             insertCell(table, "", Element.ALIGN_LEFT, 1, bf12);
             insertCell(table, liveBidLogDTO.getMaxValue() + "", Element.ALIGN_LEFT, 1, bf12);

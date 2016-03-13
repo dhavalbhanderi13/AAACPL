@@ -24,6 +24,12 @@ public class DateUtil {
 		return sdfAmerica.format(new Date());
 	}
 
+	public static String getCurrentServerDate() {
+		SimpleDateFormat sdfAmerica = new SimpleDateFormat("yyyy-MM-dd");
+		sdfAmerica.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+		return sdfAmerica.format(new Date());
+	}
+
 	public static String getTimestampForReport(Timestamp timestamp){
 		return new SimpleDateFormat("HH:mm:ss").format(timestamp);
 	}

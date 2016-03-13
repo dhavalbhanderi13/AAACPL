@@ -108,7 +108,7 @@ public class UsersDAO {
 		return isUpdated;
 	}
 
-	public LoginResponseDTO getNamePasswordForLoginValidationForEmail(
+	public LoginResponseDTO getNamePasswordForLoginValidationForEmailAndStatus(
 			String email) throws SQLException, IOException,
 			UserNotFoundException {
 		Connection connection = null;
@@ -118,15 +118,16 @@ public class UsersDAO {
 			connection = new ConnectionPool().getConnection();
 			statement = connection.createStatement();
 			StringBuilder query = new StringBuilder(
-					"SELECT id, password FROM users where email = \"").append(
+					"SELECT id, password, status FROM users where email = \"").append(
 					email).append("\"");
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			int rowCount = 0;
 			loginResponseDTO = new LoginResponseDTO();
 			while (resultSet.next()) {
 				loginResponseDTO.setEmail(email);
-				loginResponseDTO.setId(resultSet.getInt(1));
-				loginResponseDTO.setPassword(resultSet.getString(2));
+				loginResponseDTO.setId(resultSet.getInt("id"));
+				loginResponseDTO.setPassword(resultSet.getString("password"));
+				loginResponseDTO.setStatus(resultSet.getString("status"));
 				rowCount++;
 			}
 			if (rowCount == 0) {

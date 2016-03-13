@@ -19,7 +19,9 @@ public class UsersValidation {
 		} else if (!loginRequestBo.getPassword().equals(
 				loginResponseDTO.getPassword())) {
 			isValid = Boolean.FALSE;
-		} else {
+		} else if(loginResponseDTO.getStatus().equals("I")){
+			isValid = Boolean.FALSE;
+		}else{
 			isValid = Boolean.TRUE;
 		}
 		return isValid;

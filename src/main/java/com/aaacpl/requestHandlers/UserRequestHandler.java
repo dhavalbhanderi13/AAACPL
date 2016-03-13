@@ -49,7 +49,7 @@ public class UserRequestHandler {
 		UsersValidation usersValidation = new UsersValidation();
 		UsersDAO usersDAO = new UsersDAO();
 		LoginResponseDTO loginResponseDTO = usersDAO
-				.getNamePasswordForLoginValidationForEmail(loginRequestBO
+				.getNamePasswordForLoginValidationForEmailAndStatus(loginRequestBO
 						.getEmail());
 		LoginResponseBO loginResponseBO = new LoginResponseBO();
 		Boolean isValidUser = usersValidation.validateEmailPassword(
@@ -171,13 +171,17 @@ public class UserRequestHandler {
 		UsersDAO usersDAO = new UsersDAO();
 		try {
 			LoginResponseDTO dto = usersDAO
-					.getNamePasswordForLoginValidationForEmail(emailId);
+					.getNamePasswordForLoginValidationForEmailAndStatus(emailId);
 			if (dto != null && dto.getId() != 0 && dto.getValidUser()
 					&& dto.getPassword() != null) {
 				isProcessed = EmailService.sendForgotPasswordEmail(emailId,
 						dto.getPassword());
 			}
-		} catch (UserNotFoundException | SQLException | IOException e) {
+		} catch (UserNotFoundException e) {
+			e.printStackTrace();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}catch (IOException e){
 			e.printStackTrace();
 		}
 		return isProcessed;

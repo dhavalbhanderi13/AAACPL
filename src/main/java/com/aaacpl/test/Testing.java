@@ -16,24 +16,34 @@ public class Testing {
 	}
 
 	public static void main(String[] args) {
+		// List<String> emailTo = new ArrayList<String>();
+		// emailTo.add("dhavalbhanderi13@gmail.com");
+		// emailTo.add("dhavalb@zedo.com");
+		//
+		// SendEmailRequest service = new SendEmailRequest(emailTo,
+		// "Test Subject", "Test Body", "dhavalbhanderi13@gmail.com");
+		//
+		// SendEmailService ser = new SendEmailService();
+		// ser.sendEmailList(service);
 
-//		LotsService lotService = new LotsService();
-//		UpdateLotRequest updatecreateLotRequest = new UpdateLotRequest();
-//		{
-//		}
-//		updatecreateLotRequest.setId(1);
-//		updatecreateLotRequest.setStatus("A");
-//		updatecreateLotRequest.setAuctionId(1);
-//		updatecreateLotRequest.setName("DHAVAL_LOT");
-//		updatecreateLotRequest.setDescription("TESTING PURPOSE");
-//		updatecreateLotRequest.setStartBid("100");
-//		updatecreateLotRequest.setDifferenceFactor(150);
-//		updatecreateLotRequest.setStartDate("2016-02-12 00:00:00.0");
-//		updatecreateLotRequest.setEndDate("2016-03-12 00:00:00.0");
-//		updatecreateLotRequest.setCreatedBy(1);
-//		updatecreateLotRequest.setUpdatedBy(1);
-//		// lotService.getBidHistory(1);
-//		lotService.updateLot(updatecreateLotRequest);
+		// LotsService lotService = new LotsService();
+		// UpdateLotRequest updatecreateLotRequest = new UpdateLotRequest();
+		// {
+
+		// }
+		// updatecreateLotRequest.setId(1);
+		// updatecreateLotRequest.setStatus("A");
+		// updatecreateLotRequest.setAuctionId(1);
+		// updatecreateLotRequest.setName("DHAVAL_LOT");
+		// updatecreateLotRequest.setDescription("TESTING PURPOSE");
+		// updatecreateLotRequest.setStartBid("100");
+		// updatecreateLotRequest.setDifferenceFactor(150);
+		// updatecreateLotRequest.setStartDate("2016-02-12 00:00:00.0");
+		// updatecreateLotRequest.setEndDate("2016-03-12 00:00:00.0");
+		// updatecreateLotRequest.setCreatedBy(1);
+		// updatecreateLotRequest.setUpdatedBy(1);
+		// // lotService.getBidHistory(1);
+		// lotService.updateLot(updatecreateLotRequest);
 
 		// LotsDAO dao = new LotsDAO();
 		// BidRequestBO bidRequestBO = new BidRequestBO(2, 1, 800L, "10.17.150",
@@ -69,5 +79,4 @@ public class Testing {
 		 */
 
 	}
-
 }

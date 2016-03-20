@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.aaacpl.bo.request.user.LoginRequestBO;
 import com.aaacpl.bo.request.user.RegistrationRequestBO;
+import com.aaacpl.bo.request.user.UpdaterUserBO;
 import com.aaacpl.bo.response.LoginResponseBO;
 import com.aaacpl.dao.UserTypesDAO;
 import com.aaacpl.dao.UsersDAO;
@@ -41,6 +42,21 @@ public class UserRequestHandler {
 			EmailService.sendNewUserEmail(registrationRequestBO.getEmail());
 		}
 
+		return isProcessed;
+	}
+	
+	public Boolean updateUser(UpdaterUserBO updateRequestBO) {
+
+		Boolean isProcessed = Boolean.FALSE;
+		UsersDAO usersDAO = new UsersDAO();
+		try {
+			isProcessed = usersDAO
+					.updateUser(updateRequestBO);
+		} catch (SQLException sq) {
+			isProcessed = false;
+		} catch (IOException sqlException) {
+			isProcessed = false;
+		}
 		return isProcessed;
 	}
 

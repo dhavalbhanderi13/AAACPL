@@ -15,14 +15,17 @@ import javax.ws.rs.core.Response;
 
 import com.aaacpl.bo.request.user.LoginRequestBO;
 import com.aaacpl.bo.request.user.RegistrationRequestBO;
+import com.aaacpl.bo.request.user.UpdaterUserBO;
 import com.aaacpl.bo.response.LoginResponseBO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.requestHandlers.UserRequestHandler;
 import com.aaacpl.rest.request.user.LoginRequest;
 import com.aaacpl.rest.request.user.LogoutRequest;
 import com.aaacpl.rest.request.user.RegistrationRequest;
+import com.aaacpl.rest.request.user.UpdateUserRequest;
 import com.aaacpl.rest.response.user.LoginResponse;
 import com.aaacpl.rest.response.user.RegistrationResponse;
+import com.aaacpl.rest.response.user.UpdateResponse;
 import com.aaacpl.rest.response.user.UserLoggedInResponse;
 import com.aaacpl.rest.response.user.UserResponseList;
 import com.aaacpl.rest.response.user.UserTypesResponse;
@@ -30,7 +33,7 @@ import com.aaacpl.rest.util.ResponseGenerator;
 
 @Path("/user")
 public class UsersService {
-	
+
 	@POST()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -94,6 +97,42 @@ public class UsersService {
 			registrationResponse.setSuccessMessage("");
 		}
 		return ResponseGenerator.generateResponse(registrationResponse);
+	}
+
+	@POST
+	@Path("/update")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response UpdateUser(UpdateUserRequest updateUser) {
+		UpdaterUserBO updateRequestBO = new UpdaterUserBO();
+		updateRequestBO.setId(updateUser.getId());
+		updateRequestBO.setTypeId(updateUser.getTypeId());
+		updateRequestBO.setName(updateUser.getName());
+		updateRequestBO.setStatus(updateUser.getStatus());
+		updateRequestBO.setCompanyName(updateUser.getCompanyName());
+		updateRequestBO.setEmail(updateUser.getEmail());
+		updateRequestBO.setPassword(updateUser.getPassword());
+		updateRequestBO.setVatNumber(updateUser.getVatNumber());
+		updateRequestBO.setPanNumber(updateUser.getPanNumber());
+		updateRequestBO.setMaterial(updateUser.getMaterial());
+		updateRequestBO.setAddress(updateUser.getAddress());
+		updateRequestBO.setCity(updateUser.getCity());
+		updateRequestBO.setState(updateUser.getState());
+		updateRequestBO.setCountry(updateUser.getCountry());
+		updateRequestBO.setPin(updateUser.getPin());
+		updateRequestBO.setPhone(updateUser.getPhone());
+		updateRequestBO.setMobile(updateUser.getMobile());
+
+		UserRequestHandler userRequestHandler = new UserRequestHandler();
+		UpdateResponse updateResponse = new UpdateResponse();
+		if (userRequestHandler.updateUser(updateRequestBO)) {
+			updateResponse.setFailureMessage("");
+			updateResponse.setSuccessMessage("SUCCESS");
+		} else {
+			updateResponse.setFailureMessage("FAILURE");
+			updateResponse.setSuccessMessage("");
+		}
+		return ResponseGenerator.generateResponse(updateResponse);
 	}
 
 	@GET
@@ -166,7 +205,7 @@ public class UsersService {
 		}
 		return ResponseGenerator.generateResponse(response);
 	}
-	
+
 	@GET
 	@Path("/loggedIn")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -183,7 +222,7 @@ public class UsersService {
 		}
 		return ResponseGenerator.generateResponse(response);
 	}
-	
+
 	@GET
 	@Path("/forgot")
 	@Consumes(MediaType.APPLICATION_JSON)

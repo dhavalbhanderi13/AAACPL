@@ -9,13 +9,20 @@ public class SendEmailRequest {
 	private String body;
 	private String acknowledgementEmail;
 
-	public SendEmailRequest(List<String> emailTo, String subject, String body,
-			String acknowledgementEmail) {
+	public void setEmailTo(List<String> emailTo) {
 		this.emailTo = emailTo;
-		this.subject = subject;
-		this.body = body;
-		this.acknowledgementEmail = acknowledgementEmail;
+	}
 
+	public void setAcknowledgementEmail(String acknowledgementEmail) {
+		this.acknowledgementEmail = acknowledgementEmail;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 	public List<String> getEmailTo() {

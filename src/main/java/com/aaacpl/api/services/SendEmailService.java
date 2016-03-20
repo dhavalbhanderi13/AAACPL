@@ -8,6 +8,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.aaacpl.rest.request.email.SendEmailRequest;
+import com.aaacpl.rest.response.email.SendEmailResponse;
 import com.aaacpl.rest.util.EmailService;
 import com.aaacpl.rest.util.ResponseGenerator;
 
@@ -19,12 +20,17 @@ public class SendEmailService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response sendEmailList(SendEmailRequest emailRequest) {
+		SendEmailResponse emailResponse = new SendEmailResponse();
 		if (EmailService.sendEmails(emailRequest)) {
-			return ResponseGenerator
-					.generateResponse("Email Sending Successful");
+
+			emailResponse.setSuccessMessage("Email Sending Successful");
+			emailResponse.setFailureMessage("");
+
 		} else {
-			return ResponseGenerator
-					.generateResponse("Email Sending Unsuccessful");
+			emailResponse.setSuccessMessage("");
+			emailResponse.setFailureMessage("Email Sending Unsuccessful");
 		}
+		return ResponseGenerator
+				.generateResponse(emailResponse);
 	}
 }

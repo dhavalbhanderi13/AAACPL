@@ -9,7 +9,6 @@ public class UpdaterUserBO {
 	private String status;
 	private String companyName;
 	private String email;
-	private String password;
 	private String material;
 	private String address;
 	private String city;
@@ -45,7 +44,7 @@ public class UpdaterUserBO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getStatus() {
 		return status;
 	}
@@ -68,14 +67,6 @@ public class UpdaterUserBO {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getMaterial() {
@@ -182,8 +173,6 @@ public class UpdaterUserBO {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((panNumber == null) ? 0 : panNumber.hashCode());
-		result = prime * result
-				+ ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		result = prime * result + pin;
 		result = prime
@@ -251,11 +240,6 @@ public class UpdaterUserBO {
 				return false;
 		} else if (!panNumber.equals(other.panNumber))
 			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
 		if (phone == null) {
 			if (other.phone != null)
 				return false;
@@ -292,12 +276,12 @@ public class UpdaterUserBO {
 	public String toString() {
 		return "UpdaterUserBO [id=" + id + ", typeId=" + typeId + ", name="
 				+ name + ", status=" + status + ", companyName=" + companyName
-				+ ", email=" + email + ", password=" + password + ", material="
-				+ material + ", address=" + address + ", city=" + city
-				+ ", country=" + country + ", state=" + state + ", pin=" + pin
-				+ ", panNumber=" + panNumber + ", vatNumber=" + vatNumber
-				+ ", mobile=" + mobile + ", phone=" + phone
-				+ ", registrationDate=" + registrationDate + "]";
+				+ ", email=" + email + ", material=" + material + ", address="
+				+ address + ", city=" + city + ", country=" + country
+				+ ", state=" + state + ", pin=" + pin + ", panNumber="
+				+ panNumber + ", vatNumber=" + vatNumber + ", mobile=" + mobile
+				+ ", phone=" + phone + ", registrationDate=" + registrationDate
+				+ "]";
 	}
 
 }

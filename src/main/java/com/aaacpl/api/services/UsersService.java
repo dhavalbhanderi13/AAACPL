@@ -111,7 +111,6 @@ public class UsersService {
 		updateRequestBO.setStatus(updateUser.getStatus());
 		updateRequestBO.setCompanyName(updateUser.getCompanyName());
 		updateRequestBO.setEmail(updateUser.getEmail());
-		updateRequestBO.setPassword(updateUser.getPassword());
 		updateRequestBO.setVatNumber(updateUser.getVatNumber());
 		updateRequestBO.setPanNumber(updateUser.getPanNumber());
 		updateRequestBO.setMaterial(updateUser.getMaterial());

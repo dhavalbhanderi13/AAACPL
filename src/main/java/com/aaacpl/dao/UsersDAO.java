@@ -86,7 +86,7 @@ public class UsersDAO {
 			connection = new ConnectionPool().getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection
-					.prepareStatement("UPDATE users SET type_id = ?, name =?, company_name =?, email =?, password =?, "
+					.prepareStatement("UPDATE users SET type_id = ?, name =?, company_name =?, email =? , "
 							+ " material =?, address =?, city =?, state =?, country,pin =?, phone =?, mobile =?, pan_number =?,"
 							+ " vat_number =?, reg_date =?, status =? WHERE id =?;");
 			preparedStatement.setInt(parameterIndex++, updateUserBO.getTypeId());
@@ -94,8 +94,6 @@ public class UsersDAO {
 			preparedStatement.setString(parameterIndex++,
 					updateUserBO.getCompanyName());
 			preparedStatement.setString(parameterIndex++, updateUserBO.getEmail());
-			preparedStatement.setString(parameterIndex++,
-					updateUserBO.getPassword());
 			preparedStatement.setString(parameterIndex++,
 					updateUserBO.getMaterial());
 			preparedStatement

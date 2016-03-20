@@ -7,7 +7,6 @@ public class UpdateUserRequest {
 	private String status;
 	private String companyName;
 	private String email;
-	private String password;
 	private String material;
 	private String address;
 	private String city;
@@ -18,7 +17,7 @@ public class UpdateUserRequest {
 	private String vatNumber;
 	private String mobile;
 	private String phone;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -65,14 +64,6 @@ public class UpdateUserRequest {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getMaterial() {
@@ -159,10 +150,10 @@ public class UpdateUserRequest {
 	public String toString() {
 		return "UpdateUserRequest [id=" + id + ", typeId=" + typeId + ", name="
 				+ name + ", status=" + status + ", companyName=" + companyName
-				+ ", email=" + email + ", password=" + password + ", material="
-				+ material + ", address=" + address + ", city=" + city
-				+ ", country=" + country + ", state=" + state + ", pin=" + pin
-				+ ", panNumber=" + panNumber + ", vatNumber=" + vatNumber
-				+ ", mobile=" + mobile + ", phone=" + phone + "]";
+				+ ", email=" + email + ", material=" + material + ", address="
+				+ address + ", city=" + city + ", country=" + country
+				+ ", state=" + state + ", pin=" + pin + ", panNumber="
+				+ panNumber + ", vatNumber=" + vatNumber + ", mobile=" + mobile
+				+ ", phone=" + phone + "]";
 	}
 }

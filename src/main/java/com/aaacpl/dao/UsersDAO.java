@@ -86,37 +86,48 @@ public class UsersDAO {
 			connection = new ConnectionPool().getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection
-					.prepareStatement("UPDATE users SET type_id = ?, name =?, company_name =?, email =? , "
-							+ " material =?, address =?, city =?, state =?, country,pin =?, phone =?, mobile =?, pan_number =?,"
-							+ " vat_number =?, reg_date =?, status =? WHERE id =?;");
+					.prepareStatement("UPDATE users SET type_id =?, name =?, company_name =?, email =? , "
+							+ " material =?, address =?, city =?, state =?, country =?, pin =?, phone =?, mobile =?, pan_number =?,"
+							+ " vat_number =?, status =? WHERE id =?;");
+			
 			preparedStatement.setInt(parameterIndex++, updateUserBO.getTypeId());
+			
 			preparedStatement.setString(parameterIndex++, updateUserBO.getName());
+			
 			preparedStatement.setString(parameterIndex++,
 					updateUserBO.getCompanyName());
+			
 			preparedStatement.setString(parameterIndex++, updateUserBO.getEmail());
+			
 			preparedStatement.setString(parameterIndex++,
 					updateUserBO.getMaterial());
+			
 			preparedStatement
 					.setString(parameterIndex++, updateUserBO.getAddress());
+			
 			preparedStatement.setString(parameterIndex++, updateUserBO.getCity());
+			
 			preparedStatement.setString(parameterIndex++, updateUserBO.getState());
+			
 			preparedStatement
 					.setString(parameterIndex++, updateUserBO.getCountry());
+			
 			preparedStatement.setInt(parameterIndex++, updateUserBO.getPin());
+			
 			preparedStatement.setString(parameterIndex++, updateUserBO.getPhone());
+			
 			preparedStatement.setString(parameterIndex++, updateUserBO.getMobile());
+			
 			preparedStatement.setString(parameterIndex++,
 					updateUserBO.getPanNumber());
+			
 			preparedStatement.setString(parameterIndex++,
 					updateUserBO.getVatNumber());
-
-			java.util.Date today = new java.util.Date();
-			
-			preparedStatement.setDate(parameterIndex++,
-					new java.sql.Date(today.getTime()));
 			
 			preparedStatement.setString(parameterIndex++, updateUserBO.getStatus());
+			
 			preparedStatement.setInt(parameterIndex++, updateUserBO.getId());
+			
 			int i = preparedStatement.executeUpdate();
 			if (i > 0) {
 				connection.commit();

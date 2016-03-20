@@ -225,7 +225,8 @@ public class UsersDAO {
 						resultSet.getString("pan_number"),
 						resultSet.getString("vat_number"),
 						resultSet.getString("mobile"),
-						resultSet.getString("phone"));
+						resultSet.getString("phone"),
+						resultSet.getString("status"));
 				userResponseList.add(userResponse);
 			}
 

@@ -16,11 +16,9 @@ public class UserResponseList {
 	private String vatNumber;
 	private String mobile;
 	private String phone;
+	private String status;
 
-	public UserResponseList(int id, String name, String companyName,
-			int typeId, String email, String material, String address,
-			String city, String country, String state, int pin,
-			String panNumber, String vatNumber, String mobile, String phone) {
+	public UserResponseList(int id, String name, String companyName, int typeId, String email, String material, String address, String city, String country, String state, int pin, String panNumber, String vatNumber, String mobile, String phone, String status) {
 		this.id = id;
 		this.name = name;
 		this.companyName = companyName;
@@ -36,9 +34,9 @@ public class UserResponseList {
 		this.vatNumber = vatNumber;
 		this.mobile = mobile;
 		this.phone = phone;
-
+		this.status = status;
 	}
-	
+
 	public int getTypeId() {
 		return typeId;
 	}
@@ -99,14 +97,29 @@ public class UserResponseList {
 		return companyName;
 	}
 
-	@Override
-	public String toString() {
-		return "UserResponseList [id=" + id + ", name=" + name
-				+ ", companyName=" + companyName + ", email=" + email
-				+ ", material=" + material + ", address=" + address + ", city="
-				+ city + ", country=" + country + ", state=" + state + ", pin="
-				+ pin + ", panNumber=" + panNumber + ", vatNumber=" + vatNumber
-				+ ", mobile=" + mobile + ", phone=" + phone + "]";
+	public String getStatus() {
+		return status;
 	}
 
+	@Override
+	public String toString() {
+		return "UserResponseList{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", companyName='" + companyName + '\'' +
+				", typeId=" + typeId +
+				", email='" + email + '\'' +
+				", material='" + material + '\'' +
+				", address='" + address + '\'' +
+				", city='" + city + '\'' +
+				", country='" + country + '\'' +
+				", state='" + state + '\'' +
+				", pin=" + pin +
+				", panNumber='" + panNumber + '\'' +
+				", vatNumber='" + vatNumber + '\'' +
+				", mobile='" + mobile + '\'' +
+				", phone='" + phone + '\'' +
+				", status='" + status + '\'' +
+				'}';
+	}
 }

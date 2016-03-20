@@ -44,14 +44,13 @@ public class UserRequestHandler {
 
 		return isProcessed;
 	}
-	
+
 	public Boolean updateUser(UpdaterUserBO updateRequestBO) {
 
 		Boolean isProcessed = Boolean.FALSE;
 		UsersDAO usersDAO = new UsersDAO();
 		try {
-			isProcessed = usersDAO
-					.updateUser(updateRequestBO);
+			isProcessed = usersDAO.updateUser(updateRequestBO);
 		} catch (SQLException sq) {
 			isProcessed = false;
 		} catch (IOException sqlException) {
@@ -188,16 +187,15 @@ public class UserRequestHandler {
 		try {
 			LoginResponseDTO dto = usersDAO
 					.getNamePasswordForLoginValidationForEmailAndStatus(emailId);
-			if (dto != null && dto.getId() != 0 && dto.getValidUser()
-					&& dto.getPassword() != null) {
+			if (dto != null && dto.getId() != 0 && dto.getPassword() != null) {
 				isProcessed = EmailService.sendForgotPasswordEmail(emailId,
 						dto.getPassword());
 			}
 		} catch (UserNotFoundException e) {
 			e.printStackTrace();
-		}catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return isProcessed;

@@ -56,7 +56,7 @@ public class EmailService {
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(to));
 
-			message.setSubject("Forgor Password");
+			message.setSubject("AAACPL Password");
 
 			message.setText("Your Password is : \"" + UserPassword + "\"");
 

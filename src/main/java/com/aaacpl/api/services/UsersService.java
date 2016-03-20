@@ -223,7 +223,7 @@ public class UsersService {
 	}
 
 	@GET
-	@Path("/forgot")
+	@Path("/forgot/{emailId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response forgotPassword(@PathParam("emailId") String emailId) {

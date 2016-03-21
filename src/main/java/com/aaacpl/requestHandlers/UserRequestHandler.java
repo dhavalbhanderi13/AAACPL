@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.aaacpl.bo.request.user.ChangePasswordBO;
 import com.aaacpl.bo.request.user.LoginRequestBO;
 import com.aaacpl.bo.request.user.RegistrationRequestBO;
 import com.aaacpl.bo.request.user.UpdaterUserBO;
@@ -212,5 +213,16 @@ public class UserRequestHandler {
 			e.printStackTrace();
 		}
 		return userList;
+	}
+
+	public boolean changePassword(ChangePasswordBO updateRequestBO) {
+		Boolean isProcessed = Boolean.FALSE;
+		UsersDAO usersDAO = new UsersDAO();
+		try {
+			isProcessed = usersDAO.changePassword(updateRequestBO);
+		} catch (UserNotFoundException e) {
+			e.printStackTrace();
+		}
+		return isProcessed;
 	}
 }

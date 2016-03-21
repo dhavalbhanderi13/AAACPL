@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.aaacpl.bo.request.user.ChangePasswordBO;
 import com.aaacpl.bo.request.user.UpdaterUserBO;
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.user.LoginResponseDTO;
@@ -347,5 +348,61 @@ public class UsersDAO {
 		}
 
 		return userLoggedinList;
+	}
+
+	public Boolean changePassword(ChangePasswordBO changePwdBO) {
+		Boolean isProcessed = Boolean.FALSE;
+		Connection connection = null;
+		Statement statement = null;
+		try {
+			connection = new ConnectionPool().getConnection();
+			statement = connection.createStatement();
+			String query = "SELECT password FROM users WHERE id="
+					+ changePwdBO.getUserId();
+
+			ResultSet resultSet = statement.executeQuery(query);
+			String oldDBpassword = null;
+			while (resultSet.next()) {
+				oldDBpassword = resultSet.getString("password");
+			}
+
+			if (oldDBpassword != null && changePwdBO.getOldPassword() != null
+					&& oldDBpassword.equals(changePwdBO.getOldPassword())) {
+				if (updatePassword(changePwdBO.getNewPassword(),
+						changePwdBO.getUserId(), connection)) {
+					isProcessed = Boolean.TRUE;
+				}
+			}
+
+		} catch (SQLException | IOException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				statement.close();
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return isProcessed;
+	}
+
+	private boolean updatePassword(String newPassword, int userId,
+			Connection connection) throws SQLException {
+		boolean isUpdated = false;
+		connection.setAutoCommit(false);
+		String query = "UPDATE users SET password=\"" + newPassword
+				+ "\" WHERE id=" + userId;
+
+		PreparedStatement preparedStatement = connection
+				.prepareStatement(query);
+		int i = preparedStatement.executeUpdate();
+		if (i > 0) {
+			connection.commit();
+			isUpdated = Boolean.TRUE;
+		} else {
+			connection.rollback();
+		}
+		return isUpdated;
 	}
 }

@@ -13,12 +13,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.aaacpl.bo.request.user.ChangePasswordBO;
 import com.aaacpl.bo.request.user.LoginRequestBO;
 import com.aaacpl.bo.request.user.RegistrationRequestBO;
 import com.aaacpl.bo.request.user.UpdaterUserBO;
 import com.aaacpl.bo.response.LoginResponseBO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.requestHandlers.UserRequestHandler;
+import com.aaacpl.rest.request.user.ChangePasswordRequest;
 import com.aaacpl.rest.request.user.LoginRequest;
 import com.aaacpl.rest.request.user.LogoutRequest;
 import com.aaacpl.rest.request.user.RegistrationRequest;
@@ -239,6 +241,27 @@ public class UsersService {
 			loginResponse.setFailureMessage("FAILURE");
 			return ResponseGenerator.generateResponse(loginResponse);
 		}
+	}
+
+	@POST
+	@Path("/changePassword")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response changePassword(ChangePasswordRequest changePwdReq) {
+		ChangePasswordBO changePwdBO = new ChangePasswordBO(
+				changePwdReq.getUserId(), changePwdReq.getOldPassword(),
+				changePwdReq.getNewPassword());
+
+		UserRequestHandler userRequestHandler = new UserRequestHandler();
+		UpdateResponse updateResponse = new UpdateResponse();
+		if (userRequestHandler.changePassword(changePwdBO)) {
+			updateResponse.setFailureMessage("");
+			updateResponse.setSuccessMessage("Password Updated");
+		} else {
+			updateResponse.setFailureMessage("FAILURE");
+			updateResponse.setSuccessMessage("");
+		}
+		return ResponseGenerator.generateResponse(updateResponse);
 	}
 
 }

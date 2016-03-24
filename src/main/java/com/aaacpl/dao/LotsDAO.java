@@ -131,6 +131,7 @@ public class LotsDAO {
 				e.printStackTrace();
 			}
 		}
+        System.out.println("All lots = "+ lotDTOs);
 		return lotDTOs;
 	}
 
@@ -142,10 +143,13 @@ public class LotsDAO {
 		try {
 			connection = new ConnectionPool().getConnection();
 			statement = connection.createStatement();
+
+			String serverTimeStamp = DateUtil.getCurrentServerTime();
+            System.out.println("Server timestamp = "+serverTimeStamp);
 			StringBuilder query = new StringBuilder(
 					"select * from lot where id IN(Select DISTINCT lot_id from lot_user_map where user_id =")
 					.append(userId).append(") AND lot.auction_id = ")
-					.append(auctionId).append(" AND enddate > CONVERT_TZ(CURRENT_TIMESTAMP(), \"-5:00\", \"+5:30\")");
+					.append(auctionId).append(" AND enddate > '"+serverTimeStamp+"'");
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
 				LotDTO lotDTO = new LotDTO(resultSet.getInt("id"),

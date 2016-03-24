@@ -123,6 +123,7 @@ public class UsersService {
 		updateRequestBO.setPin(updateUser.getPin());
 		updateRequestBO.setPhone(updateUser.getPhone());
 		updateRequestBO.setMobile(updateUser.getMobile());
+		updateRequestBO.setStatus(updateUser.getMobile());
 
 		UserRequestHandler userRequestHandler = new UserRequestHandler();
 		UpdateResponse updateResponse = new UpdateResponse();

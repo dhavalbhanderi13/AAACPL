@@ -138,8 +138,9 @@ public class LotsRequestHandler {
         List<LotsByAccessResponse> lotsResponseList = new ArrayList<LotsByAccessResponse>();
         try {
             LotsDAO lotsDAO = new LotsDAO();
-            lotsResponseList = buildListOfLotsByAccessFromDTOs(lotsDAO
-                    .getLotsByUser(userId, auctionId));
+            List<LotDTO> lotDTO = lotsDAO.getLotsByUser(userId, auctionId);
+            System.out.println(lotDTO);
+            lotsResponseList = buildListOfLotsByAccessFromDTOs(lotDTO);
         } catch (SQLException s) {
             s.printStackTrace();
         } catch (IOException s) {

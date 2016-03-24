@@ -56,7 +56,7 @@ public class UsersDAO {
 			java.util.Date today = new java.util.Date();
 			preparedStatement.setDate(parameterIndex++,
 					new java.sql.Date(today.getTime()));
-			preparedStatement.setString(parameterIndex++, "A");
+			preparedStatement.setString(parameterIndex++, "I");
 			int i = preparedStatement.executeUpdate();
 			if (i > 0) {
 				connection.commit();
@@ -121,7 +121,7 @@ public class UsersDAO {
 			
 			preparedStatement.setString(parameterIndex++,
 					updateUserBO.getPanNumber());
-			
+
 			preparedStatement.setString(parameterIndex++,
 					updateUserBO.getVatNumber());
 			
@@ -374,9 +374,11 @@ public class UsersDAO {
 				}
 			}
 
-		} catch (SQLException | IOException sqlException) {
+		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		} finally {
+		}catch (IOException io){
+			io.printStackTrace();
+		} finally{
 			try {
 				statement.close();
 				connection.close();

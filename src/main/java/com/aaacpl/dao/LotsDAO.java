@@ -131,7 +131,6 @@ public class LotsDAO {
 				e.printStackTrace();
 			}
 		}
-        System.out.println("All lots = "+ lotDTOs);
 		return lotDTOs;
 	}
 
@@ -145,7 +144,6 @@ public class LotsDAO {
 			statement = connection.createStatement();
 
 			String serverTimeStamp = DateUtil.getCurrentServerTime();
-            System.out.println("Server timestamp = "+serverTimeStamp);
 			StringBuilder query = new StringBuilder(
 					"select * from lot where id IN(Select DISTINCT lot_id from lot_user_map where user_id =")
 					.append(userId).append(") AND lot.auction_id = ")
@@ -348,7 +346,9 @@ public class LotsDAO {
 			preparedStatement = connection
 					.prepareStatement("INSERT INTO live_bid_log(user_id, lot_id, max_value, ipAddress, localSystemTime) "
 							+ " VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE max_value="
-							+ bidRequestBO.getBidAmount() + ";");
+							+ bidRequestBO.getBidAmount() + ", user_id="+bidRequestBO.getUserId()
+							+ ", ipAddress="+bidRequestBO.getIpAddress()+", localSystemTime="+bidRequestBO.getLocalSystemTime());
+
 
 			preparedStatement
 					.setInt(parameterIndex++, bidRequestBO.getUserId());

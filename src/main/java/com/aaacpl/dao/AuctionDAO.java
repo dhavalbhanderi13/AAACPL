@@ -227,7 +227,6 @@ public class AuctionDAO {
 			String serverDate = DateUtil.getCurrentServerDate();
 			StringBuilder query = new StringBuilder(
 					"select * from auction where date(startdate) <= '"+serverDate+"' AND enddate >= '"+serverTimeStamp+"';");
-            System.out.println("Query = "+query.toString());
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
 				AuctionDTO auctionDTO = new AuctionDTO(resultSet.getInt("id"),

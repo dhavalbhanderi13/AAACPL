@@ -167,7 +167,6 @@ public class LotsService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStatus(StatusRequest statusRequest) {
-
 		LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
 		LotStatusResponse lotStatusresponse = lotsRequestHandler
 				.getLotStatus(statusRequest);

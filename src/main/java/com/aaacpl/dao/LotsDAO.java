@@ -147,7 +147,7 @@ public class LotsDAO {
 			StringBuilder query = new StringBuilder(
 					"select * from lot where id IN(Select DISTINCT lot_id from lot_user_map where user_id =")
 					.append(userId).append(") AND lot.auction_id = ")
-					.append(auctionId).append(" AND enddate > '"+serverTimeStamp+"'");
+					.append(auctionId).append(" AND enddate > '"+serverTimeStamp+"' ORDER BY startdate ASC");
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
 				LotDTO lotDTO = new LotDTO(resultSet.getInt("id"),
@@ -224,15 +224,16 @@ public class LotsDAO {
 		try {
 			connection = new ConnectionPool().getConnection();
 			connection.setAutoCommit(false);
+			Boolean isMaxBid = isBidAmtMax(connection, bidRequestBO);
 
 			// First Log the bid request in lot_audit_log
-			if (insertIntoLotAuditLog(connection, bidRequestBO)) {
+			if (insertIntoLotAuditLog(connection, bidRequestBO, isMaxBid)) {
 
 				// returning true because we are not sure if the bid is max
 				isProcessed = Boolean.TRUE;
 
 				// Check if the current bid Amount is greater than Max
-				if (isBidAmtMax(connection, bidRequestBO)) {
+				if (isMaxBid) {
 
 					// If true Insert/Update the Max value in live_audit_log
 					if (insertIntoLiveBidLog(connection, bidRequestBO)) {
@@ -260,14 +261,13 @@ public class LotsDAO {
 	}
 
 	private boolean insertIntoLotAuditLog(Connection connection,
-			BidRequestBO bidRequestBO) throws SQLException, IOException {
+			BidRequestBO bidRequestBO, Boolean isMax) throws SQLException, IOException {
 		PreparedStatement preparedStatement = null;
 		int parameterIndex = 1;
 		boolean isProcessed = false;
 		try {
 			preparedStatement = connection
-					.prepareStatement("INSERT INTO lot_audit_log(user_id, lot_id, bid_amt, ipAddress, localSystemTime) "
-							+ " VALUES (?,?,?,?,?);");
+					.prepareStatement("INSERT INTO lot_audit_log(user_id, lot_id, bid_amt, ipAddress, localSystemTime, isAccepted) VALUES (?,?,?,?,?,?);");
 
 			preparedStatement
 					.setInt(parameterIndex++, bidRequestBO.getUserId());
@@ -282,6 +282,8 @@ public class LotsDAO {
 
 			preparedStatement.setString(parameterIndex++,
 					DateUtil.getCurrentServerTime());
+			preparedStatement.setBoolean(parameterIndex++,
+					isMax);
 
 			int i = preparedStatement.executeUpdate();
 
@@ -342,12 +344,18 @@ public class LotsDAO {
 		PreparedStatement preparedStatement = null;
 		int parameterIndex = 1;
 		boolean isProcessed = false;
+		String query = "INSERT INTO live_bid_log(user_id, lot_id, max_value, ipAddress, localSystemTime) "
+				+ " VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE max_value="
+				+ bidRequestBO.getBidAmount() + ", user_id="+bidRequestBO.getUserId()
+				+ ", localSystemTime='"+bidRequestBO.getLocalSystemTime()+"'";
+		System.out.println(bidRequestBO.getIpAddress());
+		if(!bidRequestBO.getIpAddress().equals(null) || !bidRequestBO.getIpAddress().equals("")){
+			query = query +", ipAddress='"+bidRequestBO.getIpAddress()+"'";
+		}
+		System.out.println(query);
 		try {
 			preparedStatement = connection
-					.prepareStatement("INSERT INTO live_bid_log(user_id, lot_id, max_value, ipAddress, localSystemTime) "
-							+ " VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE max_value="
-							+ bidRequestBO.getBidAmount() + ", user_id="+bidRequestBO.getUserId()
-							+ ", ipAddress="+bidRequestBO.getIpAddress()+", localSystemTime="+bidRequestBO.getLocalSystemTime());
+					.prepareStatement(query);
 
 
 			preparedStatement

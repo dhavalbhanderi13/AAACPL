@@ -10,14 +10,16 @@ public class LotAuditLogDTO {
     private int bidAmount;
     private String ipAddress;
     private String localSystemTime;
+    private Boolean isAccepted;
 
-    public LotAuditLogDTO(int id, int lot_id, int user_id, int bidAmount, String ipAddress, String localSystemTime) {
+    public LotAuditLogDTO(int id, int lot_id, int user_id, int bidAmount, String ipAddress, String localSystemTime, Boolean isAccepted) {
         this.id = id;
         this.lot_id = lot_id;
         this.user_id = user_id;
         this.bidAmount = bidAmount;
         this.ipAddress = ipAddress;
         this.localSystemTime = localSystemTime;
+        this.isAccepted = isAccepted;
     }
 
     public int getId() {
@@ -44,6 +46,10 @@ public class LotAuditLogDTO {
         return localSystemTime;
     }
 
+    public Boolean getAccepted() {
+        return isAccepted;
+    }
+
     @Override
     public String toString() {
         return "LotAuditLogDTO{" +
@@ -53,6 +59,7 @@ public class LotAuditLogDTO {
                 ", bidAmount=" + bidAmount +
                 ", ipAddress='" + ipAddress + '\'' +
                 ", localSystemTime='" + localSystemTime + '\'' +
+                ", isAccepted=" + isAccepted +
                 '}';
     }
 }

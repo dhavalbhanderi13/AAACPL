@@ -24,7 +24,7 @@ public class LotAuditLogDAO {
             while (resultSet.next()) {
                 LotAuditLogDTO lotDTO = new LotAuditLogDTO(resultSet.getInt("id"), resultSet.getInt("lot_id"),
                         resultSet.getInt("user_id"),resultSet.getInt("bid_amt"),
-                        resultSet.getString("ipAddress"), resultSet.getString("localSystemTime"));
+                        resultSet.getString("ipAddress"), resultSet.getString("localSystemTime"), resultSet.getBoolean("isAccepted"));
                 lotDTOs.add(lotDTO);
             }
         } catch (SQLException sqlException) {

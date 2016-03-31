@@ -38,7 +38,7 @@ public class BidHistoryPDFCreator {
             .append(" - ").append(lotDTO.getDifferenceFactor()+"");
             insertCell(table, lotInfo.toString(), Element.ALIGN_LEFT, 1, bf12);
 
-            float[] columnWidthsInner = {1f, 7f, 2.5f, 2f};
+            float[] columnWidthsInner = {1f, 7f, 2.5f, 2f, 2f};
             PdfPTable table1 = new PdfPTable(columnWidthsInner);
             table1.setWidthPercentage(90f);
             if (lotAuditLogDTOList.size() > 0) {
@@ -46,12 +46,15 @@ public class BidHistoryPDFCreator {
                 insertCell(table1, "Company/Name", Element.ALIGN_CENTER, 1, bfBold12);
                 insertCell(table1, "Bid Amount", Element.ALIGN_CENTER, 1, bfBold12);
                 insertCell(table1, "Bidding Date", Element.ALIGN_CENTER, 1, bfBold12);
+                insertCell(table1, "Accepted/Rejected", Element.ALIGN_CENTER, 1, bfBold12);
                 int innerCounter = 1;
                 for (LotAuditLogDTO lotAuditLogDTO1 : lotAuditLogDTOList) {
+                    String isAcceptedStatus = lotAuditLogDTO1.getAccepted()? "ACCEPTED" : "REJECTED";
                     insertCell(table1, innerCounter + "", Element.ALIGN_RIGHT, 1, bf12);
                     insertCell(table1, userIdNameMap.get(lotAuditLogDTO1.getUser_id()), Element.ALIGN_LEFT, 1, bf12);
                     insertCell(table1, lotAuditLogDTO1.getBidAmount() + "", Element.ALIGN_LEFT, 1, bf12);
                     insertCell(table1, lotAuditLogDTO1.getLocalSystemTime(), Element.ALIGN_LEFT, 1, bf12);
+                    insertCell(table1, isAcceptedStatus, Element.ALIGN_LEFT, 1, bf12);
                     innerCounter++;
                 }
             } else {

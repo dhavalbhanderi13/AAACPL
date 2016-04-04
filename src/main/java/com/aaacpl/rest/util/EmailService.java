@@ -84,8 +84,11 @@ public class EmailService {
 				send(to, message);
 			}
 
-			sendAcknowledgementEmail(request.getAcknowledgementEmail(),
-					request.getEmailTo());
+			if (request.getAcknowledgementEmail() != null
+					&& !request.getAcknowledgementEmail().isEmpty()) {
+				sendAcknowledgementEmail(request.getAcknowledgementEmail(),
+						request.getEmailTo());
+			}
 			isProcessed = Boolean.TRUE;
 
 		} catch (MessagingException e) {

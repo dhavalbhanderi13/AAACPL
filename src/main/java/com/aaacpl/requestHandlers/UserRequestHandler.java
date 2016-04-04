@@ -73,7 +73,7 @@ public class UserRequestHandler {
 		if (isValidUser) {
 			Long sessionId = new Date().getTime();
 			usersDAO.updateSessionId(loginResponseDTO.getId(), sessionId);
-			loginResponseBO.setSessionId(sessionId);
+			loginResponseBO.setSessionId(sessionId+"@"+loginResponseDTO.getId());
 		}
 		loginResponseBO.setValidUser(isValidUser);
 		loginResponseBO.setId(loginResponseDTO.getId());

@@ -407,4 +407,39 @@ public class UsersDAO {
 		}
 		return isUpdated;
 	}
+
+	public String getSessionIdForUserId(
+			int userId) throws SQLException, IOException,
+			UserNotFoundException {
+		Connection connection = null;
+		Statement statement = null;
+        String sessionId = "";
+		try {
+			connection = new ConnectionPool().getConnection();
+			statement = connection.createStatement();
+			StringBuilder query = new StringBuilder(
+					"SELECT sessionId FROM users where id = ")
+					.append(userId);
+			ResultSet resultSet = statement.executeQuery(query.toString());
+			int rowCount = 0;
+			while (resultSet.next()) {
+				sessionId = resultSet.getBigDecimal("sessionId")+"";
+				rowCount++;
+			}
+			if (rowCount == 0) {
+				throw new UserNotFoundException("User name invalid");
+			}
+
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				statement.close();
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+        return sessionId;
+    }
 }

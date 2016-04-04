@@ -507,7 +507,7 @@ public class LotsDAO {
 		Statement statement = null;
 		Connection connection = null;
 		List<BidHistoryResponse> listResponse = new ArrayList<BidHistoryResponse>();
-		String query = "SELECT u.name , company_name , user_id , bid_amt , auction_id , localSystemTime, isAccepted "
+		String query = "SELECT u.name , company_name , user_id , bid_amt , auction_id , localSystemTime, ll.isAccepted "
 				+ "FROM users as u , lot as l , lot_audit_log as ll WHERE "
 				+ "ll.user_id=u.id AND ll.lot_id=l.id AND ll.lot_id=" + lotId;
 		try {
@@ -519,7 +519,7 @@ public class LotsDAO {
 				BidHistoryResponse bid = new BidHistoryResponse(
 						rs.getInt("auction_id"), rs.getInt("user_id"),
 						rs.getString("name"), rs.getString("company_name"),
-						rs.getInt("bid_amt"), rs.getString("localSystemTime"),((rs.getInt("isAccepted") == 1) ? "ACCEPTED"
+						rs.getInt("bid_amt"), rs.getString("localSystemTime"),((rs.getBoolean("ll.isAccepted")) ? "ACCEPTED"
 								: "REJECTED"));
 				listResponse.add(bid);
 			}

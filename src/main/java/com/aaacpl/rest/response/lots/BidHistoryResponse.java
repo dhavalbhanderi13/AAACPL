@@ -8,17 +8,17 @@ public class BidHistoryResponse {
 	private String companyName;
 	private int bidAmt;
 	private String logTime;
-	private String isAccetped;
+	private String isAccepted;
 
 	public BidHistoryResponse(int auctionId, int userId, String userName,
-			String companyName, int bidAmt, String logTime, String isAccetped) {
+			String companyName, int bidAmt, String logTime, String isAccepted) {
 		this.auctionId = auctionId;
 		this.userId = userId;
 		this.userName = userName;
 		this.companyName = companyName;
 		this.bidAmt = bidAmt;
 		this.logTime = logTime;
-		this.isAccetped = isAccetped;
+		this.isAccepted = isAccepted;
 	}
 
 	public int getAuctionId() {
@@ -45,16 +45,16 @@ public class BidHistoryResponse {
 		return logTime;
 	}
 
-	public String isAccetped() {
-		return isAccetped;
+	public String getIsAccepted() {
+		return isAccepted;
 	}
 
 	@Override
 	public String toString() {
 		return "BidHistoryResponse [auctionId=" + auctionId + ", userId="
 				+ userId + ", userName=" + userName + ", companyName="
-				+ companyName + ", bidAmt=" + bidAmt + ", isAccetped"
-				+ isAccetped + ", logTime=" + logTime + "]";
+				+ companyName + ", bidAmt=" + bidAmt + ", isAccepted="
+				+ isAccepted + ", logTime=" + logTime + "]";
 	}
 
 }

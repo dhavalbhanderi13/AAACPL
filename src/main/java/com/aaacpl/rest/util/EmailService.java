@@ -84,7 +84,8 @@ public class EmailService {
 				send(to, message);
 			}
 
-			sendAcknowledgementEmail(request.getEmailTo());
+			sendAcknowledgementEmail(request.getAcknowledgementEmail(),
+					request.getEmailTo());
 			isProcessed = Boolean.TRUE;
 
 		} catch (MessagingException e) {
@@ -93,7 +94,8 @@ public class EmailService {
 		return isProcessed;
 	}
 
-	private static Boolean sendAcknowledgementEmail(List<String> recipents) {
+	private static Boolean sendAcknowledgementEmail(String to,
+			List<String> recipents) {
 		Boolean isProcessed = Boolean.FALSE;
 
 		try {

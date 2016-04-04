@@ -7,14 +7,9 @@ public class SendEmailRequest {
 	private List<String> emailTo;
 	private String subject;
 	private String body;
-	private String acknowledgementEmail;
 
 	public void setEmailTo(List<String> emailTo) {
 		this.emailTo = emailTo;
-	}
-
-	public void setAcknowledgementEmail(String acknowledgementEmail) {
-		this.acknowledgementEmail = acknowledgementEmail;
 	}
 
 	public void setBody(String body) {
@@ -37,14 +32,9 @@ public class SendEmailRequest {
 		return body;
 	}
 
-	public String getAcknowledgementEmail() {
-		return acknowledgementEmail;
-	}
-
 	@Override
 	public String toString() {
 		return "SendEmailRequest [emailTo=" + emailTo + ", subject=" + subject
-				+ ", body=" + body + ", acknowledgementEmail="
-				+ acknowledgementEmail + "]";
+				+ ", body=" + body + "]";
 	}
 }

@@ -84,11 +84,7 @@ public class EmailService {
 				send(to, message);
 			}
 
-			if (request.getAcknowledgementEmail() != null
-					&& !request.getAcknowledgementEmail().isEmpty()) {
-				sendAcknowledgementEmail(request.getAcknowledgementEmail(),
-						request.getEmailTo());
-			}
+			sendAcknowledgementEmail(request.getEmailTo());
 			isProcessed = Boolean.TRUE;
 
 		} catch (MessagingException e) {
@@ -97,8 +93,7 @@ public class EmailService {
 		return isProcessed;
 	}
 
-	private static Boolean sendAcknowledgementEmail(String to,
-			List<String> recipents) {
+	private static Boolean sendAcknowledgementEmail(List<String> recipents) {
 		Boolean isProcessed = Boolean.FALSE;
 
 		try {
@@ -107,7 +102,7 @@ public class EmailService {
 			message.setFrom(new InternetAddress(FROM));
 
 			message.setRecipients(Message.RecipientType.TO,
-					InternetAddress.parse(to));
+					InternetAddress.parse("kohinoor@aaacpl.com"));
 
 			message.setSubject("Notification Email is send");
 

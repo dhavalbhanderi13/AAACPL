@@ -19,9 +19,9 @@ import com.aaacpl.rest.response.user.UserLoggedInResponse;
 import com.aaacpl.rest.response.user.UserResponseList;
 
 public class UsersDAO {
-	public Boolean insertUser(UsersDTO usersDTO) throws SQLException,
+	
+	public Integer insertUser(UsersDTO usersDTO) throws SQLException,
 			IOException {
-		boolean isCreated = false;
 		PreparedStatement preparedStatement = null;
 		Connection connection = null;
 		try {
@@ -29,7 +29,7 @@ public class UsersDAO {
 			connection = new ConnectionPool().getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection
-					.prepareStatement("INSERT INTO users(type_id, name, company_name, email, password,  material, address, city, state, country,pin, phone, mobile, pan_number, vat_number, reg_date, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+					.prepareStatement("INSERT INTO users(type_id, name, company_name, email, password,  material, address, city, state, country,pin, phone, mobile, pan_number, vat_number, reg_date, status, isVerified) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 			preparedStatement.setInt(parameterIndex++, usersDTO.getTypeId());
 			preparedStatement.setString(parameterIndex++, usersDTO.getName());
 			preparedStatement.setString(parameterIndex++,
@@ -57,12 +57,25 @@ public class UsersDAO {
 			preparedStatement.setDate(parameterIndex++,
 					new java.sql.Date(today.getTime()));
 			preparedStatement.setString(parameterIndex++, "I");
+			preparedStatement.setBoolean(parameterIndex++, false);
 			int i = preparedStatement.executeUpdate();
 			if (i > 0) {
 				connection.commit();
-				isCreated = Boolean.TRUE;
 			} else {
 				connection.rollback();
+			}
+			
+			try {
+				ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					return generatedKeys.getInt(1);
+				} else {
+					throw new SQLException(
+							"Creating user failed, no ID obtained.");
+				}
+			} catch (SQLException e) {
+				connection.rollback();
+				e.printStackTrace();
 			}
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
@@ -74,7 +87,7 @@ public class UsersDAO {
 				e.printStackTrace();
 			}
 		}
-		return isCreated;
+		return null;
 	}
 
 	public Boolean updateUser(UpdaterUserBO updateUserBO) throws SQLException,
@@ -181,6 +194,39 @@ public class UsersDAO {
 		}
 		return isUpdated;
 	}
+	
+	public Boolean updateVerifiedUser(int userId)
+			throws SQLException, IOException {
+		boolean isUpdated = false;
+		PreparedStatement preparedStatement = null;
+		Connection connection = null;
+		try {
+			connection = new ConnectionPool().getConnection();
+			connection.setAutoCommit(false);
+			StringBuffer query = new StringBuffer(
+					"UPDATE users SET isVerified = ").append("'true'")
+					.append(" WHERE id = ").append(userId);
+			preparedStatement = connection.prepareStatement(query.toString());
+
+			int i = preparedStatement.executeUpdate();
+			if (i > 0) {
+				connection.commit();
+				isUpdated = Boolean.TRUE;
+			} else {
+				connection.rollback();
+			}
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				preparedStatement.close();
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return isUpdated;
+	}
 
 	public LoginResponseDTO getNamePasswordForLoginValidationForEmailAndStatus(
 			String email) throws SQLException, IOException,
@@ -192,7 +238,7 @@ public class UsersDAO {
 			connection = new ConnectionPool().getConnection();
 			statement = connection.createStatement();
 			StringBuilder query = new StringBuilder(
-					"SELECT id, password, status FROM users where email = \"")
+					"SELECT id, password, status, isVerified FROM users where email = \"")
 					.append(email).append("\"");
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			int rowCount = 0;
@@ -202,6 +248,9 @@ public class UsersDAO {
 				loginResponseDTO.setId(resultSet.getInt("id"));
 				loginResponseDTO.setPassword(resultSet.getString("password"));
 				loginResponseDTO.setStatus(resultSet.getString("status"));
+				loginResponseDTO.setIsVerifiedUsers(resultSet.getString("isVerified") != null
+						&& resultSet.getString("isVerified").equalsIgnoreCase(
+								"true"));
 				rowCount++;
 			}
 			if (rowCount == 0) {

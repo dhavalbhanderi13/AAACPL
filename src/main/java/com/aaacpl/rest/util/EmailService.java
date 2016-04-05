@@ -21,7 +21,7 @@ public class EmailService {
 	private static final String FROM = "eauction@aaacpl.com";
 	private static final Session session = getSession();
 
-	public static boolean sendNewUserEmail(String to) {
+	public static boolean sendNewUserEmail(String to, int userId) {
 		Boolean isProcessed = Boolean.FALSE;
 		try {
 			Message message = new MimeMessage(session);
@@ -31,9 +31,13 @@ public class EmailService {
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(to));
 
-			message.setSubject("New User Registered to AACPL");
+			message.setSubject("Please confirm Your Email to AACPL");
 
-			message.setText("New User Registered to AACPL");
+			message.setText("Welcome! Thanks for signing up.Please follow this link to activate your Account\n");
+			
+			message.setText("http://eauction.aaacpl.com/rest/user/confirm/"+userId);
+			
+			message.setText("Regards,\nAACPL");
 
 			Transport.send(message);
 

@@ -97,6 +97,23 @@ public class UsersService {
         }
         return ResponseGenerator.generateResponse(registrationResponse);
     }
+    
+    @GET
+    @Path("/confirm/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response confirmUser(@PathParam("id") int id) {
+        UserRequestHandler userRequestHandler = new UserRequestHandler();
+        RegistrationResponse registrationResponse = new RegistrationResponse();
+        if (userRequestHandler.verifyUser(id)) {
+            registrationResponse.setFailureMessage("");
+            registrationResponse.setSuccessMessage("SUCCESS");
+        } else {
+            registrationResponse.setFailureMessage("FAILURE");
+            registrationResponse.setSuccessMessage("");
+        }
+        return ResponseGenerator.generateResponse(registrationResponse);
+    }
 
     @POST
     @Path("/update")

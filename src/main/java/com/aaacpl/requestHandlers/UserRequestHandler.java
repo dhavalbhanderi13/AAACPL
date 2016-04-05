@@ -28,10 +28,11 @@ public class UserRequestHandler {
 
 	public Boolean register(RegistrationRequestBO registrationRequestBO) {
 
-		Boolean isProcessed = Boolean.FALSE;
+		Boolean isProcessed = Boolean.TRUE;
+		Integer userId = null;
 		UsersDAO usersDAO = new UsersDAO();
 		try {
-			isProcessed = usersDAO
+			userId = usersDAO
 					.insertUser(buildUsersDTOFromBO(registrationRequestBO));
 		} catch (SQLException sq) {
 			isProcessed = false;
@@ -39,10 +40,24 @@ public class UserRequestHandler {
 			isProcessed = false;
 		}
 
-		if (isProcessed) {
-			EmailService.sendNewUserEmail(registrationRequestBO.getEmail());
+		if (isProcessed && userId!=null) {
+			EmailService.sendNewUserEmail(registrationRequestBO.getEmail(), userId);
 		}
 
+		return isProcessed;
+	}
+	
+	public Boolean verifyUser(Integer userId) {
+
+		Boolean isProcessed = Boolean.FALSE;
+		UsersDAO usersDAO = new UsersDAO();
+		try {
+			isProcessed = usersDAO.updateVerifiedUser(userId);
+		} catch (SQLException sq) {
+			isProcessed = false;
+		} catch (IOException sqlException) {
+			isProcessed = false;
+		}
 		return isProcessed;
 	}
 

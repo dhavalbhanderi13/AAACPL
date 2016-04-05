@@ -14,11 +14,9 @@ public class AuctionDTO {
 	private String catalog;
 	private Integer createdBy;
 	private Integer updatedBy;
+	private String status;
 
-	public AuctionDTO(int id, String name, int auctionTypeId,
-			String description, Integer deptId, Timestamp startDate,
-			Timestamp endDate, String catalog, Integer createdBy,
-			Integer updatedBy) {
+	public AuctionDTO(int id, String name, int auctionTypeId, String description, Integer deptId, Timestamp startDate, Timestamp endDate, String catalog, Integer createdBy, Integer updatedBy, String status) {
 		this.id = id;
 		this.name = name;
 		this.auctionTypeId = auctionTypeId;
@@ -29,7 +27,7 @@ public class AuctionDTO {
 		this.catalog = catalog;
 		this.createdBy = createdBy;
 		this.updatedBy = updatedBy;
-
+		this.status = status;
 	}
 
 	public int getId() {
@@ -72,13 +70,24 @@ public class AuctionDTO {
 		return updatedBy;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
 	@Override
 	public String toString() {
-		return "AuctionDTO{" + "id=" + id + ", name='" + name + '\''
-				+ ", auctionTypeId=" + auctionTypeId + ", description='"
-				+ description + '\'' + ", deptId=" + deptId + ", updatedBy="
-				+ updatedBy + ", startDate='" + startDate + '\''
-				+ ", endDate='" + endDate + '\'' + ", catalog='" + catalog
-				+ '\'' + ", createdBy='" + createdBy + '\'' + '}';
+		return "AuctionDTO{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", auctionTypeId=" + auctionTypeId +
+				", description='" + description + '\'' +
+				", deptId=" + deptId +
+				", startDate=" + startDate +
+				", endDate=" + endDate +
+				", catalog='" + catalog + '\'' +
+				", createdBy=" + createdBy +
+				", updatedBy=" + updatedBy +
+				", status='" + status + '\'' +
+				'}';
 	}
 }

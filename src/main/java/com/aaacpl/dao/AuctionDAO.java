@@ -119,7 +119,8 @@ public class AuctionDAO {
 						resultSet.getTimestamp("enddate"),
 						resultSet.getString("catalog"),
 						resultSet.getInt("createdBy"),
-						resultSet.getInt("updatedBy"));
+						resultSet.getInt("updatedBy"),
+						resultSet.getString("status"));
 				auctionDTOs.add(auctionDTO);
 			}
 		} catch (SQLException sqlException) {
@@ -158,7 +159,8 @@ public class AuctionDAO {
 						resultSet.getTimestamp("enddate"),
 						resultSet.getString("catalog"),
 						resultSet.getInt("createdBy"),
-						resultSet.getInt("updatedBy"));
+						resultSet.getInt("updatedBy"),
+						resultSet.getString("status"));
 			}
 
 			if (index == 0) {
@@ -199,7 +201,8 @@ public class AuctionDAO {
 						resultSet.getTimestamp("enddate"),
 						resultSet.getString("catalog"),
 						resultSet.getInt("createdBy"),
-						resultSet.getInt("updatedBy"));
+						resultSet.getInt("updatedBy"),
+						resultSet.getString("status"));
 				auctionDTOs.add(auctionDTO);
 			}
 
@@ -238,7 +241,8 @@ public class AuctionDAO {
 						resultSet.getTimestamp("enddate"),
 						resultSet.getString("catalog"),
 						resultSet.getInt("createdBy"),
-						resultSet.getInt("updatedBy"));
+						resultSet.getInt("updatedBy"),
+						resultSet.getString("status"));
 				auctionDTOs.add(auctionDTO);
 			}
 

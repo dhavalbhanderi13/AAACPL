@@ -120,7 +120,8 @@ public class AuctionRequestHandler {
 							.getStartDate()),
 					DateUtil.getDateStringFromTimeStamp(auctionDTO.getEndDate()),
 					auctionDTO.getCatalog(), auctionDTO.getCreatedBy(),
-					auctionDTO.getUpdatedBy());
+					auctionDTO.getUpdatedBy(),
+					auctionDTO.getStatus());
 			auctionResponseList.add(auctionResponse);
 		}
 		return auctionResponseList;
@@ -134,7 +135,8 @@ public class AuctionRequestHandler {
 				DateUtil.getDateStringFromTimeStamp(auctionDTO.getStartDate()),
 				DateUtil.getDateStringFromTimeStamp(auctionDTO.getEndDate()),
 				auctionDTO.getCatalog(), auctionDTO.getCreatedBy(),
-				auctionDTO.getUpdatedBy());
+				auctionDTO.getUpdatedBy(),
+				auctionDTO.getStatus());
 		return auctionResponse;
 	}
 

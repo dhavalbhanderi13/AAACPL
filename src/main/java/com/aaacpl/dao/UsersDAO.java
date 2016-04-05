@@ -19,7 +19,7 @@ import com.aaacpl.rest.response.user.UserLoggedInResponse;
 import com.aaacpl.rest.response.user.UserResponseList;
 
 public class UsersDAO {
-	
+
 	public Integer insertUser(UsersDTO usersDTO) throws SQLException,
 			IOException {
 		PreparedStatement preparedStatement = null;
@@ -64,7 +64,7 @@ public class UsersDAO {
 			} else {
 				connection.rollback();
 			}
-			
+
 			try {
 				ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
 				if (generatedKeys.next()) {
@@ -194,7 +194,7 @@ public class UsersDAO {
 		}
 		return isUpdated;
 	}
-	
+
 	public Boolean updateVerifiedUser(int userId)
 			throws SQLException, IOException {
 		boolean isUpdated = false;
@@ -238,7 +238,7 @@ public class UsersDAO {
 			connection = new ConnectionPool().getConnection();
 			statement = connection.createStatement();
 			StringBuilder query = new StringBuilder(
-					"SELECT id, password, status, isVerified FROM users where email = \"")
+					"SELECT id, password, status FROM users where email = \"")
 					.append(email).append("\"");
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			int rowCount = 0;
@@ -248,9 +248,6 @@ public class UsersDAO {
 				loginResponseDTO.setId(resultSet.getInt("id"));
 				loginResponseDTO.setPassword(resultSet.getString("password"));
 				loginResponseDTO.setStatus(resultSet.getString("status"));
-				loginResponseDTO.setIsVerifiedUsers(resultSet.getString("isVerified") != null
-						&& resultSet.getString("isVerified").equalsIgnoreCase(
-								"true"));
 				rowCount++;
 			}
 			if (rowCount == 0) {

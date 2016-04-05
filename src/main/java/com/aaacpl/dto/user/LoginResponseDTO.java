@@ -5,7 +5,6 @@ public class LoginResponseDTO {
 	private int id;
 	private String email;
 	private String password;
-	private Boolean isVerifiedUsers;
 
 	public String getStatus() {
 		return status;
@@ -47,14 +46,6 @@ public class LoginResponseDTO {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Boolean getIsVerifiedUsers() {
-		return isVerifiedUsers;
-	}
-
-	public void setIsVerifiedUsers(Boolean isVerifiedUsers) {
-		this.isVerifiedUsers = isVerifiedUsers;
 	}
 
 	@Override

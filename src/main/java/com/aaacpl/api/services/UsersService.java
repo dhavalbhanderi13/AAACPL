@@ -97,7 +97,7 @@ public class UsersService {
         }
         return ResponseGenerator.generateResponse(registrationResponse);
     }
-    
+
     @GET
     @Path("/confirm/{id}")
     @Consumes(MediaType.APPLICATION_JSON)

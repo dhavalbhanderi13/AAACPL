@@ -7,6 +7,7 @@ public class DepartmentResponse {
 	private int id;
 	private String name;
 	private String logoPath;
+	private String status;
 
 	public int getId() {
 		return id;
@@ -32,9 +33,21 @@ public class DepartmentResponse {
 		this.logoPath = logoPath;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
-		return "DepartmentResponse{" + "id=" + id + ", name='" + name + '\''
-				+ ", logoPath='" + logoPath + '\'' + '}';
+		return "DepartmentResponse{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", logoPath='" + logoPath + '\'' +
+				", status='" + status + '\'' +
+				'}';
 	}
 }

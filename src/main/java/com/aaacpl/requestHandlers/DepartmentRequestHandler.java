@@ -59,6 +59,7 @@ public class DepartmentRequestHandler {
 			departmentResponse.setId(departmentDTO.getId());
 			departmentResponse.setName(departmentDTO.getName());
 			departmentResponse.setLogoPath(departmentDTO.getLogoPath());
+			departmentResponse.setStatus(departmentDTO.getStatus());
 			departmentResponseList.add(departmentResponse);
 		}
 		return departmentResponseList;
@@ -94,6 +95,7 @@ public class DepartmentRequestHandler {
 			departmentResponse.setId(departmentDTO.getId());
 			departmentResponse.setName(departmentDTO.getName());
 			departmentResponse.setLogoPath(departmentDTO.getLogoPath());
+			departmentResponse.setStatus(departmentDTO.getStatus());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

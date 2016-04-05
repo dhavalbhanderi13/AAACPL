@@ -77,10 +77,10 @@ public class DepartmentDAO {
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
 				DepartmentDTO departmentDTO = new DepartmentDTO();
-				departmentDTO.setId(resultSet.getInt(1));
-				departmentDTO.setName(resultSet.getString(2));
-				departmentDTO.setLogoPath(resultSet.getString(3));
-				departmentDTO.setLogoPath(resultSet.getString(4));
+				departmentDTO.setId(resultSet.getInt("id"));
+				departmentDTO.setName(resultSet.getString("name"));
+				departmentDTO.setLogoPath(resultSet.getString("logo_path"));
+				departmentDTO.setStatus(resultSet.getString("status"));
 				departmentDTOs.add(departmentDTO);
 			}
 		} catch (SQLException sqlException) {
@@ -106,10 +106,10 @@ public DepartmentDTO getDepartmentById(int departmentId) throws SQLException,
 			StringBuilder query = new StringBuilder("SELECT * FROM department where id = ").append(departmentId);
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
-				departmentDTO.setId(resultSet.getInt(1));
-				departmentDTO.setName(resultSet.getString(2));
-				departmentDTO.setLogoPath(resultSet.getString(3));
-				departmentDTO.setLogoPath(resultSet.getString(4));
+				departmentDTO.setId(resultSet.getInt("id"));
+				departmentDTO.setName(resultSet.getString("name"));
+				departmentDTO.setLogoPath(resultSet.getString("logo_path"));
+				departmentDTO.setStatus(resultSet.getString("status"));
 			}
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();

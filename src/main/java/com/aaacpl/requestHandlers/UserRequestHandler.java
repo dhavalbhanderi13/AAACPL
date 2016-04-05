@@ -46,7 +46,7 @@ public class UserRequestHandler {
 
 		return isProcessed;
 	}
-	
+
 	public Boolean verifyUser(Integer userId) {
 
 		Boolean isProcessed = Boolean.FALSE;

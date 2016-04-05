@@ -224,16 +224,19 @@ public class LotsDAO {
 		try {
 			connection = new ConnectionPool().getConnection();
 			connection.setAutoCommit(false);
+            LotDTO lotDTO = getLotById(bidRequestBO.getLotId());
 			Boolean isMaxBid = isBidAmtMax(connection, bidRequestBO);
+            Boolean isLotTimeEnded = DateUtil.compareTimestampWithCurrentDate(lotDTO.getEndDate()) < 0;
+            Boolean isBidAccepted = isMaxBid && !isLotTimeEnded;
 
 			// First Log the bid request in lot_audit_log
-			if (insertIntoLotAuditLog(connection, bidRequestBO, isMaxBid)) {
+			if (insertIntoLotAuditLog(connection, bidRequestBO, isBidAccepted)) {
 
 				// returning true because we are not sure if the bid is max
 				isProcessed = Boolean.TRUE;
 
 				// Check if the current bid Amount is greater than Max
-				if (isMaxBid) {
+				if (isBidAccepted) {
 
 					// If true Insert/Update the Max value in live_audit_log
 					if (insertIntoLiveBidLog(connection, bidRequestBO)) {

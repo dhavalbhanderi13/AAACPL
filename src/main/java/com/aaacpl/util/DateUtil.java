@@ -39,7 +39,7 @@ public class DateUtil {
 				DateTimeZone.forID("Asia/Kolkata"));
 		DateTime currentDate = new DateTime(new Date(),
 				DateTimeZone.forID("Asia/Kolkata"));
-		DateTimeComparator comparator = DateTimeComparator.getDateOnlyInstance();
+		DateTimeComparator comparator = DateTimeComparator.getInstance();
 		return comparator.compare(dt,currentDate);
 	}
 }

@@ -40,9 +40,12 @@ public class ReportService {
                     "attachment; filename=Lotwise Bid History.pdf");
             return response.build();
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            String absoluteDiskPath = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps";
+            File file = new ReportRequestHandler().getUnauthorizedPDFResponse(absoluteDiskPath, "/Unauthorized Access.pdf");
+            Response.ResponseBuilder response = Response.ok(file);
+            response.header("Content-Disposition",
+                    "attachment; filename=Unauthorized Access.pdf");
+            return response.build();
         }
 
     }
@@ -63,9 +66,12 @@ public class ReportService {
                     "attachment; filename=Combine Bid History Prepare Automatically Between Auction.pdf");
             return response.build();
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            String absoluteDiskPath = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps";
+            File file = new ReportRequestHandler().getUnauthorizedPDFResponse(absoluteDiskPath, "/Unauthorized Access.pdf");
+            Response.ResponseBuilder response = Response.ok(file);
+            response.header("Content-Disposition",
+                    "attachment; filename=Unauthorized Access.pdf");
+            return response.build();
         }
 
 
@@ -87,9 +93,12 @@ public class ReportService {
                     "attachment; filename=Bid Sheet.pdf");
             return response.build();
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            String absoluteDiskPath = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps";
+            File file = new ReportRequestHandler().getUnauthorizedPDFResponse(absoluteDiskPath, "/Unauthorized Access.pdf");
+            Response.ResponseBuilder response = Response.ok(file);
+            response.header("Content-Disposition",
+                    "attachment; filename=Unauthorized Access.pdf");
+            return response.build();
         }
 
     }

@@ -78,6 +78,46 @@ public class ReportRequestHandler {
         return file;
     }
 
+    public File getUnauthorizedPDFResponse(String absolutePath, String fileName) {
+        File file = null;
+        Document doc = new Document();
+        PdfWriter docWriter = null;
+        try {
+            file = new File(absolutePath, fileName);
+            docWriter = PdfWriter.getInstance(doc, new FileOutputStream(absolutePath + fileName));
+            doc.open();
+
+            doc.newPage();
+
+
+            doc.addAuthor("betterThanZero");
+            doc.addCreationDate();
+            doc.addProducer();
+            doc.addCreator("AAACPL.com");
+            doc.addTitle("LotWise Bid History");
+            doc.setPageSize(PageSize.LETTER);
+            Paragraph paragraph = new Paragraph("Unauthorized Access");
+            doc.add(paragraph);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } finally {
+            if (doc != null) {
+                //close the document
+                doc.close();
+            }
+            if (docWriter != null) {
+                //close the writer
+                docWriter.close();
+            }
+        }
+
+
+        return file;
+    }
+
     public File getBidHistoryReport(String absolutePath, String fileName, int auctionId) {
         File file = null;
         Document doc = new Document();
@@ -109,7 +149,7 @@ public class ReportRequestHandler {
                 doc.addCreator("AAACPL.com");
                 doc.addTitle("LotWise Bid History");
                 doc.setPageSize(PageSize.LETTER);
-                if(isForFirstTime) {
+                if (isForFirstTime) {
                     //create a paragraph
                     Paragraph paragraphHeader = new Paragraph("A. A. Auctioneers & Contractors Pvt. Ltd.");
                     paragraphHeader.setAlignment(Paragraph.ALIGN_LEFT);
@@ -192,7 +232,7 @@ public class ReportRequestHandler {
                 doc.addCreator("AAACPL.com");
                 doc.addTitle("LotWise Bid History");
                 doc.setPageSize(PageSize.LETTER);
-                if(isForFirstTime) {
+                if (isForFirstTime) {
                     //create a paragraph
                     Paragraph paragraphHeader = new Paragraph("A. A. Auctioneers & Contractors Pvt. Ltd.");
                     paragraphHeader.setAlignment(Paragraph.ALIGN_LEFT);
@@ -241,7 +281,7 @@ public class ReportRequestHandler {
                     doc.add(Chunk.NEWLINE);
                 }
 
-                if(liveBidLogDTO != null) {
+                if (liveBidLogDTO != null) {
                     highestBidTotal = highestBidTotal + liveBidLogDTO.getMaxValue();
                 }
                 Paragraph paragraphs = new BidSheetPDFCreator().createPDF(userNameIdMap, liveBidLogDTO, lotDTO, counter);
@@ -249,7 +289,7 @@ public class ReportRequestHandler {
                 counter++;
             }
 
-            Paragraph highestBidTotalInfo = new Paragraph("Total of Highest Bid Amount: "+highestBidTotal);
+            Paragraph highestBidTotalInfo = new Paragraph("Total of Highest Bid Amount: " + highestBidTotal);
             highestBidTotalInfo.setAlignment(Paragraph.ALIGN_LEFT);
             highestBidTotalInfo.setFont(bf12);
             doc.add(highestBidTotalInfo);

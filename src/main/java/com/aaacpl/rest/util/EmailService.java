@@ -33,11 +33,7 @@ public class EmailService {
 
 			message.setSubject("Please confirm Your Email to AACPL");
 
-			message.setText("Welcome! Thanks for signing up.Please follow this link to activate your Account\n");
-
-			message.setText("http://eauction.aaacpl.com/rest/user/confirm/"+userId);
-
-			message.setText("Regards,\nAACPL");
+			message.setText("Welcome! Thanks for signing up.Please follow this link to activate your Account\n\nhttp://eauction.aaacpl.com/rest/user/confirm/"+userId+"\n\nRegards,\nAACPL");
 
 			Transport.send(message);
 

@@ -17,8 +17,9 @@ public class UserResponseList {
 	private String mobile;
 	private String phone;
 	private String status;
+	private String isVerified;
 
-	public UserResponseList(int id, String name, String companyName, int typeId, String email, String material, String address, String city, String country, String state, int pin, String panNumber, String vatNumber, String mobile, String phone, String status) {
+	public UserResponseList(int id, String name, String companyName, int typeId, String email, String material, String address, String city, String country, String state, int pin, String panNumber, String vatNumber, String mobile, String phone, String status, String isVerified) {
 		this.id = id;
 		this.name = name;
 		this.companyName = companyName;
@@ -35,6 +36,11 @@ public class UserResponseList {
 		this.mobile = mobile;
 		this.phone = phone;
 		this.status = status;
+		this.isVerified = isVerified;
+	}
+
+	public String getIsVerified() {
+		return isVerified;
 	}
 
 	public int getTypeId() {
@@ -120,6 +126,7 @@ public class UserResponseList {
 				", mobile='" + mobile + '\'' +
 				", phone='" + phone + '\'' +
 				", status='" + status + '\'' +
+				", isVerified='" + isVerified + '\'' +
 				'}';
 	}
 }

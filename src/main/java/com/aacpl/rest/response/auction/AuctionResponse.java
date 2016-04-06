@@ -12,10 +12,9 @@ public class AuctionResponse {
 	private String catalog;
 	private Integer createdBy;
 	private Integer updatedBy;
+	private String status;
 
-	public AuctionResponse(int auctionId, String name, int auctionTypeId,
-			String description, Integer deptId, String startDate,
-			String endDate, String catalog, Integer createdBy, Integer updatedBy) {
+	public AuctionResponse(int auctionId, String name, int auctionTypeId, String description, Integer deptId, String startDate, String endDate, String catalog, Integer createdBy, Integer updatedBy, String status) {
 		this.auctionId = auctionId;
 		this.name = name;
 		this.auctionTypeId = auctionTypeId;
@@ -26,19 +25,19 @@ public class AuctionResponse {
 		this.catalog = catalog;
 		this.createdBy = createdBy;
 		this.updatedBy = updatedBy;
-
+		this.status = status;
 	}
 
 	public int getAuctionId() {
 		return auctionId;
 	}
 
-	public int getAuctionTypeId() {
-		return auctionTypeId;
-	}
-
 	public String getName() {
 		return name;
+	}
+
+	public int getAuctionTypeId() {
+		return auctionTypeId;
 	}
 
 	public String getDescription() {
@@ -69,13 +68,24 @@ public class AuctionResponse {
 		return updatedBy;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
 	@Override
 	public String toString() {
-		return "AuctionResponse{" + "auctionId=" + auctionId + ", name='"
-				+ name + '\'' + ", auctionTypeId=" + auctionTypeId
-				+ ", description='" + description + '\'' + ", deptId=" + deptId
-				+ ", updatedBy=" + updatedBy + ", startDate='" + startDate
-				+ '\'' + ", endDate='" + endDate + '\'' + ", catalog='"
-				+ catalog + '\'' + ", createdBy='" + createdBy + '\'' + '}';
+		return "AuctionResponse{" +
+				"auctionId=" + auctionId +
+				", name='" + name + '\'' +
+				", auctionTypeId=" + auctionTypeId +
+				", description='" + description + '\'' +
+				", deptId=" + deptId +
+				", startDate='" + startDate + '\'' +
+				", endDate='" + endDate + '\'' +
+				", catalog='" + catalog + '\'' +
+				", createdBy=" + createdBy +
+				", updatedBy=" + updatedBy +
+				", status='" + status + '\'' +
+				'}';
 	}
 }

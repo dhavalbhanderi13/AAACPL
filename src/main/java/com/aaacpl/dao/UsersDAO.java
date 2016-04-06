@@ -57,7 +57,7 @@ public class UsersDAO {
 			preparedStatement.setDate(parameterIndex++,
 					new java.sql.Date(today.getTime()));
 			preparedStatement.setString(parameterIndex++, "I");
-			preparedStatement.setBoolean(parameterIndex++, false);
+			preparedStatement.setString(parameterIndex++, "false");
 			int i = preparedStatement.executeUpdate();
 			if (i > 0) {
 				connection.commit();
@@ -346,7 +346,8 @@ public class UsersDAO {
 						resultSet.getString("vat_number"),
 						resultSet.getString("mobile"),
 						resultSet.getString("phone"),
-						resultSet.getString("status"));
+						resultSet.getString("status"),
+						resultSet.getString("isVerified"));
 				userResponseList.add(userResponse);
 			}
 

@@ -12,7 +12,7 @@ import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.participator.CreateParticipatorDTO;
 
 public class UserLotMapDAO {
-	
+
 	public Boolean insertUserLotMapping(
 			CreateParticipatorDTO createParticipatorDTO) throws SQLException,
 			IOException {
@@ -22,15 +22,21 @@ public class UserLotMapDAO {
 		try {
 			Iterator<Integer> userIdsIterator = createParticipatorDTO
 					.getUserIds().iterator();
+			connection = new ConnectionPool().getConnection();
+			preparedStatement = connection
+					.prepareStatement("INSERT INTO lot_user_map(user_id, lot_id) VALUES (?,?);");
 			int counter = 0;
 			while (userIdsIterator.hasNext()) {
 				int parameterIndex = 1;
-				connection = new ConnectionPool().getConnection();
+				int userId = userIdsIterator.next();
 				connection.setAutoCommit(false);
-				preparedStatement = connection
-						.prepareStatement("INSERT INTO lot_user_map(user_id, lot_id) VALUES (?,?);");
-				preparedStatement.setInt(parameterIndex++,
-						userIdsIterator.next());
+
+				if (userLotMapExists(connection, userId,
+						createParticipatorDTO.getLotId())) {
+					continue;
+				}
+
+				preparedStatement.setInt(parameterIndex++, userId);
 				preparedStatement.setInt(parameterIndex++,
 						createParticipatorDTO.getLotId());
 				int i = preparedStatement.executeUpdate();
@@ -57,6 +63,28 @@ public class UserLotMapDAO {
 			}
 		}
 		return isInserted;
+	}
+
+	private boolean userLotMapExists(Connection conn, int userId, int lotId) {
+		boolean exists = false;
+		Statement statement = null;
+		String query = "select id FROM lot_user_map WHERE user_id=" + userId
+				+ " AND lot_id=" + lotId + " LIMIT 1";
+		try {
+			statement = conn.createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
+			while (resultSet.next()) {
+				exists = true;
+			}
+		} catch (SQLException e) {
+			try {
+				statement.close();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+		return exists;
 	}
 
 	public List<Integer> getListOfUsers(int lotId) throws SQLException,
@@ -87,8 +115,8 @@ public class UserLotMapDAO {
 		return userIds;
 	}
 
-	public Map<Integer, String> getUserNameIdMap(int lotId) throws SQLException,
-			IOException {
+	public Map<Integer, String> getUserNameIdMap(int lotId)
+			throws SQLException, IOException {
 		Map<Integer, String> userIdNameMap = new HashMap<Integer, String>();
 		Connection connection = null;
 		Statement statement = null;
@@ -100,7 +128,8 @@ public class UserLotMapDAO {
 					.append(lotId).append(")");
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
-                userIdNameMap.put(resultSet.getInt("id"), resultSet.getString("name"));
+				userIdNameMap.put(resultSet.getInt("id"),
+						resultSet.getString("name"));
 			}
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();

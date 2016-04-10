@@ -2,6 +2,7 @@ package com.aaacpl.validation;
 
 import com.aaacpl.dao.UsersDAO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
+import com.aaacpl.rest.response.requestAuth.RequestAuthenticationResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -30,5 +31,11 @@ public class RequestValidation {
         }
 
         return isValidRequest;
+    }
+
+    public static RequestAuthenticationResponse getUnautheticatedResponse(){
+        RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
+        requestAuthenticationResponse.setFailureMessage("Unauthorized access");
+        return requestAuthenticationResponse;
     }
 }

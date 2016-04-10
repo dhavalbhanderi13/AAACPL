@@ -53,9 +53,7 @@ public class UploadFiles {
 
             return ResponseGenerator.generateResponse(response);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
 
     }

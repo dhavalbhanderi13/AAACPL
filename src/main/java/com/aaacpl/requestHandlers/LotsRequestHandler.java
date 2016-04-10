@@ -57,17 +57,17 @@ public class LotsRequestHandler {
     }
 
     public List<LotsResponse> getAllLots(int auctionId) {
-        List<LotsResponse> departmentResponseList = new ArrayList<LotsResponse>();
+        List<LotsResponse> lotsResponseList = new ArrayList<LotsResponse>();
         try {
             LotsDAO lotsDAO = new LotsDAO();
             List<LotDTO> lotDTOs = lotsDAO.getAllLots(auctionId);
-            departmentResponseList = buildListOfLotsFromDTOs(lotDTOs);
+            lotsResponseList = buildListOfLotsFromDTOs(lotDTOs);
         } catch (SQLException s) {
             s.printStackTrace();
         } catch (IOException s) {
             s.printStackTrace();
         }
-        return departmentResponseList;
+        return lotsResponseList;
     }
 
     public LotsResponse getLotById(int id) {
@@ -97,7 +97,8 @@ public class LotsRequestHandler {
                     DateUtil.getDateStringFromTimeStamp(lotDTO.getStartDate()),
                     DateUtil.getDateStringFromTimeStamp(lotDTO.getEndDate()),
                     lotDTO.getCreatedBy(), lotDTO.getUpdatedBy(),
-                    new UserLotMapDAO().getListOfUsers(lotDTO.getId()));
+                    new UserLotMapDAO().getListOfUsers(lotDTO.getId()),
+                    lotDTO.getStatus());
             lotsResponseList.add(lotsResponse);
         }
         return lotsResponseList;
@@ -130,7 +131,8 @@ public class LotsRequestHandler {
                 DateUtil.getDateStringFromTimeStamp(lotDTO.getStartDate()),
                 DateUtil.getDateStringFromTimeStamp(lotDTO.getEndDate()),
                 lotDTO.getCreatedBy(), lotDTO.getUpdatedBy(),
-                new UserLotMapDAO().getListOfUsers(lotDTO.getId()));
+                new UserLotMapDAO().getListOfUsers(lotDTO.getId()),
+                lotDTO.getStatus());
         return lotsResponse;
     }
 

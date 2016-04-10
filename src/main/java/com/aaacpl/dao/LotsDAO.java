@@ -32,7 +32,7 @@ public class LotsDAO {
 			connection.setAutoCommit(false);
 			preparedStatement = connection
 					.prepareStatement("INSERT INTO lot(auction_id, name, description, start_bid, difference_factor, "
-							+ "startdate, enddate, createdby, updatedby) VALUES (?,?,?,?,?,?,?,?,?);");
+							+ "startdate, enddate, createdby, updatedby, status) VALUES (?,?,?,?,?,?,?,?,?,?);");
 
 			preparedStatement.setInt(parameterIndex++,
 					createLotRequestDTO.getAuctionId());
@@ -61,6 +61,7 @@ public class LotsDAO {
 
 			preparedStatement.setInt(parameterIndex++,
 					createLotRequestDTO.getCreatedBy());
+			preparedStatement.setString(parameterIndex++,"A");
 
 			int i = preparedStatement.executeUpdate();
 
@@ -118,7 +119,8 @@ public class LotsDAO {
 						resultSet.getTimestamp("startdate"),
 						resultSet.getTimestamp("enddate"),
 						resultSet.getInt("createdby"),
-						resultSet.getInt("updatedby"));
+						resultSet.getInt("updatedby"),
+						resultSet.getString("status"));
 				lotDTOs.add(lotDTO);
 			}
 		} catch (SQLException sqlException) {
@@ -159,7 +161,8 @@ public class LotsDAO {
 						resultSet.getTimestamp("startdate"),
 						resultSet.getTimestamp("enddate"),
 						resultSet.getInt("createdby"),
-						resultSet.getInt("updatedby"));
+						resultSet.getInt("updatedby"),
+						resultSet.getString("status"));
 				lotDTOs.add(lotDTO);
 			}
 		} catch (SQLException sqlException) {
@@ -198,7 +201,8 @@ public class LotsDAO {
 						resultSet.getTimestamp("startdate"),
 						resultSet.getTimestamp("enddate"),
 						resultSet.getInt("createdby"),
-						resultSet.getInt("updatedby"));
+						resultSet.getInt("updatedby"),
+						resultSet.getString("status"));
 			}
 
 			if (index == 0) {
@@ -270,7 +274,7 @@ public class LotsDAO {
 		boolean isProcessed = false;
 		try {
 			preparedStatement = connection
-					.prepareStatement("INSERT INTO lot_audit_log(user_id, lot_id, bid_amt, ipAddress, localSystemTime, isAccepted) VALUES (?,?,?,?,?,?);");
+					.prepareStatement("INSERT INTO lot_audit_log(user_id, lot_id, bid_amt, ipAddress, clientSystemTime, localSystemTime, isAccepted) VALUES (?,?,?,?,?,?,?);");
 
 			preparedStatement
 					.setInt(parameterIndex++, bidRequestBO.getUserId());
@@ -282,6 +286,10 @@ public class LotsDAO {
 
 			preparedStatement.setString(parameterIndex++,
 					bidRequestBO.getIpAddress());
+
+
+            preparedStatement.setString(parameterIndex++,
+                    bidRequestBO.getLocalSystemTime());
 
 			preparedStatement.setString(parameterIndex++,
 					DateUtil.getCurrentServerTime());
@@ -347,15 +355,13 @@ public class LotsDAO {
 		PreparedStatement preparedStatement = null;
 		int parameterIndex = 1;
 		boolean isProcessed = false;
-		String query = "INSERT INTO live_bid_log(user_id, lot_id, max_value, ipAddress, localSystemTime) "
-				+ " VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE max_value="
+		String query = "INSERT INTO live_bid_log(user_id, lot_id, max_value, ipAddress, localSystemTime, clientSystemTime) "
+				+ " VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE max_value="
 				+ bidRequestBO.getBidAmount() + ", user_id="+bidRequestBO.getUserId()
-				+ ", localSystemTime='"+bidRequestBO.getLocalSystemTime()+"'";
-		System.out.println(bidRequestBO.getIpAddress());
+				+ ", clientSystemTime='"+bidRequestBO.getLocalSystemTime()+"', localSystemTime='"+DateUtil.getCurrentServerTime()+"'";
 		if(!bidRequestBO.getIpAddress().equals(null) || !bidRequestBO.getIpAddress().equals("")){
 			query = query +", ipAddress='"+bidRequestBO.getIpAddress()+"'";
 		}
-		System.out.println(query);
 		try {
 			preparedStatement = connection
 					.prepareStatement(query);
@@ -374,6 +380,9 @@ public class LotsDAO {
 
 			preparedStatement.setString(parameterIndex++,
 					DateUtil.getCurrentServerTime());
+
+            preparedStatement.setString(parameterIndex++,
+					bidRequestBO.getLocalSystemTime());
 
 			int i = preparedStatement.executeUpdate();
 
@@ -446,11 +455,12 @@ public class LotsDAO {
 		try {
 			int parameterIndex = 1;
 			connection = new ConnectionPool().getConnection();
+			String query = "UPDATE lot SET auction_id = ? , name = ? , description = ? ,"
+					+ " start_bid = ? , difference_factor = ? , startdate = ? , enddate = ? ,"
+					+ " updatedby = ?, status=? WHERE id = ? ;";
 			connection.setAutoCommit(false);
 			preparedStatement = connection
-					.prepareStatement("UPDATE lot SET auction_id = ? , name = ? , description = ? ,"
-							+ " start_bid = ? , difference_factor = ? , startdate = ? , enddate = ? ,"
-							+ " updatedby = ? WHERE id = ? ;");
+					.prepareStatement(query);
 
 			preparedStatement.setInt(parameterIndex++,
 					updateLotRequestBO.getAuctionId());
@@ -477,8 +487,13 @@ public class LotsDAO {
 			preparedStatement.setInt(parameterIndex++,
 					updateLotRequestBO.getUpdatedBy());
 
+
+			preparedStatement.setString(parameterIndex++,
+					updateLotRequestBO.getStatus());
+
 			preparedStatement.setInt(parameterIndex++,
 					updateLotRequestBO.getId());
+
 
 			int i = preparedStatement.executeUpdate();
 

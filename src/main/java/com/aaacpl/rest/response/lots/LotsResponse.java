@@ -30,9 +30,11 @@ public class LotsResponse {
 	private int createdBy;
 	private int updatedBy;
 	private List<Integer> linkedUserIds;
+	private String status;
 
 	public LotsResponse(final int id, final int auctionId, final String name, final String description, final String startBid,
-			final int differenceFactor, final String startDate, final String endDate, final int createdBy, final int updatedBy, final List<Integer> linkedUserIds) {
+			final int differenceFactor, final String startDate, final String endDate, final int createdBy, final int updatedBy, final List<Integer> linkedUserIds,
+						final String status) {
 		this.id = id;
 		this.auctionId = auctionId;
 		this.name = name;
@@ -44,6 +46,7 @@ public class LotsResponse {
 		this.createdBy = createdBy;
 		this.updatedBy = updatedBy;
 		this.linkedUserIds = linkedUserIds;
+		this.status = status;
 	}
 
 	public int getId() {
@@ -90,20 +93,25 @@ public class LotsResponse {
         return linkedUserIds;
     }
 
-    @Override
-    public String toString() {
-        return "LotsResponse{" +
-                "id=" + id +
-                ", auctionId=" + auctionId +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", startBid='" + startBid + '\'' +
-                ", differenceFactor=" + differenceFactor +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
-                ", createdBy=" + createdBy +
-                ", updatedBy=" + updatedBy +
-                ", linkedUserIds=" + linkedUserIds +
-                '}';
-    }
+	public String getStatus() {
+		return status;
+	}
+
+	@Override
+	public String toString() {
+		return "LotsResponse{" +
+				"id=" + id +
+				", auctionId=" + auctionId +
+				", name='" + name + '\'' +
+				", description='" + description + '\'' +
+				", startBid='" + startBid + '\'' +
+				", differenceFactor=" + differenceFactor +
+				", startDate='" + startDate + '\'' +
+				", endDate='" + endDate + '\'' +
+				", createdBy=" + createdBy +
+				", updatedBy=" + updatedBy +
+				", linkedUserIds=" + linkedUserIds +
+				", status='" + status + '\'' +
+				'}';
+	}
 }

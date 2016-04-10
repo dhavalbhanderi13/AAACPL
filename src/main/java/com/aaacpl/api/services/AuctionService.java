@@ -54,9 +54,7 @@ public class AuctionService {
             }
             return ResponseGenerator.generateResponse(createDepartmentResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -91,9 +89,7 @@ public class AuctionService {
             }
             return ResponseGenerator.generateResponse(updateAuctionResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -109,9 +105,7 @@ public class AuctionService {
                     .getAllAuctions(departmentId));
             return ResponseGenerator.generateResponse(auctionResponseList);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -131,9 +125,7 @@ public class AuctionService {
             }
             return ResponseGenerator.generateResponse(response);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -149,9 +141,7 @@ public class AuctionService {
                     .getAllUpcomingAuctions());
             return ResponseGenerator.generateResponse(auctionResponseList);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -167,9 +157,7 @@ public class AuctionService {
                     .getLiveAuctions());
             return ResponseGenerator.generateResponse(auctionResponseList);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 }

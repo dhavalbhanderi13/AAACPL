@@ -143,6 +143,7 @@ public class UsersDAO {
 			preparedStatement.setInt(parameterIndex++, updateUserBO.getId());
 			
 			int i = preparedStatement.executeUpdate();
+			System.out.println("i = "+i);
 			if (i > 0) {
 				connection.commit();
 				isCreated = Boolean.TRUE;

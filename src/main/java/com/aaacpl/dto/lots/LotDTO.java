@@ -13,8 +13,9 @@ public class LotDTO {
     private Timestamp endDate;
     private int createdBy;
     private int updatedBy;
+    private String status;
 
-    public LotDTO(int id, int auctionId, String name, String description, String startBid, int differenceFactor, Timestamp startDate, Timestamp endDate, int createdBy, int updatedBy) {
+    public LotDTO(int id, int auctionId, String name, String description, String startBid, int differenceFactor, Timestamp startDate, Timestamp endDate, int createdBy, int updatedBy, String status) {
         this.id = id;
         this.auctionId = auctionId;
         this.name = name;
@@ -25,6 +26,7 @@ public class LotDTO {
         this.endDate = endDate;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
+        this.status = status;
     }
 
     public int getId() {
@@ -67,6 +69,10 @@ public class LotDTO {
         return updatedBy;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     @Override
     public String toString() {
         return "LotDTO{" +
@@ -76,10 +82,11 @@ public class LotDTO {
                 ", description='" + description + '\'' +
                 ", startBid='" + startBid + '\'' +
                 ", differenceFactor=" + differenceFactor +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
-                ", createdBy='" + createdBy + '\'' +
-                ", updatedBy='" + updatedBy + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", createdBy=" + createdBy +
+                ", updatedBy=" + updatedBy +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

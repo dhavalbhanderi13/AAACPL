@@ -25,7 +25,6 @@ import com.aaacpl.rest.response.lots.LotStatusResponse;
 import com.aaacpl.rest.response.lots.LotsListByAccessResponse;
 import com.aaacpl.rest.response.lots.LotsListResponse;
 import com.aaacpl.rest.response.lots.UpdateLotResponse;
-import com.aaacpl.rest.response.requestAuth.RequestAuthenticationResponse;
 import com.aaacpl.rest.util.ResponseGenerator;
 import com.aaacpl.util.DateUtil;
 import com.aaacpl.validation.RequestValidation;
@@ -62,9 +61,7 @@ public class LotsService {
             }
             return ResponseGenerator.generateResponse(createLotResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -102,9 +99,7 @@ public class LotsService {
             }
             return ResponseGenerator.generateResponse(createLotResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -120,9 +115,7 @@ public class LotsService {
                     .getAllLots(auctionId));
             return ResponseGenerator.generateResponse(lotsListResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -142,9 +135,7 @@ public class LotsService {
             }
             return ResponseGenerator.generateResponse(response);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -161,9 +152,7 @@ public class LotsService {
                     .getLotsByAccess(userId, auctionId));
             return ResponseGenerator.generateResponse(lotsListResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -188,9 +177,7 @@ public class LotsService {
             }
             return ResponseGenerator.generateResponse(bidResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -205,9 +192,7 @@ public class LotsService {
                     .getLotStatus(statusRequest);
             return ResponseGenerator.generateResponse(lotStatusresponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -222,9 +207,7 @@ public class LotsService {
                     .getBidHistory(lotId);
             return ResponseGenerator.generateResponse(bidHistoryList);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
 
     }

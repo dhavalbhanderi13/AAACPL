@@ -45,9 +45,7 @@ public class DepartmentService {
             }
             return ResponseGenerator.generateResponse(createDepartmentResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -63,9 +61,7 @@ public class DepartmentService {
                             .getAllDepartments());
             return ResponseGenerator.generateResponse(departmentListResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -78,9 +74,7 @@ public class DepartmentService {
             DepartmentResponse departmentResponse = departmentRequestHandler.getDepartmentById(id);
             return ResponseGenerator.generateResponse(departmentResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 
@@ -112,9 +106,7 @@ public class DepartmentService {
             }
             return ResponseGenerator.generateResponse(updateResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 }

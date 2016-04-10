@@ -35,9 +35,7 @@ public class ParticipatorService {
 
             return ResponseGenerator.generateResponse(createParticipatorResponse);
         } else {
-            RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-            requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-            return ResponseGenerator.generateResponse(requestAuthenticationResponse);
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }
 }

@@ -4,7 +4,14 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -20,7 +27,6 @@ import com.aaacpl.rest.request.user.LoginRequest;
 import com.aaacpl.rest.request.user.LogoutRequest;
 import com.aaacpl.rest.request.user.RegistrationRequest;
 import com.aaacpl.rest.request.user.UpdateUserRequest;
-import com.aaacpl.rest.response.requestAuth.RequestAuthenticationResponse;
 import com.aaacpl.rest.response.user.LoginResponse;
 import com.aaacpl.rest.response.user.RegistrationResponse;
 import com.aaacpl.rest.response.user.UpdateResponse;
@@ -99,10 +105,10 @@ public class UsersService {
     }
 
     @GET
-    @Path("/confirm/{id}")
+    @Path("/confirm")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response confirmUser(@PathParam("id") int id) {
+    public Response confirmUser(@QueryParam("id") int id) {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         RegistrationResponse registrationResponse = new RegistrationResponse();
         if (userRequestHandler.verifyUser(id)) {

@@ -25,10 +25,12 @@ public class ReportService {
 
 
     @GET
-    @Path("/lotWiseBid/{auctionId}")
+    @Path("/lotWiseBid/{auctionId}/{userId}/{randomNumber}")
     @Produces("application/pdf")
-    public Response getLotWiseBidHistory(@PathParam("auctionId") int auctionId, @HeaderParam("sessionId") String sessionId) {
-        if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
+    public Response getLotWiseBidHistory(@PathParam("auctionId") int auctionId, @PathParam("userId") int userId,
+                                         @PathParam("randomNumber") Long randomNumber ) {
+        String sessionId = randomNumber +"@"+userId;
+        if (RequestValidation.isRequestValid(sessionId)) {
             String relativeWebPath = "";
         /*Boolean isFileCreated = (new PDFCreator()).createPDF("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps\"/123.pdf");
         File file = new File("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps", "123.pdf");*/
@@ -51,14 +53,16 @@ public class ReportService {
     }
 
     @GET
-    @Path("/bidHistory/{auctionId}")
+    @Path("/bidHistory/{auctionId}/{userId}/{randomNumber}")
     @Produces("application/pdf")
-    public Response getBidHistory(@PathParam("auctionId") int auctionId, @HeaderParam("sessionId") String sessionId) {
-        if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
+    public Response getBidHistory(@PathParam("auctionId") int auctionId, @PathParam("userId") int userId,
+                                  @PathParam("randomNumber") Long randomNumber ) {
+        String sessionId = randomNumber +"@"+userId;
+        if (RequestValidation.isRequestValid(sessionId)) {
             String relativeWebPath = "";
         /*Boolean isFileCreated = (new PDFCreator()).createPDF("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps\"/123.pdf");
         File file = new File("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps", "123.pdf");*/
-            // String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
+            //  String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
             String absoluteDiskPath = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps";
             File file = new ReportRequestHandler().getBidHistoryReport(absoluteDiskPath, "/Combine Bid History Prepare Automatically Between Auction.pdf", auctionId);
             Response.ResponseBuilder response = Response.ok(file);
@@ -78,10 +82,12 @@ public class ReportService {
     }
 
     @GET
-    @Path("/bidSheet/{auctionId}")
+    @Path("/bidSheet/{auctionId}/{userId}/{randomNumber}")
     @Produces("application/pdf")
-    public Response getBidSheet(@PathParam("auctionId") int auctionId, @HeaderParam("sessionId") String sessionId) {
-        if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
+    public Response getBidSheet(@PathParam("auctionId") int auctionId, @PathParam("userId") int userId,
+                                @PathParam("randomNumber") Long randomNumber ) {
+        String sessionId = randomNumber +"@"+userId;
+        if (RequestValidation.isRequestValid(sessionId)) {
             String relativeWebPath = "";
         /*Boolean isFileCreated = (new PDFCreator()).createPDF("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps\"/123.pdf");
         File file = new File("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps", "123.pdf");*/

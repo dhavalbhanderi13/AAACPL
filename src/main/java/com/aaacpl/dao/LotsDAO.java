@@ -11,6 +11,7 @@ import com.aaacpl.bo.response.UpdateLotResponseBO;
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.auction.AuctionDTO;
 import com.aaacpl.dto.lots.*;
+import com.aaacpl.exceptions.lotServiceException.DuplicateTenderBidException;
 import com.aaacpl.exceptions.lotServiceException.LotNotFoundException;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.rest.request.lots.StatusRequest;
@@ -274,7 +275,7 @@ public class LotsDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             LotDTO lotDTO = getLotById(bidRequestBO.getLotId());
-            Boolean isMaxBid = isBidAmtMax(connection, bidRequestBO);
+            Boolean isMaxBid = isBidAmtMax(connection, bidRequestBO.getLotId(), bidRequestBO.getBidAmount());
             Boolean isLotTimeEnded = DateUtil.compareTimestampWithCurrentDate(lotDTO.getEndDate()) < 0;
             Boolean isBidAccepted = isMaxBid && !isLotTimeEnded;
 
@@ -308,6 +309,55 @@ public class LotsDAO {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        return isProcessed;
+    }
+
+    public Boolean insertTenderBid(BidRequestBO tenderBidRequestBO) throws SQLException,
+            IOException {
+        boolean isProcessed = false;
+        Connection connection = null;
+        StatusRequest statusRequest = new StatusRequest();
+        statusRequest.setLotid(tenderBidRequestBO.getLotId());
+        statusRequest.setCurrentBidMax(0);
+        LotStatusDTO lotStatus = getLotStatus(statusRequest);
+        System.out.println(lotStatus);
+        Boolean isBidAllowed = lotStatus == null || !lotStatus.getHigestBidUser().equals(tenderBidRequestBO.getUserId());
+        if(isBidAllowed) {
+            try {
+                connection = new ConnectionPool().getConnection();
+                connection.setAutoCommit(false);
+                Boolean isMaxBid = isBidAmtMax(connection, tenderBidRequestBO.getLotId(), tenderBidRequestBO.getBidAmount());
+
+                // First Log the bid request in lot_audit_log
+                if (insertIntoLotAuditLogForTender(connection, tenderBidRequestBO, isMaxBid)) {
+
+                    // returning true because we are not sure if the bid is max
+                    isProcessed = Boolean.TRUE;
+
+                    // Check if the current bid Amount is greater than Max
+
+                        // If true Insert/Update the Max value in live_audit_log
+                        if (insertIntoLiveBidLogTender(connection, tenderBidRequestBO)) {
+                            isProcessed = Boolean.TRUE;
+                        } else {
+                            isProcessed = Boolean.FALSE;
+                        }
+                }
+
+            } catch (SQLException sqlException) {
+                isProcessed = false;
+                connection.rollback();
+                sqlException.printStackTrace();
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else{
+            throw new DuplicateTenderBidException("Bid already performed");
         }
         return isProcessed;
     }
@@ -364,13 +414,65 @@ public class LotsDAO {
         return isProcessed;
     }
 
-    private Boolean isBidAmtMax(Connection connection, BidRequestBO bidRequestBO)
+    private boolean insertIntoLotAuditLogForTender(Connection connection,
+                                          BidRequestBO bidRequestBO, Boolean isMax) throws SQLException, IOException {
+        PreparedStatement preparedStatement = null;
+        int parameterIndex = 1;
+        boolean isProcessed = false;
+        try {
+            preparedStatement = connection
+                    .prepareStatement("INSERT INTO lot_audit_log(user_id, lot_id, bid_amt, ipAddress, clientSystemTime, localSystemTime, isAccepted) VALUES (?,?,?,?,?,?,?);");
+
+            preparedStatement
+                    .setInt(parameterIndex++, bidRequestBO.getUserId());
+
+            preparedStatement.setInt(parameterIndex++, bidRequestBO.getLotId());
+
+            preparedStatement.setLong(parameterIndex++,
+                    bidRequestBO.getBidAmount());
+
+            preparedStatement.setString(parameterIndex++,
+                    bidRequestBO.getIpAddress());
+
+
+            preparedStatement.setString(parameterIndex++,
+                    bidRequestBO.getLocalSystemTime());
+
+            preparedStatement.setString(parameterIndex++,
+                    DateUtil.getCurrentServerTime());
+            preparedStatement.setBoolean(parameterIndex++,
+                    isMax);
+
+            int i = preparedStatement.executeUpdate();
+
+            if (i > 0) {
+                isProcessed = true;
+                connection.commit();
+            } else {
+                connection.rollback();
+            }
+        } catch (SQLException sqlException) {
+            connection.rollback();
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                // Do Not close connection over here
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return isProcessed;
+    }
+
+    private Boolean isBidAmtMax(Connection connection, Integer lotId, Long bidAmount)
             throws SQLException, IOException {
         Statement statement = null;
         Long maxValue = 0L;
         Boolean isMax = Boolean.FALSE;
         String query = "SELECT MAX(max_value) from live_bid_log WHERE lot_id="
-                + bidRequestBO.getLotId();
+                + lotId;
         try {
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
@@ -378,7 +480,7 @@ public class LotsDAO {
             while (rs.next()) {
                 maxValue = rs.getLong("MAX(max_value)");
             }
-            if (bidRequestBO.getBidAmount() > maxValue) {
+            if (bidAmount > maxValue) {
                 return Boolean.TRUE;
             }
 
@@ -452,6 +554,63 @@ public class LotsDAO {
         return isProcessed;
     }
 
+    private boolean insertIntoLiveBidLogTender(Connection connection,
+                                         BidRequestBO bidRequestBO) throws SQLException, IOException {
+        PreparedStatement preparedStatement = null;
+        int parameterIndex = 1;
+        boolean isProcessed = false;
+        String query = "INSERT INTO live_bid_log(user_id, lot_id, max_value, ipAddress, localSystemTime, clientSystemTime) "
+                + " VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE max_value="
+                + bidRequestBO.getBidAmount() + ", user_id=" + bidRequestBO.getUserId()
+                + ", clientSystemTime='" + bidRequestBO.getLocalSystemTime() + "', localSystemTime='" + DateUtil.getCurrentServerTime() + "'";
+        if (!bidRequestBO.getIpAddress().equals(null) || !bidRequestBO.getIpAddress().equals("")) {
+            query = query + ", ipAddress='" + bidRequestBO.getIpAddress() + "'";
+        }
+        try {
+            preparedStatement = connection
+                    .prepareStatement(query);
+
+
+            preparedStatement
+                    .setInt(parameterIndex++, bidRequestBO.getUserId());
+
+            preparedStatement.setInt(parameterIndex++, bidRequestBO.getLotId());
+
+            preparedStatement.setLong(parameterIndex++,
+                    bidRequestBO.getBidAmount());
+
+            preparedStatement.setString(parameterIndex++,
+                    bidRequestBO.getIpAddress());
+
+            preparedStatement.setString(parameterIndex++,
+                    DateUtil.getCurrentServerTime());
+
+            preparedStatement.setString(parameterIndex++,
+                    bidRequestBO.getLocalSystemTime());
+
+            int i = preparedStatement.executeUpdate();
+
+            if (i > 0) {
+                isProcessed = true;
+                connection.commit();
+            } else {
+                connection.rollback();
+            }
+        } catch (SQLException sqlException) {
+            connection.rollback();
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                // Do Not close connection over here
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return isProcessed;
+    }
+
     public LotStatusDTO getLotStatus(StatusRequest statusRequest)
             throws SQLException, IOException {
         Statement statement = null;
@@ -460,6 +619,7 @@ public class LotsDAO {
         boolean hasHighestBidChanged = false;
         String query = "select l.startdate, l.enddate, lb.user_id, lb.max_value from lot as l, live_bid_log as lb where lb.lot_id = l.id and lb.lot_id ="
                 + statusRequest.getLotid();
+        System.out.println(query);
         try {
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();

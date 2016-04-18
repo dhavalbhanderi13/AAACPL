@@ -184,6 +184,21 @@ public class LotsRequestHandler {
         return isProcessed;
     }
 
+    public synchronized Boolean insertTenderBid(BidRequestBO tenderBidRequestBO) {
+        LotsDAO lotsDAO = new LotsDAO();
+        boolean isProcessed = false;
+        try {
+            if (lotsDAO.insertTenderBid(tenderBidRequestBO)) {
+                isProcessed = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return isProcessed;
+    }
+
     public LotStatusResponse getLotStatus(StatusRequest statusRequest) {
         LotStatusResponse lotResponse = null;
         try {

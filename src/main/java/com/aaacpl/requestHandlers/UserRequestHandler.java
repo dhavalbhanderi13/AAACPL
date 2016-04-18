@@ -76,7 +76,7 @@ public class UserRequestHandler {
 	}
 
 	public LoginResponseBO login(LoginRequestBO loginRequestBO)
-			throws SQLException, IOException {
+			throws SQLException {
 		UsersValidation usersValidation = new UsersValidation();
 		UsersDAO usersDAO = new UsersDAO();
 		LoginResponseDTO loginResponseDTO = usersDAO
@@ -152,8 +152,6 @@ public class UserRequestHandler {
 			}
 		} catch (SQLException sq) {
 			sq.printStackTrace();
-		} catch (IOException sqlException) {
-			sqlException.printStackTrace();
 		}
 
 		return getTypesResponses;
@@ -161,7 +159,7 @@ public class UserRequestHandler {
 	}
 
 	public GetUserResponse getUserById(int id) throws SQLException,
-			IOException, UserNotFoundException {
+			UserNotFoundException {
 		UsersDAO usersDAO = new UsersDAO();
 		UserTypesDAO userTypesDAO = new UserTypesDAO();
 		GetUserResponse userResponse = buildUsersResponseFromDTO(usersDAO
@@ -177,8 +175,6 @@ public class UserRequestHandler {
 			UsersDAO usersDAO = new UsersDAO();
 			isLoggedOut = usersDAO.updateSessionId(userId, null);
 		} catch (SQLException s) {
-			s.printStackTrace();
-		} catch (IOException s) {
 			s.printStackTrace();
 		}
 		return isLoggedOut;
@@ -210,8 +206,6 @@ public class UserRequestHandler {
 		} catch (UserNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return isProcessed;

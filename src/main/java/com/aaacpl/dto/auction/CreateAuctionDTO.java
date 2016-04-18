@@ -13,10 +13,13 @@ public class CreateAuctionDTO {
 	private String catalog;
 	private Integer createdBy;
 	private Integer updatedBy;
+	private Boolean isTender;
+    private Timestamp tenderStartDate;
+    private Timestamp tenderEndDate;
 
 	public CreateAuctionDTO(String name, int auctionTypeId, String description,
 			Integer deptId, Timestamp startDate, Timestamp endDate,
-			String catalog, Integer createdBy, Integer updatedBy) {
+			String catalog, Integer createdBy, Integer updatedBy, Boolean isTender, Timestamp tenderStartDate, Timestamp tenderEndDate) {
 		this.name = name;
 		this.auctionTypeId = auctionTypeId;
 		this.description = description;
@@ -26,6 +29,9 @@ public class CreateAuctionDTO {
 		this.catalog = catalog;
 		this.createdBy = createdBy;
 		this.updatedBy = updatedBy;
+		this.isTender = isTender;
+        this.tenderStartDate = tenderStartDate;
+        this.tenderEndDate = tenderEndDate;
 	}
 
 	public String getName() {
@@ -64,14 +70,34 @@ public class CreateAuctionDTO {
 		return updatedBy;
 	}
 
-	@Override
-	public String toString() {
-		return "CreateAuctionRequestBO {'name': '" + name
-				+ "',  'description': '" + description + "',  'deptId': '"
-				+ deptId + "',  'updatedBy': '" + updatedBy
-				+ "',  'startDate': '" + startDate + "',  'endDate': '" + name
-				+ "enddate',  'catalog': '" + catalog + "',  'createdBy': '"
-				+ createdBy + "'";
+	public Boolean getTender() {
+		return isTender;
 	}
 
+
+    public Timestamp getTenderStartDate() {
+        return tenderStartDate;
+    }
+
+    public Timestamp getTenderEndDate() {
+        return tenderEndDate;
+    }
+
+    @Override
+    public String toString() {
+        return "CreateAuctionDTO{" +
+                "name='" + name + '\'' +
+                ", auctionTypeId=" + auctionTypeId +
+                ", description='" + description + '\'' +
+                ", deptId=" + deptId +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", catalog='" + catalog + '\'' +
+                ", createdBy=" + createdBy +
+                ", updatedBy=" + updatedBy +
+                ", isTender=" + isTender +
+                ", tenderStartDate='" + tenderStartDate + '\'' +
+                ", tenderEndDate='" + tenderEndDate + '\'' +
+                '}';
+    }
 }

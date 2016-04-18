@@ -14,11 +14,14 @@ public class UpdateAuctionDTO {
 	private Timestamp endDate;
 	private String catalog;
 	private Integer updatedBy;
+	private Boolean isTender;
+	private Timestamp tenderStartDate;
+	private Timestamp tenderEndDate;
 
 	public UpdateAuctionDTO(Integer id, String status, String name,
 			int auctionTypeId, String description, Integer deptId,
 			Timestamp startDate, Timestamp endDate, String catalog,
-			Integer updatedBy) {
+			Integer updatedBy, Boolean isTender, Timestamp tenderStartDate, Timestamp tenderEndDate) {
 		this.id = id;
 		this.status = status;
 		this.name = name;
@@ -29,6 +32,9 @@ public class UpdateAuctionDTO {
 		this.endDate = endDate;
 		this.catalog = catalog;
 		this.updatedBy = updatedBy;
+		this.isTender = isTender;
+		this.tenderStartDate = tenderStartDate;
+		this.tenderEndDate = tenderEndDate;
 
 	}
 
@@ -72,6 +78,18 @@ public class UpdateAuctionDTO {
 		return id;
 	}
 
+	public Boolean getTender() {
+		return isTender;
+	}
+
+	public Timestamp getTenderStartDate() {
+		return tenderStartDate;
+	}
+
+	public Timestamp getTenderEndDate() {
+		return tenderEndDate;
+	}
+
 	@Override
 	public String toString() {
 		return "UpdateAuctionDTO{" +
@@ -85,6 +103,9 @@ public class UpdateAuctionDTO {
 				", endDate=" + endDate +
 				", catalog='" + catalog + '\'' +
 				", updatedBy=" + updatedBy +
+				", isTender=" + isTender +
+				", tenderStartDate='" + tenderStartDate + '\'' +
+				", tenderEndDate='" + tenderEndDate + '\'' +
 				'}';
 	}
 }

@@ -7,8 +7,8 @@ import com.aaacpl.dto.user.LoginResponseDTO;
 import com.aaacpl.dto.user.UsersDTO;
 
 public interface IUsersDAO {
-	Boolean insertUser(UsersDTO usersDTO) throws SQLException, IOException;
+	Boolean insertUser(UsersDTO usersDTO) throws SQLException;
 
 	LoginResponseDTO getNamePasswordForLoginValidationForName(String email)
-			throws SQLException, IOException;
+			throws SQLException;
 }

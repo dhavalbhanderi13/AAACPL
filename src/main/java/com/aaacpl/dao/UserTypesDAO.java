@@ -12,8 +12,8 @@ import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.user.UserTypesDTO;
 
 public class UserTypesDAO implements IUserTypesDAO {
-	public List<UserTypesDTO> getAllUserTypes() throws SQLException,
-			IOException {
+	public List<UserTypesDTO> getAllUserTypes() throws SQLException
+			 {
 		List<UserTypesDTO> userTypesDTOList = new ArrayList<UserTypesDTO>();
 		Connection connection = null;
 		Statement statement = null;
@@ -42,7 +42,7 @@ public class UserTypesDAO implements IUserTypesDAO {
 		return userTypesDTOList;
 	}
 
-	public String getLabel(int id) throws IOException, SQLException {
+	public String getLabel(int id) throws SQLException {
 		String label = "";
 		Connection connection = null;
 		Statement statement = null;

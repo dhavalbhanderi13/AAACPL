@@ -3,7 +3,7 @@ package com.aaacpl.dto.lots;
 import java.sql.Timestamp;
 
 public class LotDTO {
-    private int id;
+       private int id;
     private int auctionId;
     private String name;
     private String description;

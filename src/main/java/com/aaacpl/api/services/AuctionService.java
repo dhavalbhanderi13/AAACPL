@@ -38,7 +38,10 @@ public class AuctionService {
                     createAuctionRequest.getEndDate(),
                     createAuctionRequest.getCatalog(),
                     createAuctionRequest.getCreatedBy(),
-                    createAuctionRequest.getUpdatedBy());
+                    createAuctionRequest.getUpdatedBy(),
+                    createAuctionRequest.getIsAuctionTender(),
+                    createAuctionRequest.getTenderStartDate(),
+                    createAuctionRequest.getTenderEndDate());
 
             CreateAuctionResponse createDepartmentResponse = new CreateAuctionResponse();
             AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
@@ -73,7 +76,10 @@ public class AuctionService {
                     updateAuctionRequest.getStartDate(),
                     updateAuctionRequest.getEndDate(),
                     updateAuctionRequest.getCatalog(),
-                    updateAuctionRequest.getUpdatedBy());
+                    updateAuctionRequest.getUpdatedBy(),
+                    updateAuctionRequest.getIsAuctionTender() == 1,
+                    updateAuctionRequest.getTenderStartDate(),
+                    updateAuctionRequest.getTenderEndDate());
 
             UpdateAuctionResponse updateAuctionResponse = new UpdateAuctionResponse();
             AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
@@ -131,14 +137,14 @@ public class AuctionService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/upcoming")
-    public Response getUpcomingAuctions(@HeaderParam("sessionId") String sessionId) {
+    @Path("/upcoming/{isTender}")
+    public Response getUpcomingAuctions(@HeaderParam("sessionId") String sessionId, @PathParam("isTender") Integer isTender) {
         if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
             AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
             AuctionsListResponse auctionResponseList = new AuctionsListResponse();
 
             auctionResponseList.setAuctionResponseList(auctionRequestHandler
-                    .getAllUpcomingAuctions());
+                    .getAllUpcomingAuctions(isTender == 1));
             return ResponseGenerator.generateResponse(auctionResponseList);
         } else {
             return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
@@ -147,14 +153,14 @@ public class AuctionService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/live")
-    public Response getLiveAuctions(@HeaderParam("sessionId") String sessionId) {
+    @Path("/live/{isTender}")
+    public Response getLiveAuctions(@HeaderParam("sessionId") String sessionId, @PathParam("isTender") Integer isTender) {
         if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
             AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
             AuctionsListResponse auctionResponseList = new AuctionsListResponse();
 
             auctionResponseList.setAuctionResponseList(auctionRequestHandler
-                    .getLiveAuctions());
+                    .getLiveAuctions(isTender == 1));
             return ResponseGenerator.generateResponse(auctionResponseList);
         } else {
             return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());

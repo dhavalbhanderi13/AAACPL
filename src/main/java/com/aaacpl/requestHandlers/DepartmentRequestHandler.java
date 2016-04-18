@@ -28,7 +28,6 @@ public class DepartmentRequestHandler {
 			createDepartmentResponseBO.setId(departmentDAO.insertDepartment(
 					createDepartmentRequestDTO).getId());
 		} catch (SQLException sq) {
-		} catch (IOException sqlException) {
 		}
 
 		return createDepartmentResponseBO;
@@ -42,8 +41,6 @@ public class DepartmentRequestHandler {
 					.getAllDepartments();
 			departmentResponseList = buildListOfDepartmentResponseFromDTOs(departmentDTOs);
 		} catch (SQLException s) {
-			s.printStackTrace();
-		} catch (IOException s) {
 			s.printStackTrace();
 		}
 		return departmentResponseList;
@@ -79,8 +76,6 @@ public class DepartmentRequestHandler {
 			isProcessed = departmentDAO.updateDepartment(updateDepartmentDTO);
 		} catch (SQLException sq) {
 			isProcessed = false;
-		} catch (IOException sqlException) {
-			isProcessed = false;
 		}
 
 		return isProcessed;
@@ -96,11 +91,10 @@ public class DepartmentRequestHandler {
 			departmentResponse.setName(departmentDTO.getName());
 			departmentResponse.setLogoPath(departmentDTO.getLogoPath());
 			departmentResponse.setStatus(departmentDTO.getStatus());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (SQLException sqlException){
+			sqlException.printStackTrace();
 		}
+
 
 		return departmentResponse;
 	}

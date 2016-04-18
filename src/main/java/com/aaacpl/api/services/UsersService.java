@@ -27,6 +27,7 @@ import com.aaacpl.rest.request.user.LoginRequest;
 import com.aaacpl.rest.request.user.LogoutRequest;
 import com.aaacpl.rest.request.user.RegistrationRequest;
 import com.aaacpl.rest.request.user.UpdateUserRequest;
+import com.aaacpl.rest.response.requestAuth.RequestAuthenticationResponse;
 import com.aaacpl.rest.response.user.LoginResponse;
 import com.aaacpl.rest.response.user.RegistrationResponse;
 import com.aaacpl.rest.response.user.UpdateResponse;
@@ -59,8 +60,6 @@ public class UsersService {
                         .getSessionId()));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         } catch (UserNotFoundException e) {
             loginResponse.setSuccessMessage("");
@@ -182,8 +181,6 @@ public class UsersService {
             try {
                 response = userRequestHandler.getUserById(id);
             } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
                 e.printStackTrace();
             } catch (UserNotFoundException e) {
                 LoginResponse loginResponse = new LoginResponse();

@@ -1,6 +1,5 @@
 package com.aaacpl.requestHandlers;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,6 +21,8 @@ public class AuctionRequestHandler {
 			CreateAuctionRequestBO createAuctionRequestBO) {
 		AuctionDAO auctionDao = new AuctionDAO();
 		AuctionResponseBO auctionResponseBO = new AuctionResponseBO();
+        Boolean isTenderStartDate = createAuctionRequestBO.getTenderStartDate() != null && !createAuctionRequestBO.getTenderStartDate().equals("");
+        Boolean isTenderEndDate = createAuctionRequestBO.getTenderEndDate() != null && !createAuctionRequestBO.getTenderEndDate().equals("");
 		CreateAuctionDTO auctionDTO = new CreateAuctionDTO(
 				createAuctionRequestBO.getName(),
 				createAuctionRequestBO.getAuctionTypeId(),
@@ -32,7 +33,9 @@ public class AuctionRequestHandler {
 				DateUtil.getTimeStampFromString(createAuctionRequestBO
 						.getEndDate()), createAuctionRequestBO.getCatalog(),
 				createAuctionRequestBO.getCreatedBy(),
-				createAuctionRequestBO.getUpdatedBy());
+				createAuctionRequestBO.getUpdatedBy(), createAuctionRequestBO.getIsTender() == 1,
+                isTenderStartDate ? DateUtil.getTimeStampFromString(createAuctionRequestBO.getTenderStartDate()):null,
+                isTenderEndDate ? DateUtil.getTimeStampFromString(createAuctionRequestBO.getTenderEndDate()):null);
 
 		try {
 
@@ -40,8 +43,6 @@ public class AuctionRequestHandler {
 					.getId());
 		} catch (SQLException sq) {
 			sq.printStackTrace();
-		} catch (IOException sqlException) {
-			sqlException.printStackTrace();
 		}
 
 		return auctionResponseBO;
@@ -56,35 +57,29 @@ public class AuctionRequestHandler {
 			departmentResponseList = buildListOfDepartmentResponseFromDTOs(auctionsDTOs);
 		} catch (SQLException s) {
 			s.printStackTrace();
-		} catch (IOException s) {
+		}
+		return departmentResponseList;
+	}
+
+	public List<AuctionResponse> getAllUpcomingAuctions(Boolean isTender) {
+		List<AuctionResponse> departmentResponseList = new ArrayList<AuctionResponse>();
+		try {
+			AuctionDAO auctionDAO = new AuctionDAO();
+			List<AuctionDTO> auctionsDTOs = auctionDAO.getUpcomingAuctions(isTender);
+			departmentResponseList = buildListOfDepartmentResponseFromDTOs(auctionsDTOs);
+		} catch (SQLException s) {
 			s.printStackTrace();
 		}
 		return departmentResponseList;
 	}
 
-	public List<AuctionResponse> getAllUpcomingAuctions() {
+	public List<AuctionResponse> getLiveAuctions(Boolean isTender) {
 		List<AuctionResponse> departmentResponseList = new ArrayList<AuctionResponse>();
 		try {
 			AuctionDAO auctionDAO = new AuctionDAO();
-			List<AuctionDTO> auctionsDTOs = auctionDAO.getUpcomingAuctions();
+			List<AuctionDTO> auctionsDTOs = auctionDAO.getLiveAuctions(isTender);
 			departmentResponseList = buildListOfDepartmentResponseFromDTOs(auctionsDTOs);
 		} catch (SQLException s) {
-			s.printStackTrace();
-		} catch (IOException s) {
-			s.printStackTrace();
-		}
-		return departmentResponseList;
-	}
-
-	public List<AuctionResponse> getLiveAuctions() {
-		List<AuctionResponse> departmentResponseList = new ArrayList<AuctionResponse>();
-		try {
-			AuctionDAO auctionDAO = new AuctionDAO();
-			List<AuctionDTO> auctionsDTOs = auctionDAO.getLiveAuctions();
-			departmentResponseList = buildListOfDepartmentResponseFromDTOs(auctionsDTOs);
-		} catch (SQLException s) {
-			s.printStackTrace();
-		} catch (IOException s) {
 			s.printStackTrace();
 		}
 		return departmentResponseList;
@@ -98,8 +93,6 @@ public class AuctionRequestHandler {
 			auctionResponse = buildLotResponseFromDTOs(auctionDTO);
 		} catch (SQLException s) {
 			s.printStackTrace();
-		} catch (IOException s) {
-			s.printStackTrace();
 		}
 		return auctionResponse;
 	}
@@ -108,6 +101,7 @@ public class AuctionRequestHandler {
 			List<AuctionDTO> auctionDTOs) {
 		List<AuctionResponse> auctionResponseList = new ArrayList<AuctionResponse>();
 		Iterator<AuctionDTO> iterator = auctionDTOs.iterator();
+
 		while (iterator.hasNext()) {
 			AuctionDTO auctionDTO = iterator.next();
 			AuctionResponse auctionResponse = new AuctionResponse(
@@ -121,7 +115,11 @@ public class AuctionRequestHandler {
 					DateUtil.getDateStringFromTimeStamp(auctionDTO.getEndDate()),
 					auctionDTO.getCatalog(), auctionDTO.getCreatedBy(),
 					auctionDTO.getUpdatedBy(),
-					auctionDTO.getStatus());
+					auctionDTO.getStatus(),
+					auctionDTO.getIsTender(),
+                    auctionDTO.getIsTender() == 1 ?
+                            DateUtil.getDateStringFromTimeStamp(auctionDTO.getTenderStartDate()):"",
+                    auctionDTO.getIsTender() == 1 ?DateUtil.getDateStringFromTimeStamp(auctionDTO.getTenderEndDate()):"");
 			auctionResponseList.add(auctionResponse);
 		}
 		return auctionResponseList;
@@ -136,7 +134,9 @@ public class AuctionRequestHandler {
 				DateUtil.getDateStringFromTimeStamp(auctionDTO.getEndDate()),
 				auctionDTO.getCatalog(), auctionDTO.getCreatedBy(),
 				auctionDTO.getUpdatedBy(),
-				auctionDTO.getStatus());
+				auctionDTO.getStatus(),auctionDTO.getIsTender(),
+				DateUtil.getDateStringFromTimeStamp(auctionDTO.getTenderStartDate()),
+				DateUtil.getDateStringFromTimeStamp(auctionDTO.getTenderEndDate()));
 		return auctionResponse;
 	}
 
@@ -146,7 +146,8 @@ public class AuctionRequestHandler {
 		AuctionDAO auctionDao = new AuctionDAO();
 
 		AuctionResponseBO auctionResponseBO = new AuctionResponseBO();
-
+        Boolean isTenderStartDate = updateAuctionRequestBO.getTenderStartDate() != null && !updateAuctionRequestBO.getTenderStartDate().equals("");
+        Boolean isTenderEndDate = updateAuctionRequestBO.getTenderEndDate() != null && !updateAuctionRequestBO.getTenderEndDate().equals("");
 		UpdateAuctionDTO auctionDTO = new UpdateAuctionDTO(
 				updateAuctionRequestBO.getId(),
 				updateAuctionRequestBO.getStatus(),
@@ -158,7 +159,10 @@ public class AuctionRequestHandler {
 						.getStartDate()),
 				DateUtil.getTimeStampFromString(updateAuctionRequestBO
 						.getEndDate()), updateAuctionRequestBO.getCatalog(),
-				updateAuctionRequestBO.getUpdatedBy());
+				updateAuctionRequestBO.getUpdatedBy(),
+                updateAuctionRequestBO.getTender(),
+                isTenderStartDate ? DateUtil.getTimeStampFromString(updateAuctionRequestBO.getTenderStartDate()): null,
+                isTenderEndDate ? DateUtil.getTimeStampFromString(updateAuctionRequestBO.getTenderEndDate()): null);
 
 		try {
 
@@ -166,8 +170,6 @@ public class AuctionRequestHandler {
 					.getId());
 		} catch (SQLException sq) {
 			sq.printStackTrace();
-		} catch (IOException sqlException) {
-			sqlException.printStackTrace();
 		}
 
 		return auctionResponseBO;

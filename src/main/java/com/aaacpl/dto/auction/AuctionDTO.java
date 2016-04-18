@@ -15,8 +15,13 @@ public class AuctionDTO {
 	private Integer createdBy;
 	private Integer updatedBy;
 	private String status;
+	private Integer isTender;
+	private Timestamp tenderStartDate;
+	private Timestamp tenderEndDate;
 
-	public AuctionDTO(int id, String name, int auctionTypeId, String description, Integer deptId, Timestamp startDate, Timestamp endDate, String catalog, Integer createdBy, Integer updatedBy, String status) {
+	public AuctionDTO(int id, String name, int auctionTypeId, String description, Integer deptId, Timestamp startDate,
+					  Timestamp endDate, String catalog, Integer createdBy, Integer updatedBy, String status,
+					  Integer isTender, Timestamp tenderStartDate, Timestamp tenderEndDate) {
 		this.id = id;
 		this.name = name;
 		this.auctionTypeId = auctionTypeId;
@@ -28,6 +33,9 @@ public class AuctionDTO {
 		this.createdBy = createdBy;
 		this.updatedBy = updatedBy;
 		this.status = status;
+		this.isTender = isTender;
+		this.tenderStartDate = tenderStartDate;
+		this.tenderEndDate = tenderEndDate;
 	}
 
 	public int getId() {
@@ -74,6 +82,18 @@ public class AuctionDTO {
 		return status;
 	}
 
+	public Integer getIsTender() {
+		return isTender;
+	}
+
+	public Timestamp getTenderStartDate() {
+		return tenderStartDate;
+	}
+
+	public Timestamp getTenderEndDate() {
+		return tenderEndDate;
+	}
+
 	@Override
 	public String toString() {
 		return "AuctionDTO{" +
@@ -88,6 +108,9 @@ public class AuctionDTO {
 				", createdBy=" + createdBy +
 				", updatedBy=" + updatedBy +
 				", status='" + status + '\'' +
+				", isTender=" + isTender +
+				", tenderStartDate='" + tenderStartDate + '\'' +
+				", tenderEndDate='" + tenderEndDate + '\'' +
 				'}';
 	}
 }

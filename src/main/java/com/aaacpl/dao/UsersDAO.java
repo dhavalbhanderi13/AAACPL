@@ -143,7 +143,6 @@ public class UsersDAO {
 			preparedStatement.setInt(parameterIndex++, updateUserBO.getId());
 			
 			int i = preparedStatement.executeUpdate();
-			System.out.println("i = "+i);
 			if (i > 0) {
 				connection.commit();
 				isCreated = Boolean.TRUE;
@@ -164,7 +163,7 @@ public class UsersDAO {
 	}
 
 	public Boolean updateSessionId(int userId, Long sessionId)
-			throws SQLException, IOException {
+			throws SQLException {
 		boolean isUpdated = false;
 		PreparedStatement preparedStatement = null;
 		Connection connection = null;
@@ -230,7 +229,7 @@ public class UsersDAO {
 	}
 
 	public LoginResponseDTO getNamePasswordForLoginValidationForEmailAndStatus(
-			String email) throws SQLException, IOException,
+			String email) throws SQLException,
 			UserNotFoundException {
 		Connection connection = null;
 		Statement statement = null;
@@ -268,8 +267,7 @@ public class UsersDAO {
 		return loginResponseDTO;
 	}
 
-	public UsersDTO getUserById(int id) throws SQLException, IOException,
-			UserNotFoundException {
+	public UsersDTO getUserById(int id) throws SQLException, UserNotFoundException {
 		Connection connection = null;
 		Statement statement = null;
 		UsersDTO usersDTO = null;
@@ -424,8 +422,6 @@ public class UsersDAO {
 
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		}catch (IOException io){
-			io.printStackTrace();
 		} finally{
 			try {
 				statement.close();

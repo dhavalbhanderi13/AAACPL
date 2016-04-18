@@ -11,6 +11,9 @@ public class CreateAuctionRequest {
 	private String catalog;
 	private Integer createdBy;
 	private Integer updatedBy;
+	private Integer isAuctionTender;
+    private String tenderStartDate;
+    private String tenderEndDate;
 
 	public String getName() {
 		return name;
@@ -84,15 +87,45 @@ public class CreateAuctionRequest {
 		this.updatedBy = updatedBy;
 	}
 
-	@Override
-	public String toString() {
-		return "CreateAuctionRequestBO {'name': '" + name
-				+ "',  'auctionTypeId': '" + auctionTypeId
-				+ "',  'description': '" + description + "',  'deptId': '"
-				+ deptId + "',  'updatedBy': '" + updatedBy
-				+ "',  'startDate': '" + startDate + "',  'endDate': '" + name
-				+ "enddate',  'catalog': '" + catalog + "',  'createdBy': '"
-				+ createdBy + "'";
+	public Integer getIsAuctionTender() {
+		return isAuctionTender;
 	}
 
+	public void setIsAuctionTender(Integer isAuctionTender) {
+		this.isAuctionTender = isAuctionTender;
+	}
+
+    public String getTenderStartDate() {
+        return tenderStartDate;
+    }
+
+    public void setTenderStartDate(String tenderStartDate) {
+        this.tenderStartDate = tenderStartDate;
+    }
+
+    public String getTenderEndDate() {
+        return tenderEndDate;
+    }
+
+    public void setTenderEndDate(String tenderEndDate) {
+        this.tenderEndDate = tenderEndDate;
+    }
+
+    @Override
+    public String toString() {
+        return "CreateAuctionRequest{" +
+                "name='" + name + '\'' +
+                ", auctionTypeId=" + auctionTypeId +
+                ", description='" + description + '\'' +
+                ", deptId=" + deptId +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", catalog='" + catalog + '\'' +
+                ", createdBy=" + createdBy +
+                ", updatedBy=" + updatedBy +
+                ", isAuctionTender=" + isAuctionTender +
+                ", tenderStartDate='" + tenderStartDate + '\'' +
+                ", tenderEndDate='" + tenderEndDate + '\'' +
+                '}';
+    }
 }

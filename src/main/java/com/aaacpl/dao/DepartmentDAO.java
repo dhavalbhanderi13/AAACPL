@@ -1,6 +1,5 @@
 package com.aaacpl.dao;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +17,7 @@ import com.aaacpl.dto.department.UpdateDepartmentDTO;
 public class DepartmentDAO {
 	public CreateDepartmentResponseDTO insertDepartment(
 			CreateDepartmentRequestDTO createDepartmentRequestDTO)
-			throws SQLException, IOException {
+			throws SQLException {
 		PreparedStatement preparedStatement = null;
 		Connection connection = null;
 		CreateDepartmentResponseDTO createDepartmentResponseDTO = new CreateDepartmentResponseDTO();
@@ -65,8 +64,7 @@ public class DepartmentDAO {
 		return createDepartmentResponseDTO;
 	}
 
-	public List<DepartmentDTO> getAllDepartments() throws SQLException,
-			IOException {
+	public List<DepartmentDTO> getAllDepartments() throws SQLException{
 		List<DepartmentDTO> departmentDTOs = new ArrayList<DepartmentDTO>();
 		Connection connection = null;
 		Statement statement = null;
@@ -95,8 +93,7 @@ public class DepartmentDAO {
 		}
 		return departmentDTOs;
 	}
-public DepartmentDTO getDepartmentById(int departmentId) throws SQLException,
-			IOException {
+public DepartmentDTO getDepartmentById(int departmentId) throws SQLException{
 		DepartmentDTO departmentDTO = new DepartmentDTO();
 		Connection connection = null;
 		Statement statement = null;
@@ -125,7 +122,7 @@ public DepartmentDTO getDepartmentById(int departmentId) throws SQLException,
 	}
 
 	public Boolean updateDepartment(UpdateDepartmentDTO updateDepartmentDTO)
-			throws SQLException, IOException {
+			throws SQLException {
 		boolean isProcessed = false;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;

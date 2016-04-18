@@ -140,16 +140,16 @@ public class LotsService {
     }
 
     @GET
-    @Path("/byAccess/auction/{auctionId}/user/{userId}")
+    @Path("/byAccess/auction/{auctionId}/user/{userId}/{isTender}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getLotsByUserAccess(@PathParam("userId") int userId,
+    public Response getLotsByUserAccess(@PathParam("userId") int userId,@PathParam("isTender") Integer isTender,
                                         @PathParam("auctionId") int auctionId, @HeaderParam("sessionId") String sessionId) {
         if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
             LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
             LotsListByAccessResponse lotsListResponse = new LotsListByAccessResponse();
 
             lotsListResponse.setLotsResponseList(lotsRequestHandler
-                    .getLotsByAccess(userId, auctionId));
+                    .getLotsByAccess(userId, auctionId, isTender));
             return ResponseGenerator.generateResponse(lotsListResponse);
         } else {
             return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());

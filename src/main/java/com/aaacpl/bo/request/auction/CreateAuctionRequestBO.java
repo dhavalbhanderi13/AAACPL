@@ -8,13 +8,17 @@ public class CreateAuctionRequestBO {
 	private Integer deptId;
 	private String startDate;
 	private String endDate;
+	private String tenderStartDate;
+	private String tenderEndDate;
 	private String catalog;
 	private Integer createdBy;
 	private Integer updatedBy;
+	private Integer isTender;
 
 	public CreateAuctionRequestBO(String name, int auctionTypeId,
 			String description, Integer deptId, String startDate,
-			String endDate, String catalog, Integer createdBy, Integer updatedBy) {
+			String endDate, String catalog, Integer createdBy, Integer updatedBy, Integer isTender,
+								  String tenderStartDate, String tenderEndDate) {
 		this.name = name;
 		this.auctionTypeId = auctionTypeId;
 		this.description = description;
@@ -24,6 +28,9 @@ public class CreateAuctionRequestBO {
 		this.catalog = catalog;
 		this.createdBy = createdBy;
 		this.updatedBy = updatedBy;
+		this.isTender = isTender;
+		this.tenderStartDate = tenderStartDate;
+		this.tenderEndDate = tenderEndDate;
 
 	}
 
@@ -63,14 +70,33 @@ public class CreateAuctionRequestBO {
 		return updatedBy;
 	}
 
-	@Override
-	public String toString() {
-		return "CreateAuctionRequestBO {'name': '" + name
-				+ "',  'description': '" + description + "',  'deptId': '"
-				+ deptId + "',  'updatedBy': '" + updatedBy
-				+ "',  'startDate': '" + startDate + "',  'endDate': '" + name
-				+ "enddate',  'catalog': '" + catalog + "',  'createdBy': '"
-				+ createdBy + "'";
+	public Integer getIsTender() {
+		return isTender;
 	}
 
+	public String getTenderStartDate() {
+		return tenderStartDate;
+	}
+
+	public String getTenderEndDate() {
+		return tenderEndDate;
+	}
+
+	@Override
+	public String toString() {
+		return "CreateAuctionRequestBO{" +
+				"name='" + name + '\'' +
+				", auctionTypeId=" + auctionTypeId +
+				", description='" + description + '\'' +
+				", deptId=" + deptId +
+				", startDate='" + startDate + '\'' +
+				", endDate='" + endDate + '\'' +
+				", tenderStartDate='" + tenderStartDate + '\'' +
+				", tenderEndDate='" + tenderEndDate + '\'' +
+				", catalog='" + catalog + '\'' +
+				", createdBy=" + createdBy +
+				", updatedBy=" + updatedBy +
+				", isTender=" + isTender +
+				'}';
+	}
 }

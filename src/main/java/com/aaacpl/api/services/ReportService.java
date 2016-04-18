@@ -62,7 +62,7 @@ public class ReportService {
             String relativeWebPath = "";
         /*Boolean isFileCreated = (new PDFCreator()).createPDF("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps\"/123.pdf");
         File file = new File("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps", "123.pdf");*/
-            //  String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
+           //  String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
             String absoluteDiskPath = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps";
             File file = new ReportRequestHandler().getBidHistoryReport(absoluteDiskPath, "/Combine Bid History Prepare Automatically Between Auction.pdf", auctionId);
             Response.ResponseBuilder response = Response.ok(file);
@@ -70,6 +70,8 @@ public class ReportService {
                     "attachment; filename=Combine Bid History Prepare Automatically Between Auction.pdf");
             return response.build();
         } else {
+            String relativeWebPath = "";
+           // String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
             String absoluteDiskPath = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps";
             File file = new ReportRequestHandler().getUnauthorizedPDFResponse(absoluteDiskPath, "/Unauthorized Access.pdf");
             Response.ResponseBuilder response = Response.ok(file);

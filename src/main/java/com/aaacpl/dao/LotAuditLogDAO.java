@@ -3,7 +3,6 @@ package com.aaacpl.dao;
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.lotAuditLog.LotAuditLogDTO;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LotAuditLogDAO {
-    public List<LotAuditLogDTO> getAuditLog(int lotId) throws SQLException, IOException {
+    public List<LotAuditLogDTO> getAuditLog(int lotId) throws SQLException{
         List<LotAuditLogDTO> lotDTOs = new ArrayList<LotAuditLogDTO>();
         Connection connection = null;
         Statement statement = null;

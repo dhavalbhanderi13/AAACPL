@@ -13,8 +13,13 @@ public class AuctionResponse {
 	private Integer createdBy;
 	private Integer updatedBy;
 	private String status;
+	private Integer isTender;
+	private String tenderStartDate;
+	private String tenderEndDate;
 
-	public AuctionResponse(int auctionId, String name, int auctionTypeId, String description, Integer deptId, String startDate, String endDate, String catalog, Integer createdBy, Integer updatedBy, String status) {
+	public AuctionResponse(int auctionId, String name, int auctionTypeId, String description, Integer deptId,
+						   String startDate, String endDate, String catalog, Integer createdBy,
+						   Integer updatedBy, String status, Integer isTender, String tenderStartDate, String tenderEndDate) {
 		this.auctionId = auctionId;
 		this.name = name;
 		this.auctionTypeId = auctionTypeId;
@@ -26,6 +31,9 @@ public class AuctionResponse {
 		this.createdBy = createdBy;
 		this.updatedBy = updatedBy;
 		this.status = status;
+		this.isTender = isTender;
+		this.tenderStartDate = tenderStartDate;
+		this.tenderEndDate = tenderEndDate;
 	}
 
 	public int getAuctionId() {
@@ -72,6 +80,18 @@ public class AuctionResponse {
 		return status;
 	}
 
+	public Integer getIsTender() {
+		return isTender;
+	}
+
+	public String getTenderStartDate() {
+		return tenderStartDate;
+	}
+
+	public String getTenderEndDate() {
+		return tenderEndDate;
+	}
+
 	@Override
 	public String toString() {
 		return "AuctionResponse{" +
@@ -86,6 +106,9 @@ public class AuctionResponse {
 				", createdBy=" + createdBy +
 				", updatedBy=" + updatedBy +
 				", status='" + status + '\'' +
+				", isTender=" + isTender +
+				", tenderStartDate='" + tenderStartDate + '\'' +
+				", tenderEndDate='" + tenderEndDate + '\'' +
 				'}';
 	}
 }

@@ -12,11 +12,14 @@ public class UpdateAuctionRequestBO {
 	private String endDate;
 	private String catalog;
 	private Integer updatedBy;
+	private Boolean isTender;
+	private String tenderStartDate;
+	private String tenderEndDate;
 
 	public UpdateAuctionRequestBO(Integer id, String status, String name,
 			int auctionTypeId, String description, Integer deptId,
 			String startDate, String endDate, String catalog,
-			Integer updatedBy) {
+			Integer updatedBy, Boolean isTender, String tenderStartDate, String tenderEndDate) {
 		this.id = id;
 		this.status = status;
 		this.name = name;
@@ -27,6 +30,9 @@ public class UpdateAuctionRequestBO {
 		this.endDate = endDate;
 		this.catalog = catalog;
 		this.updatedBy = updatedBy;
+		this.isTender = isTender;
+		this.tenderStartDate = tenderStartDate;
+		this.tenderEndDate = tenderEndDate;
 
 	}
 
@@ -70,6 +76,18 @@ public class UpdateAuctionRequestBO {
 		return id;
 	}
 
+	public Boolean getTender() {
+		return isTender;
+	}
+
+	public String getTenderStartDate() {
+		return tenderStartDate;
+	}
+
+	public String getTenderEndDate() {
+		return tenderEndDate;
+	}
+
 	@Override
 	public String toString() {
 		return "UpdateAuctionRequestBO{" +
@@ -83,6 +101,9 @@ public class UpdateAuctionRequestBO {
 				", endDate='" + endDate + '\'' +
 				", catalog='" + catalog + '\'' +
 				", updatedBy=" + updatedBy +
+				", isTender=" + isTender +
+				", tenderStartDate='" + tenderStartDate + '\'' +
+				", tenderEndDate='" + tenderEndDate + '\'' +
 				'}';
 	}
 }

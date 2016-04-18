@@ -15,13 +15,11 @@ import com.aaacpl.bo.response.UpdateLotResponseBO;
 import com.aaacpl.dao.LotsDAO;
 import com.aaacpl.dao.UserLotMapDAO;
 import com.aaacpl.dto.lots.CreateLotRequestDTO;
+import com.aaacpl.dto.lots.LotByAccessInTenderDTO;
 import com.aaacpl.dto.lots.LotDTO;
 import com.aaacpl.dto.lots.LotStatusDTO;
 import com.aaacpl.rest.request.lots.StatusRequest;
-import com.aaacpl.rest.response.lots.BidHistoryResponse;
-import com.aaacpl.rest.response.lots.LotStatusResponse;
-import com.aaacpl.rest.response.lots.LotsByAccessResponse;
-import com.aaacpl.rest.response.lots.LotsResponse;
+import com.aaacpl.rest.response.lots.*;
 import com.aaacpl.util.DateUtil;
 
 public class LotsRequestHandler {
@@ -110,12 +108,27 @@ public class LotsRequestHandler {
         Iterator<LotDTO> iterator = lotDTOs.iterator();
         while (iterator.hasNext()) {
             LotDTO lotDTO = iterator.next();
-            LotsByAccessResponse lotsResponse = new LotsByAccessResponse(
+            LotsByAccessResponse lotsResponse = new LotByAccessForAuctionResponse(
                     lotDTO.getId(), lotDTO.getAuctionId(), lotDTO.getName(),
                     lotDTO.getDescription(), lotDTO.getStartBid(),
                     lotDTO.getDifferenceFactor(),
                     DateUtil.getDateStringFromTimeStamp(lotDTO.getStartDate()),
                     DateUtil.getDateStringFromTimeStamp(lotDTO.getEndDate()),
+                    lotDTO.getCreatedBy(), lotDTO.getUpdatedBy());
+            lotsResponseList.add(lotsResponse);
+        }
+        return lotsResponseList;
+    }
+
+    private List<LotsByAccessResponse> buildListOfLotsByAccessInLotsFromDTOs(
+            List<LotByAccessInTenderDTO> lotDTOs) throws SQLException, IOException {
+        List<LotsByAccessResponse> lotsResponseList = new ArrayList<LotsByAccessResponse>();
+        Iterator<LotByAccessInTenderDTO> iterator = lotDTOs.iterator();
+        while (iterator.hasNext()) {
+            LotByAccessInTenderDTO lotDTO = iterator.next();
+            LotsByAccessResponse lotsResponse = new LotByAccessForTenderResponse(
+                    lotDTO.getId(), lotDTO.getAuctionId(), lotDTO.getName(),
+                    lotDTO.getDescription(),
                     lotDTO.getCreatedBy(), lotDTO.getUpdatedBy());
             lotsResponseList.add(lotsResponse);
         }
@@ -136,12 +149,18 @@ public class LotsRequestHandler {
         return lotsResponse;
     }
 
-    public List<LotsByAccessResponse> getLotsByAccess(int userId, int auctionId) {
+    public List<LotsByAccessResponse> getLotsByAccess(int userId, int auctionId, int isTender) {
         List<LotsByAccessResponse> lotsResponseList = new ArrayList<LotsByAccessResponse>();
         try {
             LotsDAO lotsDAO = new LotsDAO();
-            List<LotDTO> lotDTO = lotsDAO.getLotsByUser(userId, auctionId);
-            lotsResponseList = buildListOfLotsByAccessFromDTOs(lotDTO);
+            if (isTender == 1) {
+                List<LotByAccessInTenderDTO> lotByAccessInTenderDTOs = lotsDAO.getLotsByUser(userId, auctionId, isTender);
+                lotsResponseList = buildListOfLotsByAccessInLotsFromDTOs(lotByAccessInTenderDTOs);
+            } else {
+                List<LotDTO> lotDTO = lotsDAO.getLotsByUser(userId, auctionId);
+                lotsResponseList = buildListOfLotsByAccessFromDTOs(lotDTO);
+            }
+
         } catch (SQLException s) {
             s.printStackTrace();
         } catch (IOException s) {
@@ -222,14 +241,14 @@ public class LotsRequestHandler {
         return bidHistoryList;
     }
 
-    private String getLotImplementationStatus(Timestamp startDate, Timestamp endDate){
+    private String getLotImplementationStatus(Timestamp startDate, Timestamp endDate) {
         String lotStatus = "NS";
         if (DateUtil.compareTimestampWithCurrentDate(startDate) > 0) {
             lotStatus = "NS";
         } else if (DateUtil.compareTimestampWithCurrentDate(startDate) <= 0
                 && DateUtil.compareTimestampWithCurrentDate(endDate) >= 0) {
             lotStatus = "S";
-        } else if(DateUtil.compareTimestampWithCurrentDate(endDate) < 0){
+        } else if (DateUtil.compareTimestampWithCurrentDate(endDate) < 0) {
             lotStatus = "E";
         }
 

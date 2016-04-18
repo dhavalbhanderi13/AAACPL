@@ -3,14 +3,13 @@ package com.aaacpl.dao;
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.liveBidLog.LiveBidLogDTO;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class LiveBidLogDAO {
-    public LiveBidLogDTO getAuditLog(int lotId) throws SQLException, IOException {
+    public LiveBidLogDTO getAuditLog(int lotId) throws SQLException{
         Connection connection = null;
         Statement statement = null;
         LiveBidLogDTO liveBidLogDTO = null;

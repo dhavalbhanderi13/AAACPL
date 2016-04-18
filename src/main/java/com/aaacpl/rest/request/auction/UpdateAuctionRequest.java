@@ -12,6 +12,9 @@ public class UpdateAuctionRequest {
 	private String endDate;
 	private String catalog;
 	private Integer updatedBy;
+	private Integer isAuctionTender;
+	private String tenderStartDate;
+	private String tenderEndDate;
 
 	public String getName() {
 		return name;
@@ -93,6 +96,30 @@ public class UpdateAuctionRequest {
 		this.id = id;
 	}
 
+	public Integer getIsAuctionTender() {
+		return isAuctionTender;
+	}
+
+	public void setIsAuctionTender(Integer isAuctionTender) {
+		this.isAuctionTender = isAuctionTender;
+	}
+
+	public String getTenderStartDate() {
+		return tenderStartDate;
+	}
+
+	public void setTenderStartDate(String tenderStartDate) {
+		this.tenderStartDate = tenderStartDate;
+	}
+
+	public String getTenderEndDate() {
+		return tenderEndDate;
+	}
+
+	public void setTenderEndDate(String tenderEndDate) {
+		this.tenderEndDate = tenderEndDate;
+	}
+
 	@Override
 	public String toString() {
 		return "UpdateAuctionRequest{" +
@@ -106,6 +133,9 @@ public class UpdateAuctionRequest {
 				", endDate='" + endDate + '\'' +
 				", catalog='" + catalog + '\'' +
 				", updatedBy=" + updatedBy +
+				", isAuctionTender=" + isAuctionTender +
+				", tenderStartDate='" + tenderStartDate + '\'' +
+				", tenderEndDate='" + tenderEndDate + '\'' +
 				'}';
 	}
 }

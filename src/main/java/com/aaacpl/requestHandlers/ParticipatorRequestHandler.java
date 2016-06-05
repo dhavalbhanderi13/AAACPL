@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.aaacpl.bo.request.participator.CreateParticipatorRequestBO;
 import com.aaacpl.dao.UserLotMapDAO;
-import com.aaacpl.dto.participator.CreateParticipatorDTO;
 import com.aaacpl.rest.request.participator.ParticipatorInfo;
 
 public class ParticipatorRequestHandler {
@@ -16,20 +15,31 @@ public class ParticipatorRequestHandler {
         List<ParticipatorInfo> participatorInfoList = createParticipatorRequestBO.getParticipatorInfoList();
         Iterator<ParticipatorInfo> participatorInfoIterator = participatorInfoList.iterator();
         UserLotMapDAO userLotMapDAO = new UserLotMapDAO();
-        int counter = 0;
         try {
             while (participatorInfoIterator.hasNext()) {
                 ParticipatorInfo participatorInfo = participatorInfoIterator.next();
-                CreateParticipatorDTO createParticipatorDTO = new CreateParticipatorDTO();
-                createParticipatorDTO.setLotId(participatorInfo.getLotId());
-                createParticipatorDTO.setUserIds(participatorInfo.getUserIdList());
-                Boolean isInserted = userLotMapDAO.insertUserLotMapping(createParticipatorDTO);
-                if (isInserted) {
-                    counter++;
+                Integer lotId = participatorInfo.getLotId();
+                List<Integer> oldParticipatedUsers = userLotMapDAO.getListOfUsers(lotId, null);
+                List<Integer> newParticipatorList = participatorInfo.getUserIdList();
+                Iterator<Integer> newParticipatorListIterator = newParticipatorList.iterator();
+                Iterator<Integer> oldParticipatorListIterator = oldParticipatedUsers.iterator();
+                while (newParticipatorListIterator.hasNext()){
+                    Integer userId = newParticipatorListIterator.next();
+                    if(oldParticipatedUsers.contains(userId)){
+                        userLotMapDAO.updateUserLotMapping(userId, lotId, "A");
+                    }else{
+                        userLotMapDAO.insertUserLotMapping(userId, lotId);
+                    }
                 }
-            }
-            if (counter == participatorInfoList.size()) {
+
+                while (oldParticipatorListIterator.hasNext()){
+                    Integer userId = oldParticipatorListIterator.next();
+                    if(!newParticipatorList.contains(userId)){
+                        userLotMapDAO.updateUserLotMapping(userId, lotId, "I");
+                    }
+                }
                 isCreated = Boolean.TRUE;
+
             }
         } catch (SQLException s) {
             s.printStackTrace();

@@ -8,6 +8,7 @@ import com.aaacpl.dto.lotAuditLog.LotAuditLogDTO;
 import com.aaacpl.dto.lots.LotDTO;
 import com.aaacpl.reports.BidHistoryPDFCreator;
 import com.aaacpl.reports.BidSheetPDFCreator;
+import com.aaacpl.util.DateUtil;
 import com.aaacpl.util.LotWiseBidHistoryPDFCreator;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ReportRequestHandler {
-    public File getLotWiseHistoryReport(String absolutePath, String fileName, int auctionId) {
+    public File getLotWiseHistoryReport(String absolutePath, String fileName, int auctionId, Boolean isTender) {
         File file = null;
         Document doc = new Document();
         PdfWriter docWriter = null;
@@ -33,7 +34,7 @@ public class ReportRequestHandler {
             AuctionDAO auctionDAO = new AuctionDAO();
             UserLotMapDAO userLotMapDAO = new UserLotMapDAO();
             LotAuditLogDAO lotAuditLogDAO = new LotAuditLogDAO();
-            List<LotDTO> lotDTOList = lotsDAO.getAllLots(auctionId);
+            List<LotDTO> lotDTOList = lotsDAO.getAllLots(auctionId,"A");
             AuctionDTO auctionDTO = auctionDAO.getAuctionById(auctionId);
             Iterator<LotDTO> iterator = lotDTOList.iterator();
             doc.open();
@@ -42,7 +43,7 @@ public class ReportRequestHandler {
                 LotDTO lotDTO = iterator.next();
 
                 Map<Integer, String> userNameIdMap = userLotMapDAO.getUserNameIdMap(lotDTO.getId());
-                List<LotAuditLogDTO> lotAuditLogDTOs = lotAuditLogDAO.getAuditLog(lotDTO.getId());
+                List<LotAuditLogDTO> lotAuditLogDTOs = lotAuditLogDAO.getAuditLog(lotDTO.getId(), isTender);
                 if (lotAuditLogDTOs.size() > 0) {
                     //document header attributes
                     doc.addAuthor("betterThanZero");
@@ -51,9 +52,9 @@ public class ReportRequestHandler {
                     doc.addCreator("AAACPL.com");
                     doc.addTitle("LotWise Bid History");
                     doc.setPageSize(PageSize.LETTER);
-                    doc.add(new LotWiseBidHistoryPDFCreator().createPDF(userNameIdMap, lotAuditLogDTOs, lotDTO, auctionDTO));
+                    doc.add(new LotWiseBidHistoryPDFCreator().createPDF(userNameIdMap, lotAuditLogDTOs, lotDTO, auctionDTO, isTender));
                 } else {
-                    doc.add(new LotWiseBidHistoryPDFCreator().createPDF(userNameIdMap, lotAuditLogDTOs, lotDTO, auctionDTO));
+                    doc.add(new LotWiseBidHistoryPDFCreator().createPDF(userNameIdMap, lotAuditLogDTOs, lotDTO, auctionDTO, isTender));
                 }
 
             }
@@ -118,7 +119,7 @@ public class ReportRequestHandler {
         return file;
     }
 
-    public File getBidHistoryReport(String absolutePath, String fileName, int auctionId) {
+    public File getBidHistoryReport(String absolutePath, String fileName, int auctionId, Boolean isTender) {
         File file = null;
         Document doc = new Document();
         PdfWriter docWriter = null;
@@ -129,7 +130,7 @@ public class ReportRequestHandler {
             AuctionDAO auctionDAO = new AuctionDAO();
             UserLotMapDAO userLotMapDAO = new UserLotMapDAO();
             LotAuditLogDAO lotAuditLogDAO = new LotAuditLogDAO();
-            List<LotDTO> lotDTOList = lotsDAO.getAllLots(auctionId);
+            List<LotDTO> lotDTOList = lotsDAO.getAllLots(auctionId, "A");
             AuctionDTO auctionDTO = auctionDAO.getAuctionById(auctionId);
             Iterator<LotDTO> iterator = lotDTOList.iterator();
 
@@ -141,7 +142,7 @@ public class ReportRequestHandler {
                 LotDTO lotDTO = iterator.next();
 
                 Map<Integer, String> userNameIdMap = userLotMapDAO.getUserNameIdMap(lotDTO.getId());
-                List<LotAuditLogDTO> lotAuditLogDTOs = lotAuditLogDAO.getAuditLog(lotDTO.getId());
+                List<LotAuditLogDTO> lotAuditLogDTOs = lotAuditLogDAO.getAuditLog(lotDTO.getId(), isTender);
                 //document header attributes
                 doc.addAuthor("betterThanZero");
                 doc.addCreationDate();
@@ -164,8 +165,10 @@ public class ReportRequestHandler {
                     titlePara.add(title);
                     titlePara.setFont(bfBold12);
                     doc.add(titlePara);
-                    StringBuilder auctionInfo = new StringBuilder(auctionDTO.getName()).append(" (Date :- From ").append(auctionDTO.getStartDate())
-                            .append(" To ").append(auctionDTO.getEndDate()).append(")");
+                    String startDate = isTender? DateUtil.getDateStringFromTimeStamp(auctionDTO.getTenderStartDate()):DateUtil.getDateStringFromTimeStamp(auctionDTO.getStartDate());
+                    String endDate = isTender? DateUtil.getDateStringFromTimeStamp(auctionDTO.getTenderEndDate()):DateUtil.getDateStringFromTimeStamp(auctionDTO.getEndDate());
+                    StringBuilder auctionInfo = new StringBuilder(auctionDTO.getName()).append(" (Date :- From ").append(startDate)
+                            .append(" To ").append(endDate).append(")");
                     Paragraph paragraphAuctionInfo = new Paragraph(auctionInfo.toString());
                     paragraphAuctionInfo.setAlignment(Paragraph.ALIGN_CENTER);
                     doc.add(paragraphAuctionInfo);
@@ -174,7 +177,7 @@ public class ReportRequestHandler {
                 }
 
 
-                Paragraph paragraphs = new BidHistoryPDFCreator().createPDF(userNameIdMap, lotAuditLogDTOs, lotDTO, auctionDTO);
+                Paragraph paragraphs = new BidHistoryPDFCreator().createPDF(userNameIdMap, lotAuditLogDTOs, lotDTO, auctionDTO, isTender);
                 doc.add(paragraphs);
                 doc.add(Chunk.NEWLINE);
             }
@@ -197,7 +200,7 @@ public class ReportRequestHandler {
         return file;
     }
 
-    public File getBidSheetReport(String absolutePath, String fileName, int auctionId) {
+    public File getBidSheetReport(String absolutePath, String fileName, int auctionId, Boolean isTender) {
         File file = null;
         Document doc = new Document(PageSize.A4);
         PdfWriter docWriter = null;
@@ -208,7 +211,7 @@ public class ReportRequestHandler {
             LotsDAO lotsDAO = new LotsDAO();
             AuctionDAO auctionDAO = new AuctionDAO();
             UserLotMapDAO userLotMapDAO = new UserLotMapDAO();
-            List<LotDTO> lotDTOList = lotsDAO.getAllLots(auctionId);
+            List<LotDTO> lotDTOList = lotsDAO.getAllLots(auctionId, "A");
             AuctionDTO auctionDTO = auctionDAO.getAuctionById(auctionId);
             DepartmentDAO departmentDAO = new DepartmentDAO();
             DepartmentDTO departmentDTO = departmentDAO.getDepartmentById(auctionDTO.getDeptId());
@@ -224,7 +227,14 @@ public class ReportRequestHandler {
 
                 Map<Integer, String> userNameIdMap = userLotMapDAO.getUserNameIdMap(lotDTO.getId());
                 LiveBidLogDAO liveBidLogDAO = new LiveBidLogDAO();
-                LiveBidLogDTO liveBidLogDTO = liveBidLogDAO.getAuditLog(lotDTO.getId());
+                LiveBidLogDTO liveBidLogDTO = null;
+                if(isTender){
+                    int maxAmt = new LotAuditLogDAO().getMaxAuditLogAmt(lotDTO.getId());
+                    liveBidLogDTO = new LotAuditLogDAO().getMaxAuditLogForLot(lotDTO.getId(), maxAmt);
+                }else{
+                    liveBidLogDTO = liveBidLogDAO.getAuditLog(lotDTO.getId());
+                }
+
                 //document header attributes
                 doc.addAuthor("betterThanZero");
                 doc.addCreationDate();
@@ -262,9 +272,20 @@ public class ReportRequestHandler {
                     paragraphAddress.setAlignment(Paragraph.ALIGN_CENTER);
                     paragraphAddress.setFont(bf12);
                     doc.add(paragraphAddress);
+                    String startDate = "";
+                    StringBuilder auctionInfo = new StringBuilder();
+                    String auctionDescription = "";
+                    if(isTender){
+                        auctionInfo.append("Tender Sale held at (www.aaacpl.com) on ");
+                        auctionDescription = " Tender Sale No. ("+auctionDTO.getDescription()+")";
+                        startDate = DateUtil.getDateStringFromTimeStamp(auctionDTO.getTenderStartDate());
+                    }else{
+                        auctionInfo.append("Auction Sale held at (www.aaacpl.com) on ");
+                        auctionDescription = " Auction Sale No. ("+auctionDTO.getDescription()+")";
+                        startDate = DateUtil.getDateStringFromTimeStamp(auctionDTO.getStartDate());
+                    }
 
-                    StringBuilder auctionInfo = new StringBuilder("Auction Sale held at (www.aaacpl.com) on ").append(auctionDTO.getStartDate())
-                            .append(" Auction Sale No. (").append(auctionDTO.getDescription()).append(")");
+                   auctionInfo.append(startDate).append(auctionDescription);
                     Paragraph paragraphAuctionInfo = new Paragraph(auctionInfo.toString());
                     paragraphAuctionInfo.setAlignment(Paragraph.ALIGN_CENTER);
                     paragraphAddress.setFont(bf12);

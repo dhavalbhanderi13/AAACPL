@@ -13,7 +13,7 @@ import java.util.List;
 
 public class LotWiseBidHistoryPDFCreator {
     public Paragraph createPDF(Map<Integer, String> userIdNameMap, List<LotAuditLogDTO> lotAuditLogDTOList,
-                               LotDTO lotDTO, AuctionDTO auctionDTO) throws DocumentException {
+                               LotDTO lotDTO, AuctionDTO auctionDTO, Boolean isTender) throws DocumentException {
 
         DecimalFormat df = new DecimalFormat("###,###.##");
 
@@ -40,16 +40,20 @@ public class LotWiseBidHistoryPDFCreator {
         insertCell(table, "", Element.ALIGN_CENTER, 1, bfBold12);
         insertCell(table, "Bid History", Element.ALIGN_CENTER, 3, bfBold12);
         table.setHeaderRows(1);
-        insertCell(table, "Auction", Element.ALIGN_LEFT, 1, bfBold12);
-        StringBuilder auctionInfo = new StringBuilder(auctionDTO.getName()).append(" (Date :- From ").append(auctionDTO.getStartDate())
-                .append(" To ").append(auctionDTO.getEndDate()).append(")");
+        insertCell(table, isTender?"Tender":"Auction", Element.ALIGN_LEFT, 1, bfBold12);
+        String startDate = isTender? DateUtil.getDateStringFromTimeStamp(auctionDTO.getTenderStartDate()):DateUtil.getDateStringFromTimeStamp(auctionDTO.getStartDate());
+        String endDate = isTender? DateUtil.getDateStringFromTimeStamp(auctionDTO.getTenderEndDate()):DateUtil.getDateStringFromTimeStamp(auctionDTO.getEndDate());
+        StringBuilder auctionInfo = new StringBuilder(auctionDTO.getName()).append(" (Date :- From ").append(startDate)
+                .append(" To ").append(endDate).append(")");
         insertCell(table, auctionInfo.toString(), Element.ALIGN_LEFT, 3, bf12);
         int counter = 0;
         insertCell(table, "Lot", Element.ALIGN_LEFT, 1, bfBold12);
-        StringBuilder lotInfo = new StringBuilder(lotDTO.getName()).append(" StartBid:-").append(lotDTO.getStartBid())
-                .append(" (Date :- From ").append(lotDTO.getStartDate())
-                .append(" To ").append(lotDTO.getEndDate()).append(")");
-        insertCell(table, lotInfo.toString(), Element.ALIGN_LEFT, 3, bf12);
+        if(!isTender) {
+            StringBuilder lotInfo = new StringBuilder(lotDTO.getName()).append(" StartBid:-").append(lotDTO.getStartBid())
+                    .append(" (Date :- From ").append(lotDTO.getStartDate())
+                    .append(" To ").append(lotDTO.getEndDate()).append(")");
+            insertCell(table, lotInfo.toString(), Element.ALIGN_LEFT, 3, bf12);
+        }
         if (lotAuditLogDTOList.size() > 0) {
             insertCell(table1, "Sr", Element.ALIGN_LEFT, 1, bfBold12);
             insertCell(table1, "Company/Name", Element.ALIGN_CENTER, 1, bfBold12);

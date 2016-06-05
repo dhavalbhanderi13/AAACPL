@@ -58,7 +58,7 @@ public class LotsRequestHandler {
         List<LotsResponse> lotsResponseList = new ArrayList<LotsResponse>();
         try {
             LotsDAO lotsDAO = new LotsDAO();
-            List<LotDTO> lotDTOs = lotsDAO.getAllLots(auctionId);
+            List<LotDTO> lotDTOs = lotsDAO.getAllLots(auctionId, null);
             lotsResponseList = buildListOfLotsFromDTOs(lotDTOs);
         } catch (SQLException s) {
             s.printStackTrace();
@@ -95,7 +95,7 @@ public class LotsRequestHandler {
                     DateUtil.getDateStringFromTimeStamp(lotDTO.getStartDate()),
                     DateUtil.getDateStringFromTimeStamp(lotDTO.getEndDate()),
                     lotDTO.getCreatedBy(), lotDTO.getUpdatedBy(),
-                    new UserLotMapDAO().getListOfUsers(lotDTO.getId()),
+                    new UserLotMapDAO().getListOfUsers(lotDTO.getId(), "A"),
                     lotDTO.getStatus());
             lotsResponseList.add(lotsResponse);
         }
@@ -144,7 +144,7 @@ public class LotsRequestHandler {
                 DateUtil.getDateStringFromTimeStamp(lotDTO.getStartDate()),
                 DateUtil.getDateStringFromTimeStamp(lotDTO.getEndDate()),
                 lotDTO.getCreatedBy(), lotDTO.getUpdatedBy(),
-                new UserLotMapDAO().getListOfUsers(lotDTO.getId()),
+                new UserLotMapDAO().getListOfUsers(lotDTO.getId(), "A"),
                 lotDTO.getStatus());
         return lotsResponse;
     }
@@ -169,11 +169,11 @@ public class LotsRequestHandler {
         return lotsResponseList;
     }
 
-    public synchronized Boolean insertBid(BidRequestBO bidRequestBO) {
+    public synchronized Boolean insertBid(BidRequestBO bidRequestBO, Boolean isTender) {
         LotsDAO lotsDAO = new LotsDAO();
         boolean isProcessed = false;
         try {
-            if (lotsDAO.insertBid(bidRequestBO)) {
+            if (lotsDAO.insertBid(bidRequestBO, isTender)) {
                 isProcessed = true;
             }
         } catch (SQLException e) {
@@ -242,12 +242,11 @@ public class LotsRequestHandler {
         return updateLotResponse;
     }
 
-    public List<BidHistoryResponse> getBidHistory(int lotId) {
+    public List<BidHistoryResponse> getBidHistory(int lotId, int isTender) {
         List<BidHistoryResponse> bidHistoryList = null;
         try {
             LotsDAO lotsDAO = new LotsDAO();
-            bidHistoryList = lotsDAO.getBidHistoryList(lotId);
-
+            bidHistoryList = lotsDAO.getBidHistoryList(lotId, isTender == 1);
         } catch (SQLException s) {
             s.printStackTrace();
         } catch (IOException s) {

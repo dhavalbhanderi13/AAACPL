@@ -258,12 +258,12 @@ public class AuctionDAO {
             String serverDate = DateUtil.getCurrentServerDate();
             String dateCondition = "";
             if(isTender){
-                dateCondition = " AND date(tender_start_date) <= '" + serverDate + "' AND tender_end_date >= '" + serverTimeStamp + "'";
+                dateCondition = " isTender = "+isTender+" AND date(tender_start_date) <= '" + serverDate + "' AND tender_end_date >= '" + serverTimeStamp + "'";
             }else{
-                dateCondition = " AND date(startdate) <= '" + serverDate + "' AND enddate >= '" + serverTimeStamp + "'";
+                dateCondition = " date(startdate) <= '" + serverDate + "' AND enddate >= '" + serverTimeStamp + "'";
             }
             StringBuilder query = new StringBuilder(
-                    "select * from auction where isTender = "+isTender+"");
+                    "select * from auction where ");
             query.append(dateCondition);
             ResultSet resultSet = statement.executeQuery(query.toString());
 

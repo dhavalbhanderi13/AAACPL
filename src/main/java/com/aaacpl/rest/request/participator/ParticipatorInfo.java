@@ -1,10 +1,6 @@
 package com.aaacpl.rest.request.participator;
 
 import java.util.List;
-
-/**
- * Created by Hp on 17-02-2016.
- */
 public class ParticipatorInfo {
     private int lotId;
     private List<Integer> userIdList;

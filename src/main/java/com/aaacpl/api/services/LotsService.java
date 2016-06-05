@@ -157,10 +157,10 @@ public class LotsService {
     }
 
     @POST
-    @Path("/bid")
+    @Path("/bid/{isTender}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response insertBid(BidRequest bidRequest, @HeaderParam("sessionId") String sessionId) {
+    public Response insertBid(BidRequest bidRequest, @HeaderParam("sessionId") String sessionId, @PathParam("isTender") Integer isTender) {
         if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
             BidRequestBO bidRequestBO = new BidRequestBO(bidRequest.getLotId(),
                     bidRequest.getUserId(), bidRequest.getBidAmount(),
@@ -168,7 +168,7 @@ public class LotsService {
 
             BidResponse bidResponse = new BidResponse();
             LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
-            if (lotsRequestHandler.insertBid(bidRequestBO)) {
+            if (lotsRequestHandler.insertBid(bidRequestBO, isTender == 1)) {
                 bidResponse.setFailureMessage("");
                 bidResponse.setSuccessMessage("Bid was Successful");
             } else {
@@ -198,13 +198,14 @@ public class LotsService {
 
 
     @GET
-    @Path("/bidHistory/{lotId}")
+    @Path("/bidHistory/{lotId}/{isTender}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBidHistory(@PathParam("lotId") int lotId, @HeaderParam("sessionId") String sessionId) {
+    public Response getBidHistory(@PathParam("lotId") int lotId, @HeaderParam("sessionId") String sessionId,
+                                  @PathParam("isTender") Integer isTender) {
         if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
             LotsRequestHandler lotsRequestHandler = new LotsRequestHandler();
             List<BidHistoryResponse> bidHistoryList = lotsRequestHandler
-                    .getBidHistory(lotId);
+                    .getBidHistory(lotId, isTender);
             return ResponseGenerator.generateResponse(bidHistoryList);
         } else {
             return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());

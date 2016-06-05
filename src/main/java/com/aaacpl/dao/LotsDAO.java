@@ -10,6 +10,7 @@ import com.aaacpl.bo.request.lots.UpdateLotBO;
 import com.aaacpl.bo.response.UpdateLotResponseBO;
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
 import com.aaacpl.dto.auction.AuctionDTO;
+import com.aaacpl.dto.lotAuditLog.LotAuditLogDTO;
 import com.aaacpl.dto.lots.*;
 import com.aaacpl.exceptions.lotServiceException.DuplicateTenderBidException;
 import com.aaacpl.exceptions.lotServiceException.LotNotFoundException;
@@ -97,7 +98,7 @@ public class LotsDAO {
         return createLotResponseDTO;
     }
 
-    public List<LotDTO> getAllLots(int auctionId) throws SQLException,
+    public List<LotDTO> getAllLots(int auctionId, String status) throws SQLException,
             IOException {
         List<LotDTO> lotDTOs = new ArrayList<LotDTO>();
         Connection connection = null;
@@ -107,6 +108,9 @@ public class LotsDAO {
             statement = connection.createStatement();
             StringBuilder query = new StringBuilder(
                     "SELECT * FROM lot where auction_id = ").append(auctionId);
+            if (status != null) {
+                query.append(" AND status = '").append(status).append("'");
+            }
             ResultSet resultSet = statement.executeQuery(query.toString());
             while (resultSet.next()) {
                 LotDTO lotDTO = new LotDTO(resultSet.getInt("id"),
@@ -148,8 +152,9 @@ public class LotsDAO {
             StringBuilder query = new StringBuilder(
                     "select * from lot where id IN(Select DISTINCT lot_id from lot_user_map where user_id =")
                     .append(userId).append(") AND lot.auction_id = ")
-                    .append(auctionId).append(" AND enddate > '" + serverTimeStamp + "' ORDER BY startdate ASC");
+                    .append(auctionId).append(" AND enddate > '" + serverTimeStamp + "' AND lot.status = 'A' ORDER BY startdate ASC");
             ResultSet resultSet = statement.executeQuery(query.toString());
+            System.out.println(query.toString());
             while (resultSet.next()) {
                 LotDTO lotDTO = new LotDTO(resultSet.getInt("id"),
                         resultSet.getInt("auction_id"),
@@ -195,7 +200,7 @@ public class LotsDAO {
                                 "lot.description, lot.createdby, lot.updatedby, lot.status" +
                                 " from lot where lot.id IN(Select DISTINCT lot_id from lot_user_map where user_id =")
                         .append(userId).append(") AND lot.auction_id = ")
-                        .append(auctionId).append(" ORDER BY lot.startdate ASC");
+                        .append(auctionId).append(" AND lot.status = 'A' ORDER BY lot.startdate ASC");
                 ResultSet resultSet = statement.executeQuery(query.toString());
 
                 while (resultSet.next()) {
@@ -267,7 +272,7 @@ public class LotsDAO {
         return lotDTO;
     }
 
-    public Boolean insertBid(BidRequestBO bidRequestBO) throws SQLException,
+    public Boolean insertBid(BidRequestBO bidRequestBO, Boolean isTender) throws SQLException,
             IOException {
         boolean isProcessed = false;
         Connection connection = null;
@@ -275,27 +280,35 @@ public class LotsDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             LotDTO lotDTO = getLotById(bidRequestBO.getLotId());
-            Boolean isMaxBid = isBidAmtMax(connection, bidRequestBO.getLotId(), bidRequestBO.getBidAmount());
-            Boolean isLotTimeEnded = DateUtil.compareTimestampWithCurrentDate(lotDTO.getEndDate()) < 0;
-            Boolean isBidAccepted = isMaxBid && !isLotTimeEnded;
+            if (isTender) {
+                AuctionDTO auctionDTO = new AuctionDAO().getAuctionById(lotDTO.getAuctionId());
+                Boolean isTenderTimeEnded = DateUtil.compareTimestampWithCurrentDate(auctionDTO.getTenderEndDate()) < 0;
+                List<LotAuditLogDTO> auditLogDTOs = new LotAuditLogDAO().getAuditLog(lotDTO.getId(), true);
+                Boolean isBidAccepted = auditLogDTOs.isEmpty() && !isTenderTimeEnded;
+                if (insertIntoLotAuditLog(connection, bidRequestBO, isBidAccepted)) {
+                    isProcessed = Boolean.TRUE;
+                }
+            } else {
+                Boolean isMaxBid = isBidAmtMax(connection, bidRequestBO.getLotId(), bidRequestBO.getBidAmount());
+                Boolean isLotTimeEnded = DateUtil.compareTimestampWithCurrentDate(lotDTO.getEndDate()) < 0;
+                Boolean isBidAccepted = isMaxBid && !isLotTimeEnded;
 
-            // First Log the bid request in lot_audit_log
-            if (insertIntoLotAuditLog(connection, bidRequestBO, isBidAccepted)) {
+                // First Log the bid request in lot_audit_log
+                if (insertIntoLotAuditLog(connection, bidRequestBO, isBidAccepted)) {
 
-                // returning true because we are not sure if the bid is max
-                isProcessed = Boolean.TRUE;
+                    // returning true because we are not sure if the bid is max
+                    isProcessed = Boolean.TRUE;
 
-                // Check if the current bid Amount is greater than Max
-                if (isBidAccepted) {
+                    // Check if the current bid Amount is greater than Max
+                    if (isBidAccepted) {
 
-                    // If true Insert/Update the Max value in live_audit_log
-                    if (insertIntoLiveBidLog(connection, bidRequestBO)) {
-                        isProcessed = Boolean.TRUE;
-                    } else {
-                        isProcessed = Boolean.FALSE;
+                        // If true Insert/Update the Max value in live_audit_log
+                        if (insertIntoLiveBidLog(connection, bidRequestBO)) {
+                            isProcessed = Boolean.TRUE;
+                        } else {
+                            isProcessed = Boolean.FALSE;
+                        }
                     }
-                } else {
-
                 }
             }
 
@@ -321,9 +334,8 @@ public class LotsDAO {
         statusRequest.setLotid(tenderBidRequestBO.getLotId());
         statusRequest.setCurrentBidMax(0);
         LotStatusDTO lotStatus = getLotStatus(statusRequest);
-        System.out.println(lotStatus);
         Boolean isBidAllowed = lotStatus == null || !lotStatus.getHigestBidUser().equals(tenderBidRequestBO.getUserId());
-        if(isBidAllowed) {
+        if (isBidAllowed) {
             try {
                 connection = new ConnectionPool().getConnection();
                 connection.setAutoCommit(false);
@@ -337,12 +349,12 @@ public class LotsDAO {
 
                     // Check if the current bid Amount is greater than Max
 
-                        // If true Insert/Update the Max value in live_audit_log
-                        if (insertIntoLiveBidLogTender(connection, tenderBidRequestBO)) {
-                            isProcessed = Boolean.TRUE;
-                        } else {
-                            isProcessed = Boolean.FALSE;
-                        }
+                    // If true Insert/Update the Max value in live_audit_log
+                    if (insertIntoLiveBidLogTender(connection, tenderBidRequestBO)) {
+                        isProcessed = Boolean.TRUE;
+                    } else {
+                        isProcessed = Boolean.FALSE;
+                    }
                 }
 
             } catch (SQLException sqlException) {
@@ -356,7 +368,7 @@ public class LotsDAO {
                     e.printStackTrace();
                 }
             }
-        }else{
+        } else {
             throw new DuplicateTenderBidException("Bid already performed");
         }
         return isProcessed;
@@ -415,7 +427,7 @@ public class LotsDAO {
     }
 
     private boolean insertIntoLotAuditLogForTender(Connection connection,
-                                          BidRequestBO bidRequestBO, Boolean isMax) throws SQLException, IOException {
+                                                   BidRequestBO bidRequestBO, Boolean isMax) throws SQLException, IOException {
         PreparedStatement preparedStatement = null;
         int parameterIndex = 1;
         boolean isProcessed = false;
@@ -555,7 +567,7 @@ public class LotsDAO {
     }
 
     private boolean insertIntoLiveBidLogTender(Connection connection,
-                                         BidRequestBO bidRequestBO) throws SQLException, IOException {
+                                               BidRequestBO bidRequestBO) throws SQLException, IOException {
         PreparedStatement preparedStatement = null;
         int parameterIndex = 1;
         boolean isProcessed = false;
@@ -617,9 +629,8 @@ public class LotsDAO {
         Connection connection = null;
         LotStatusDTO lotStatusResponse = null;
         boolean hasHighestBidChanged = false;
-        String query = "select l.startdate, l.enddate, lb.user_id, lb.max_value from lot as l, live_bid_log as lb where lb.lot_id = l.id and lb.lot_id ="
-                + statusRequest.getLotid();
-        System.out.println(query);
+        String query = "select l.startdate, l.enddate, lb.user_id, lb.max_value from lot as l, live_bid_log as lb, auction as a where lb.lot_id = l.id and lb.lot_id ="
+                + statusRequest.getLotid() + " AND a.startdate <= lb.localSystemTime AND a.enddate >= lb.localSystemTime";
         try {
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();
@@ -725,14 +736,24 @@ public class LotsDAO {
         return updateLotResponseBO;
     }
 
-    public List<BidHistoryResponse> getBidHistoryList(int lotId)
+    public List<BidHistoryResponse> getBidHistoryList(int lotId, Boolean isTender)
             throws SQLException, IOException {
         Statement statement = null;
         Connection connection = null;
         List<BidHistoryResponse> listResponse = new ArrayList<BidHistoryResponse>();
         String query = "SELECT u.name , company_name , user_id , bid_amt , auction_id , localSystemTime, ll.isAccepted "
-                + "FROM users as u , lot as l , lot_audit_log as ll WHERE "
+                + "FROM users as u , lot as l , lot_audit_log as ll, auction as a WHERE "
                 + "ll.user_id=u.id AND ll.lot_id=l.id AND ll.lot_id=" + lotId;
+        String dateCondition = "";
+        if (isTender) {
+            dateCondition = " AND a.tender_start_date <= ll.localSystemTime AND a.tender_end_date >= ll.localSystemTime";
+        } else {
+            dateCondition = " AND a.startdate <= ll.localSystemTime AND a.enddate >= ll.localSystemTime";
+        }
+
+        query = query + dateCondition;
+
+        System.out.println(query);
         try {
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();

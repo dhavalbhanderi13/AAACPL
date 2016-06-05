@@ -11,12 +11,11 @@ public class ConnectionPool {
     private String userName;
     private String password;
 
-    public ConnectionPool() throws IOException, SQLException {
-	/*	userName = "root";
+    public ConnectionPool() {
+		/*userName = "root";
         password = "root";
 		url = "jdbc:mysql://localhost:3306/newaaacpl";
-		driver = "com.mysql.jdbc.Driver";
-*/
+		driver = "com.mysql.jdbc.Driver";*/
         userName = "adminJuMUFDf";
         password = "X3rXpzXchN2W";
         url = "jdbc:mysql://56b98d757628e1cde30000e4-theuniquemedia.rhcloud.com:44456/aaacplapi";

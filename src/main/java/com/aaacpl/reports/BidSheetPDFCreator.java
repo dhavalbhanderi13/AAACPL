@@ -81,12 +81,4 @@ public class BidSheetPDFCreator {
         table.addCell(cell);
 
     }
-
-    private void insertTableInCell(PdfPTable table, PdfPTable tableToAdd) {
-        PdfPCell cell = new PdfPCell();
-        cell.addElement(tableToAdd);
-        cell.setColspan(2);
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(cell);
-    }
 }

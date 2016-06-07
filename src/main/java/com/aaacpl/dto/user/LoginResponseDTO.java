@@ -5,6 +5,7 @@ public class LoginResponseDTO {
 	private int id;
 	private String email;
 	private String password;
+	private int departmentId;
 
 	public String getStatus() {
 		return status;
@@ -48,6 +49,16 @@ public class LoginResponseDTO {
 		this.id = id;
 	}
 
+
+	public int getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(int departmentId) {
+		this.departmentId = departmentId;
+	}
+
+
 	@Override
 	public String toString() {
 		return "LoginResponseDTO{" +
@@ -55,6 +66,7 @@ public class LoginResponseDTO {
 				", id=" + id +
 				", email='" + email + '\'' +
 				", password='" + password + '\'' +
+				", departmentId=" + departmentId +
 				", status='" + status + '\'' +
 				'}';
 	}

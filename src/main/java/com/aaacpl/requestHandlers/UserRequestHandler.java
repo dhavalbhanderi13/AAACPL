@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.aaacpl.bo.request.user.ChangePasswordBO;
-import com.aaacpl.bo.request.user.LoginRequestBO;
-import com.aaacpl.bo.request.user.RegistrationRequestBO;
-import com.aaacpl.bo.request.user.UpdaterUserBO;
+import com.aaacpl.bo.request.user.*;
 import com.aaacpl.bo.response.LoginResponseBO;
 import com.aaacpl.dao.UserTypesDAO;
 import com.aaacpl.dao.UsersDAO;
@@ -75,6 +72,17 @@ public class UserRequestHandler {
 		return isProcessed;
 	}
 
+	public Boolean updateUserDepartment(UserDepartmentAssignBO userDepartmentAssignBO) {
+		Boolean isProcessed = Boolean.FALSE;
+		UsersDAO usersDAO = new UsersDAO();
+		try {
+			isProcessed = usersDAO.updateUserDepartment(userDepartmentAssignBO.getUserId(), userDepartmentAssignBO.getDepartmentId());
+		} catch (SQLException sq) {
+			isProcessed = Boolean.FALSE;
+		}
+		return isProcessed;
+	}
+
 	public LoginResponseBO login(LoginRequestBO loginRequestBO)
 			throws SQLException {
 		UsersValidation usersValidation = new UsersValidation();
@@ -92,6 +100,7 @@ public class UserRequestHandler {
 		}
 		loginResponseBO.setValidUser(isValidUser);
 		loginResponseBO.setId(loginResponseDTO.getId());
+		loginResponseBO.setDepartmentId(loginResponseDTO.getDepartmentId());
 		return loginResponseBO;
 	}
 

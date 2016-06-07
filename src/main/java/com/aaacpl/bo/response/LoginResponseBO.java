@@ -3,6 +3,7 @@ package com.aaacpl.bo.response;
 public class LoginResponseBO {
 	private Boolean isValidUser;
 	private int id;
+	private int departmentId;
 	private String sessionId;
 
 	public String getSessionId() {
@@ -29,12 +30,21 @@ public class LoginResponseBO {
 		isValidUser = validUser;
 	}
 
-    @Override
-    public String toString() {
-        return "LoginResponseBO{" +
-                "isValidUser=" + isValidUser +
-                ", id=" + id +
-                ", sessionId=" + sessionId +
-                '}';
-    }
+	public int getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(int departmentId) {
+		this.departmentId = departmentId;
+	}
+
+	@Override
+	public String toString() {
+		return "LoginResponseBO{" +
+				"isValidUser=" + isValidUser +
+				", id=" + id +
+				", departmentId=" + departmentId +
+				", sessionId='" + sessionId + '\'' +
+				'}';
+	}
 }

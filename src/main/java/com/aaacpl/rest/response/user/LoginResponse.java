@@ -8,6 +8,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class LoginResponse {
 	private int userId;
+	private int departmentId;
 	private String successMessage;
 	private String failureMessage;
 
@@ -35,10 +36,21 @@ public class LoginResponse {
 		this.userId = userId;
 	}
 
+	public int getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(int departmentId) {
+		this.departmentId = departmentId;
+	}
+
 	@Override
 	public String toString() {
-		return "LoginResponse{" + "userId=" + userId + ", successMessage='"
-				+ successMessage + '\'' + ", failureMessage='" + failureMessage
-				+ '\'' + '}';
+		return "LoginResponse{" +
+				"userId=" + userId +
+				", departmentId=" + departmentId +
+				", successMessage='" + successMessage + '\'' +
+				", failureMessage='" + failureMessage + '\'' +
+				'}';
 	}
 }

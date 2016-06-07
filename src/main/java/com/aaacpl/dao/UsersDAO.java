@@ -195,6 +195,39 @@ public class UsersDAO {
 		return isUpdated;
 	}
 
+	public Boolean updateUserDepartment(int userId, int departmentId)
+			throws SQLException {
+		Boolean isUpdated = Boolean.FALSE;
+		PreparedStatement preparedStatement = null;
+		Connection connection = null;
+		try {
+			connection = new ConnectionPool().getConnection();
+			connection.setAutoCommit(false);
+			StringBuffer query = new StringBuffer(
+					"UPDATE users SET dept_id = ").append(departmentId)
+					.append(" WHERE id = ").append(userId);
+			preparedStatement = connection.prepareStatement(query.toString());
+
+			int i = preparedStatement.executeUpdate();
+			if (i > 0) {
+				connection.commit();
+				isUpdated = Boolean.TRUE;
+			} else {
+				connection.rollback();
+			}
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				preparedStatement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return isUpdated;
+	}
+
 	public Boolean updateVerifiedUser(int userId)
 			throws SQLException, IOException {
 		boolean isUpdated = false;
@@ -238,7 +271,7 @@ public class UsersDAO {
 			connection = new ConnectionPool().getConnection();
 			statement = connection.createStatement();
 			StringBuilder query = new StringBuilder(
-					"SELECT id, password, status FROM users where email = \"")
+					"SELECT id, password, status, dept_id FROM users where email = \"")
 					.append(email).append("\"");
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			int rowCount = 0;
@@ -248,6 +281,7 @@ public class UsersDAO {
 				loginResponseDTO.setId(resultSet.getInt("id"));
 				loginResponseDTO.setPassword(resultSet.getString("password"));
 				loginResponseDTO.setStatus(resultSet.getString("status"));
+				loginResponseDTO.setDepartmentId(resultSet.getInt("dept_id"));
 				rowCount++;
 			}
 			if (rowCount == 0) {

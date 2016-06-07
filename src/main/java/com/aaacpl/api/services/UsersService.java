@@ -15,18 +15,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.aaacpl.bo.request.user.ChangePasswordBO;
-import com.aaacpl.bo.request.user.LoginRequestBO;
-import com.aaacpl.bo.request.user.RegistrationRequestBO;
-import com.aaacpl.bo.request.user.UpdaterUserBO;
+import com.aaacpl.bo.request.user.*;
 import com.aaacpl.bo.response.LoginResponseBO;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.requestHandlers.UserRequestHandler;
-import com.aaacpl.rest.request.user.ChangePasswordRequest;
-import com.aaacpl.rest.request.user.LoginRequest;
-import com.aaacpl.rest.request.user.LogoutRequest;
-import com.aaacpl.rest.request.user.RegistrationRequest;
-import com.aaacpl.rest.request.user.UpdateUserRequest;
+import com.aaacpl.rest.request.user.*;
 import com.aaacpl.rest.response.requestAuth.RequestAuthenticationResponse;
 import com.aaacpl.rest.response.user.LoginResponse;
 import com.aaacpl.rest.response.user.RegistrationResponse;
@@ -56,6 +49,7 @@ public class UsersService {
             if (loginResponseBO.getValidUser()) {
                 loginResponse.setFailureMessage("");
                 loginResponse.setUserId(loginResponseBO.getId());
+                loginResponse.setDepartmentId(loginResponseBO.getDepartmentId());
                 loginResponse.setSuccessMessage(String.valueOf(loginResponseBO
                         .getSessionId()));
             }
@@ -124,7 +118,7 @@ public class UsersService {
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response UpdateUser(UpdateUserRequest updateUser, @HeaderParam("sessionId") String sessionId) {
+    public Response updateUser(UpdateUserRequest updateUser, @HeaderParam("sessionId") String sessionId) {
         if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
             UpdaterUserBO updateRequestBO = new UpdaterUserBO();
             updateRequestBO.setId(updateUser.getId());
@@ -147,6 +141,30 @@ public class UsersService {
             UserRequestHandler userRequestHandler = new UserRequestHandler();
             UpdateResponse updateResponse = new UpdateResponse();
             if (userRequestHandler.updateUser(updateRequestBO)) {
+                updateResponse.setFailureMessage("");
+                updateResponse.setSuccessMessage("SUCCESS");
+            } else {
+                updateResponse.setFailureMessage("FAILURE");
+                updateResponse.setSuccessMessage("");
+            }
+            return ResponseGenerator.generateResponse(updateResponse);
+        } else {
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
+        }
+    }
+
+    @POST
+    @Path("/assignDept")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response assignDepartment(UserDepartmentAssignRequest userDepartmentAssignRequest, @HeaderParam("sessionId") String sessionId) {
+        if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
+            UserDepartmentAssignBO userDepartmentAssignBO = new UserDepartmentAssignBO();
+            userDepartmentAssignBO.setDepartmentId(userDepartmentAssignRequest.getDepartmentId());
+            userDepartmentAssignBO.setUserId(userDepartmentAssignRequest.getUserId());
+            UserRequestHandler userRequestHandler = new UserRequestHandler();
+            UpdateResponse updateResponse = new UpdateResponse();
+            if (userRequestHandler.updateUserDepartment(userDepartmentAssignBO)) {
                 updateResponse.setFailureMessage("");
                 updateResponse.setSuccessMessage("SUCCESS");
             } else {

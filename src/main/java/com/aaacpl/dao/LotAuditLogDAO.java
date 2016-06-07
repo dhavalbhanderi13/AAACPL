@@ -27,6 +27,7 @@ public class LotAuditLogDAO {
                 dateCondition = " AND a.startdate <= ll.localSystemTime AND a.enddate >= ll.localSystemTime";
             }
             query.append(dateCondition);
+            query.append(" ORDER BY ll.id DESC");
             ResultSet resultSet = statement.executeQuery(query.toString());
             while (resultSet.next()) {
                 LotAuditLogDTO lotDTO = new LotAuditLogDTO(resultSet.getInt("id"), resultSet.getInt("lot_id"),
@@ -56,7 +57,6 @@ public class LotAuditLogDAO {
             statement = connection.createStatement();
             StringBuilder query = new StringBuilder("SELECT MAX(bid_amt) FROM lot_audit_log as ll, auction as a where ll.lot_id = ").append(lotId);
             query.append(" AND a.tender_start_date <= ll.localSystemTime AND a.tender_end_date >= ll.localSystemTime");
-            System.out.println("getMaxAuditLogAmt = "+query.toString());
             ResultSet resultSet = statement.executeQuery(query.toString());
             while (resultSet.next()) {
                 amount = resultSet.getInt(1);
@@ -82,7 +82,6 @@ public class LotAuditLogDAO {
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();
             StringBuilder query = new StringBuilder("SELECT * FROM lot_audit_log where lot_id = ").append(lotId).append(" AND bid_amt = ").append(amt);
-            System.out.println("getMaxAuditLogForLot = "+query.toString());
             ResultSet resultSet = statement.executeQuery(query.toString());
             while (resultSet.next()) {
                 liveBidLogDTO = new LiveBidLogDTO(resultSet.getInt("id"), resultSet.getInt("user_id"),

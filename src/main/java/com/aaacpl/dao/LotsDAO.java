@@ -154,7 +154,6 @@ public class LotsDAO {
                     .append(userId).append(") AND lot.auction_id = ")
                     .append(auctionId).append(" AND enddate > '" + serverTimeStamp + "' AND lot.status = 'A' ORDER BY startdate ASC");
             ResultSet resultSet = statement.executeQuery(query.toString());
-            System.out.println(query.toString());
             while (resultSet.next()) {
                 LotDTO lotDTO = new LotDTO(resultSet.getInt("id"),
                         resultSet.getInt("auction_id"),
@@ -751,12 +750,11 @@ public class LotsDAO {
             dateCondition = " AND a.startdate <= ll.localSystemTime AND a.enddate >= ll.localSystemTime";
         }
 
-        query = query + dateCondition;
-
-        System.out.println(query);
+        query = query + dateCondition + " ORDER BY ll.id DESC";
         try {
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();
+            System.out.println(query);
             ResultSet rs = statement.executeQuery(query);
 
             while (rs.next()) {

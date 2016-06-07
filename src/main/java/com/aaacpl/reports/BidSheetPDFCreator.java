@@ -20,7 +20,7 @@ public class BidSheetPDFCreator {
         Font bfBold12 = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
         Font bf12 = new Font(Font.FontFamily.COURIER, 11);
 
-        float[] columnWidths = {1f, 2.5f, 2.5f, 4f, 1.5f, 2.5f, 1.5f, 1.5f, 2f, 1.5f};
+        float[] columnWidths = {1f, 2.5f, 2.5f, 6f, 1.5f, 2.5f, 2f, 1.5f, 2f, 1.5f};
         PdfPTable table = new PdfPTable(columnWidths); //specify column widths
         table.setWidthPercentage(100f);
         if (counter == 1) {

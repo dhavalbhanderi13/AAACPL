@@ -30,7 +30,7 @@ public class ReportService {
             String relativeWebPath = "";
         /*Boolean isFileCreated = (new PDFCreator()).createPDF("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps\"/123.pdf");
         File file = new File("/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps", "123.pdf");*/
-            // String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
+           //  String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
             String absoluteDiskPath = "/var/lib/openshift/56b98b5c7628e138e400004c/app-root/runtime/dependencies/jbossews/webapps";
             File file = new ReportRequestHandler().getLotWiseHistoryReport(absoluteDiskPath, "/Lotwise_Bid_History"+auctionId+".pdf", auctionId,
                     isTender==1);

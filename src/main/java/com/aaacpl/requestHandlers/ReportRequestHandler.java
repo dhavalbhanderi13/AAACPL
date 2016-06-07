@@ -280,8 +280,8 @@ public class ReportRequestHandler {
                         auctionDescription = " Tender Sale No. ("+auctionDTO.getDescription()+")";
                         startDate = DateUtil.getDateStringFromTimeStamp(auctionDTO.getTenderStartDate());
                     }else{
-                        auctionInfo.append("Auction Sale held at (www.aaacpl.com) on ");
-                        auctionDescription = " Auction Sale No. ("+auctionDTO.getDescription()+")";
+                        auctionInfo.append("E-auction Sale held at (www.aaacpl.com) on ");
+                        auctionDescription = " E-auction Sale No. ("+auctionDTO.getDescription()+")";
                         startDate = DateUtil.getDateStringFromTimeStamp(auctionDTO.getStartDate());
                     }
 
@@ -313,9 +313,11 @@ public class ReportRequestHandler {
             Paragraph highestBidTotalInfo = new Paragraph("Total of Highest Bid Amount: " + highestBidTotal);
             highestBidTotalInfo.setAlignment(Paragraph.ALIGN_LEFT);
             highestBidTotalInfo.setFont(bf12);
+
             doc.add(highestBidTotalInfo);
 
             Chunk glue = new Chunk(new VerticalPositionMark());
+            doc.add(Chunk.NEWLINE);
             Paragraph p = new Paragraph("Signature of Auctioneer");
             p.add(new Chunk(glue));
             p.add("Signature                 ");
@@ -327,6 +329,10 @@ public class ReportRequestHandler {
             p1.add("Supervising Officer        ");
             p1.setFont(bf12);
             doc.add(p1);
+            doc.add(Chunk.NEWLINE);
+            doc.add(Chunk.NEWLINE);
+            doc.add(Chunk.NEWLINE);
+            doc.add(Chunk.NEWLINE);
             doc.add(Chunk.NEWLINE);
 
             Paragraph p2 = new Paragraph("Auctioneer");

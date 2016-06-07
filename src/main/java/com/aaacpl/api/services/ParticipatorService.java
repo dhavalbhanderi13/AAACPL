@@ -4,7 +4,6 @@ import com.aaacpl.bo.request.participator.CreateParticipatorRequestBO;
 import com.aaacpl.requestHandlers.ParticipatorRequestHandler;
 import com.aaacpl.rest.request.participator.CreateParticipatorRequest;
 import com.aaacpl.rest.response.participator.CreateParticipatorResponse;
-import com.aaacpl.rest.response.requestAuth.RequestAuthenticationResponse;
 import com.aaacpl.rest.util.ResponseGenerator;
 import com.aaacpl.validation.RequestValidation;
 

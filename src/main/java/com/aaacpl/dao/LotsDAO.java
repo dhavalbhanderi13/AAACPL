@@ -279,8 +279,8 @@ public class LotsDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             LotDTO lotDTO = getLotById(bidRequestBO.getLotId());
+            AuctionDTO auctionDTO = new AuctionDAO().getAuctionById(lotDTO.getAuctionId());
             if (isTender) {
-                AuctionDTO auctionDTO = new AuctionDAO().getAuctionById(lotDTO.getAuctionId());
                 Boolean isTenderTimeEnded = DateUtil.compareTimestampWithCurrentDate(auctionDTO.getTenderEndDate()) < 0;
                 List<LotAuditLogDTO> auditLogDTOs = new LotAuditLogDAO().getAuditLog(lotDTO.getId(), true);
                 Boolean isBidAccepted = auditLogDTOs.isEmpty() && !isTenderTimeEnded;
@@ -288,25 +288,57 @@ public class LotsDAO {
                     isProcessed = Boolean.TRUE;
                 }
             } else {
-                Boolean isMaxBid = isBidAmtMax(connection, bidRequestBO.getLotId(), bidRequestBO.getBidAmount());
-                Boolean isLotTimeEnded = DateUtil.compareTimestampWithCurrentDate(lotDTO.getEndDate()) < 0;
-                Boolean isBidAccepted = isMaxBid && !isLotTimeEnded;
+                switch (auctionDTO.getAuctionTypeId()) {
+                    case 1: {
+                        Boolean isMaxBid = isBidAmtMax(connection, bidRequestBO.getLotId(), bidRequestBO.getBidAmount());
+                        Boolean isLotTimeEnded = DateUtil.compareTimestampWithCurrentDate(lotDTO.getEndDate()) < 0;
+                        Boolean isBidAccepted = isMaxBid && !isLotTimeEnded;
 
-                // First Log the bid request in lot_audit_log
-                if (insertIntoLotAuditLog(connection, bidRequestBO, isBidAccepted)) {
+                        // First Log the bid request in lot_audit_log
+                        if (insertIntoLotAuditLog(connection, bidRequestBO, isBidAccepted)) {
 
-                    // returning true because we are not sure if the bid is max
-                    isProcessed = Boolean.TRUE;
-
-                    // Check if the current bid Amount is greater than Max
-                    if (isBidAccepted) {
-
-                        // If true Insert/Update the Max value in live_audit_log
-                        if (insertIntoLiveBidLog(connection, bidRequestBO)) {
+                            // returning true because we are not sure if the bid is max
                             isProcessed = Boolean.TRUE;
-                        } else {
-                            isProcessed = Boolean.FALSE;
+
+                            // Check if the current bid Amount is greater than Max
+                            if (isBidAccepted) {
+
+                                // If true Insert/Update the Max value in live_audit_log
+                                if (insertIntoLiveBidLog(connection, bidRequestBO)) {
+                                    isProcessed = Boolean.TRUE;
+                                } else {
+                                    isProcessed = Boolean.FALSE;
+                                }
+                            }
                         }
+                    }
+
+                    case 2:{
+                        Boolean isMinBid = isBidAmtMin(connection, bidRequestBO.getLotId(), bidRequestBO.getBidAmount());
+                        Boolean isLotTimeEnded = DateUtil.compareTimestampWithCurrentDate(lotDTO.getEndDate()) < 0;
+                        Boolean isBidAccepted = isMinBid && bidRequestBO.getBidAmount() > 0 && !isLotTimeEnded;
+
+                        // First Log the bid request in lot_audit_log
+                        if (insertIntoLotAuditLog(connection, bidRequestBO, isBidAccepted)) {
+
+                            // returning true because we are not sure if the bid is max
+                            isProcessed = Boolean.TRUE;
+
+                            // Check if the current bid Amount is greater than Max
+                            if (isBidAccepted) {
+
+                                // If true Insert/Update the Max value in live_audit_log
+                                if (insertIntoLiveBidLog(connection, bidRequestBO)) {
+                                    isProcessed = Boolean.TRUE;
+                                } else {
+                                    isProcessed = Boolean.FALSE;
+                                }
+                            }
+                        }
+                    }
+
+                    default:{
+                        isProcessed = Boolean.FALSE;
                     }
                 }
             }
@@ -492,6 +524,37 @@ public class LotsDAO {
                 maxValue = rs.getLong("MAX(max_value)");
             }
             if (bidAmount > maxValue) {
+                return Boolean.TRUE;
+            }
+
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                // Do Not close connection over here
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isMax;
+    }
+
+    private Boolean isBidAmtMin(Connection connection, Integer lotId, Long bidAmount)
+            throws SQLException, IOException {
+        Statement statement = null;
+        Long minValue = 0L;
+        Boolean isMax = Boolean.FALSE;
+        String query = "SELECT MIN(max_value) from live_bid_log WHERE lot_id="
+                + lotId;
+        try {
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next()) {
+                minValue = rs.getLong("MIN(max_value)");
+            }
+            if (bidAmount < minValue) {
                 return Boolean.TRUE;
             }
 

@@ -10,10 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.aaacpl.dao.UtilClasses.ConnectionPool;
-import com.aaacpl.dto.auction.AuctionDTO;
-import com.aaacpl.dto.auction.AuctionResponseDTO;
-import com.aaacpl.dto.auction.CreateAuctionDTO;
-import com.aaacpl.dto.auction.UpdateAuctionDTO;
+import com.aaacpl.dto.auction.*;
 import com.aaacpl.exceptions.userServiceExceptions.UserNotFoundException;
 import com.aaacpl.rest.exceptions.ResourceNotFoundException;
 import com.aaacpl.util.DateUtil;
@@ -73,7 +70,7 @@ public class AuctionDAO {
             if (isTender) {
                 preparedStatement.setTimestamp(parameterIndex++, createAuctionDTO.getTenderStartDate());
                 preparedStatement.setTimestamp(parameterIndex++, createAuctionDTO.getTenderEndDate());
-            }else {
+            } else {
                 preparedStatement.setTimestamp(parameterIndex++, null);
                 preparedStatement.setTimestamp(parameterIndex++, null);
             }
@@ -153,6 +150,35 @@ public class AuctionDAO {
         return auctionDTOs;
     }
 
+    public List<AuctionTypeDTO> getAuctionsTypes() throws SQLException {
+        List<AuctionTypeDTO> auctionTypeDTOs = new ArrayList<AuctionTypeDTO>();
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query = new StringBuilder(
+                    "SELECT * FROM auction_type");
+            ResultSet resultSet = statement.executeQuery(query.toString());
+            while (resultSet.next()) {
+                AuctionTypeDTO auctionTypeDTO = new AuctionTypeDTO();
+                auctionTypeDTO.setId(resultSet.getInt("id"));
+                auctionTypeDTO.setType( resultSet.getString("type"));
+                auctionTypeDTOs.add(auctionTypeDTO);
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return auctionTypeDTOs;
+    }
+
     public AuctionDTO getAuctionById(int id) throws SQLException,
             UserNotFoundException {
         Connection connection = null;
@@ -207,10 +233,10 @@ public class AuctionDAO {
         try {
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();
-            String dateCondition="";
-            if(isTender){
-                dateCondition ="where tender_start_date >= CONVERT_TZ(CURDATE(), \"-5:00\", \"+5:30\") + interval 1 day;";
-            }else{
+            String dateCondition = "";
+            if (isTender) {
+                dateCondition = "where tender_start_date >= CONVERT_TZ(CURDATE(), \"-5:00\", \"+5:30\") + interval 1 day;";
+            } else {
                 dateCondition = "where startdate >= CONVERT_TZ(CURDATE(), \"-5:00\", \"+5:30\") + interval 1 day;";
             }
             StringBuilder query = new StringBuilder(
@@ -257,9 +283,9 @@ public class AuctionDAO {
             String serverTimeStamp = DateUtil.getCurrentServerTime();
             String serverDate = DateUtil.getCurrentServerDate();
             String dateCondition = "";
-            if(isTender){
-                dateCondition = " isTender = "+isTender+" AND date(tender_start_date) <= '" + serverDate + "' AND tender_end_date >= '" + serverTimeStamp + "'";
-            }else{
+            if (isTender) {
+                dateCondition = " isTender = " + isTender + " AND date(tender_start_date) <= '" + serverDate + "' AND tender_end_date >= '" + serverTimeStamp + "'";
+            } else {
                 dateCondition = " date(startdate) <= '" + serverDate + "' AND enddate >= '" + serverTimeStamp + "'";
             }
             StringBuilder query = new StringBuilder(

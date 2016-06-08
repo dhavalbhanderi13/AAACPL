@@ -15,6 +15,7 @@ import com.aaacpl.rest.request.auction.UpdateAuctionRequest;
 import com.aaacpl.rest.response.requestAuth.RequestAuthenticationResponse;
 import com.aaacpl.rest.util.ResponseGenerator;
 import com.aaacpl.validation.RequestValidation;
+import com.aacpl.rest.response.auction.AuctionTypesResponse;
 import com.aacpl.rest.response.auction.AuctionsListResponse;
 import com.aacpl.rest.response.auction.CreateAuctionResponse;
 import com.aacpl.rest.response.auction.UpdateAuctionResponse;
@@ -110,6 +111,22 @@ public class AuctionService {
             auctionResponseList.setAuctionResponseList(auctionRequestHandler
                     .getAllAuctions(departmentId));
             return ResponseGenerator.generateResponse(auctionResponseList);
+        } else {
+            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/types")
+    public Response getAuctionTypes(@HeaderParam("sessionId") String sessionId) {
+        if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
+            AuctionRequestHandler auctionRequestHandler = new AuctionRequestHandler();
+            AuctionTypesResponse auctionTypesList = new AuctionTypesResponse();
+
+            auctionTypesList.setAuctionTypeResponseList(auctionRequestHandler
+                    .getAuctionTypes());
+            return ResponseGenerator.generateResponse(auctionTypesList);
         } else {
             return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }

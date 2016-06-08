@@ -10,10 +10,13 @@ import com.aaacpl.bo.request.auction.UpdateAuctionRequestBO;
 import com.aaacpl.bo.response.AuctionResponseBO;
 import com.aaacpl.dao.AuctionDAO;
 import com.aaacpl.dto.auction.AuctionDTO;
+import com.aaacpl.dto.auction.AuctionTypeDTO;
 import com.aaacpl.dto.auction.CreateAuctionDTO;
 import com.aaacpl.dto.auction.UpdateAuctionDTO;
 import com.aaacpl.util.DateUtil;
 import com.aacpl.rest.response.auction.AuctionResponse;
+import com.aacpl.rest.response.auction.AuctionTypeResponse;
+import com.aacpl.rest.response.auction.AuctionTypesResponse;
 
 public class AuctionRequestHandler {
 
@@ -49,16 +52,29 @@ public class AuctionRequestHandler {
 	}
 
 	public List<AuctionResponse> getAllAuctions(int departmentId) {
-		List<AuctionResponse> departmentResponseList = new ArrayList<AuctionResponse>();
+		List<AuctionResponse> auctionResponses = new ArrayList<AuctionResponse>();
 		try {
 			AuctionDAO auctionDAO = new AuctionDAO();
 			List<AuctionDTO> auctionsDTOs = auctionDAO
 					.getAllAuctions(departmentId);
-			departmentResponseList = buildListOfDepartmentResponseFromDTOs(auctionsDTOs);
+			auctionResponses = buildListOfAuctionResponseFromDTOs(auctionsDTOs);
 		} catch (SQLException s) {
 			s.printStackTrace();
 		}
-		return departmentResponseList;
+		return auctionResponses;
+	}
+
+	public List<AuctionTypeResponse> getAuctionTypes() {
+		List<AuctionTypeResponse> auctionTypeResponseList = new ArrayList<AuctionTypeResponse>();
+		try {
+			AuctionDAO auctionDAO = new AuctionDAO();
+			List<AuctionTypeDTO> auctionTypeDTOs = auctionDAO
+					.getAuctionsTypes();
+			auctionTypeResponseList = buildListOfAuctionTypesResponseFromDTOs(auctionTypeDTOs);
+		} catch (SQLException s) {
+			s.printStackTrace();
+		}
+		return auctionTypeResponseList;
 	}
 
 	public List<AuctionResponse> getAllUpcomingAuctions(Boolean isTender) {
@@ -66,7 +82,7 @@ public class AuctionRequestHandler {
 		try {
 			AuctionDAO auctionDAO = new AuctionDAO();
 			List<AuctionDTO> auctionsDTOs = auctionDAO.getUpcomingAuctions(isTender);
-			departmentResponseList = buildListOfDepartmentResponseFromDTOs(auctionsDTOs);
+			departmentResponseList = buildListOfAuctionResponseFromDTOs(auctionsDTOs);
 		} catch (SQLException s) {
 			s.printStackTrace();
 		}
@@ -78,7 +94,7 @@ public class AuctionRequestHandler {
 		try {
 			AuctionDAO auctionDAO = new AuctionDAO();
 			List<AuctionDTO> auctionsDTOs = auctionDAO.getLiveAuctions(isTender);
-			departmentResponseList = buildListOfDepartmentResponseFromDTOs(auctionsDTOs);
+			departmentResponseList = buildListOfAuctionResponseFromDTOs(auctionsDTOs);
 		} catch (SQLException s) {
 			s.printStackTrace();
 		}
@@ -97,7 +113,7 @@ public class AuctionRequestHandler {
 		return auctionResponse;
 	}
 
-	private List<AuctionResponse> buildListOfDepartmentResponseFromDTOs(
+	private List<AuctionResponse> buildListOfAuctionResponseFromDTOs(
 			List<AuctionDTO> auctionDTOs) {
 		List<AuctionResponse> auctionResponseList = new ArrayList<AuctionResponse>();
 		Iterator<AuctionDTO> iterator = auctionDTOs.iterator();
@@ -123,6 +139,21 @@ public class AuctionRequestHandler {
 			auctionResponseList.add(auctionResponse);
 		}
 		return auctionResponseList;
+	}
+	
+	private List<AuctionTypeResponse> buildListOfAuctionTypesResponseFromDTOs(
+			List<AuctionTypeDTO> auctionTypeDTOs) {
+		List<AuctionTypeResponse> auctionTypesResponses = new ArrayList<AuctionTypeResponse>();
+		Iterator<AuctionTypeDTO> iterator = auctionTypeDTOs.iterator();
+
+		while (iterator.hasNext()) {
+			AuctionTypeDTO auctionTypeDTO = iterator.next();
+			AuctionTypeResponse auctionTypeResponse = new AuctionTypeResponse();
+			auctionTypeResponse.setId(auctionTypeDTO.getId());
+			auctionTypeResponse.setType(auctionTypeDTO.getType());
+			auctionTypesResponses.add(auctionTypeResponse);
+		}
+		return auctionTypesResponses;
 	}
 
 	private AuctionResponse buildLotResponseFromDTOs(AuctionDTO auctionDTO) {
